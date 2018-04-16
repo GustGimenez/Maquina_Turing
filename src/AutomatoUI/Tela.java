@@ -10,18 +10,10 @@ import automatos.No;
 import automatos.Resolve;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,7 +25,6 @@ public class Tela extends javax.swing.JFrame {
     private Automato grafo;
     private Vertice vertice;
     private Aresta aresta;
-    private int next;
     private ViewPanel view;
     private ViewPanel view2;
     private ViewPanel view3;
@@ -63,7 +54,6 @@ public class Tela extends javax.swing.JFrame {
         this.TFletra.setBackground(Color.LIGHT_GRAY);
         this.TFletra.setVisible(false);
 
-        next = 0;
         this.newButton.setSelected(true);
 
         this.view.setBackground(Color.white);
@@ -91,7 +81,6 @@ public class Tela extends javax.swing.JFrame {
         this.TFletra.setBackground(Color.LIGHT_GRAY);
         this.TFletra.setVisible(false);
 
-        next = 0;
         this.newButton.setSelected(true);
 
         this.view.setBackground(Color.white);
