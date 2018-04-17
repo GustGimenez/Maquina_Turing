@@ -10,18 +10,11 @@ import automatos.No;
 import automatos.Resolve;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Line2D;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,7 +35,11 @@ public class Tela extends javax.swing.JFrame {
     private No camAux;
     private int camCount;
     private boolean gr;
+    
+    private int op; //Variável para as operações dos botões
+                    //0 - novo estado, 1 - nova transição, 2 - remover, 3 - arrastar
 
+    
     /**
      * Creates new form Tela
      */
@@ -64,7 +61,7 @@ public class Tela extends javax.swing.JFrame {
         this.TFletra.setVisible(false);
 
         next = 0;
-        this.newButton.setSelected(true);
+        this.op = 0; // começa com novo estado selecionado
 
         this.view.setBackground(Color.white);
         this.TelaPanel.add(this.TFletra);
@@ -92,7 +89,7 @@ public class Tela extends javax.swing.JFrame {
         this.TFletra.setVisible(false);
 
         next = 0;
-        this.newButton.setSelected(true);
+        this.op = 0;
 
         this.view.setBackground(Color.white);
         this.TelaPanel.add(this.TFletra);
@@ -118,10 +115,10 @@ public class Tela extends javax.swing.JFrame {
         PanelAutomato = new javax.swing.JPanel();
         TelaPanel = new javax.swing.JScrollPane(this.view);
         jPanel1 = new javax.swing.JPanel();
-        dragButton = new javax.swing.JRadioButton();
-        newButton = new javax.swing.JRadioButton();
-        RBTrans = new javax.swing.JRadioButton();
-        RBRemove = new javax.swing.JRadioButton();
+        novoEstadoButton = new javax.swing.JButton();
+        novaTransButton = new javax.swing.JButton();
+        removerButton = new javax.swing.JButton();
+        arrastarButton = new javax.swing.JButton();
         TFletra = new javax.swing.JTextField();
         PanelStep = new javax.swing.JPanel();
         StepPanel = new javax.swing.JScrollPane(this.view2);
@@ -176,6 +173,11 @@ public class Tela extends javax.swing.JFrame {
                 formWindowClosed(evt);
             }
         });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
         AutomatoLayout.setLayout(new java.awt.CardLayout());
 
@@ -200,18 +202,40 @@ public class Tela extends javax.swing.JFrame {
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jPanel1KeyTyped(evt);
+            }
+        });
 
-        buttonGroup1.add(dragButton);
-        dragButton.setText("Arrastar");
+        novoEstadoButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/EstadoB.png"))); // NOI18N
+        novoEstadoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novoEstadoButtonActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(newButton);
-        newButton.setText("Estado");
+        novaTransButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/transicaoB.png"))); // NOI18N
+        novaTransButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novaTransButtonActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(RBTrans);
-        RBTrans.setText("Transição");
+        removerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/DeleteB.png"))); // NOI18N
+        removerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerButtonActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(RBRemove);
-        RBRemove.setText("Remover");
+        arrastarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/cursorB.png"))); // NOI18N
+        arrastarButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        arrastarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                arrastarButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -219,25 +243,27 @@ public class Tela extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(newButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(RBTrans)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(RBRemove)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                .addComponent(dragButton)
+                .addComponent(novoEstadoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(novaTransButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(arrastarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dragButton)
-                    .addComponent(newButton)
-                    .addComponent(RBTrans)
-                    .addComponent(RBRemove))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(arrastarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(removerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(novaTransButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(novoEstadoButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         TFletra.setText("jTextField1");
@@ -259,10 +285,8 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelAutomatoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 247, Short.MAX_VALUE)))
+                    .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
@@ -275,8 +299,8 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
@@ -615,7 +639,7 @@ public class Tela extends javax.swing.JFrame {
                 this.Menu.show(this.view, p.x, p.y);
                 return;
             }
-            if (this.RBTrans.isSelected()) {
+            if (this.op == 1) {// transição
                 if (v == null) {
                     return;
                 }
@@ -662,7 +686,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void TelaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseClicked
         Point p = this.view.getMousePosition();
-        if (this.newButton.isSelected()) {
+        if (this.op == 0) {// novo estado
             if (this.vertice != null) {
                 return;
             }
@@ -670,7 +694,7 @@ public class Tela extends javax.swing.JFrame {
             this.grafo.addVertice(this.vertice);
 
         }
-        if (this.RBRemove.isSelected()) {
+        if (this.op == 2) { //remover
             if (this.vertice != null) {
                 if (this.vertice.isInicial()) {
                     this.grafo.setInicial(null);
@@ -685,7 +709,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void TelaPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseDragged
         try {
-            if (this.dragButton.isSelected()) {
+            if (this.op == 3) {//arrastar
 
                 Point p = this.view.getMousePosition();
 
@@ -694,7 +718,7 @@ public class Tela extends javax.swing.JFrame {
                     this.vertice.setY(p.y);
                 }
 
-            } else if (this.vertice != null && this.RBTrans.isSelected()) {
+            } else if (this.vertice != null && this.op == 1) {//transição
                 Point2D p = (Point2D) this.view.getMousePosition();
                 this.view.getS().setLine(p.getX(), p.getY(), vertice.getX(), vertice.getY());
             }
@@ -892,6 +916,30 @@ public class Tela extends javax.swing.JFrame {
         this.TelaPanel.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void novoEstadoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoEstadoButtonActionPerformed
+        this.op = 0; 
+    }//GEN-LAST:event_novoEstadoButtonActionPerformed
+
+    private void novaTransButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaTransButtonActionPerformed
+        this.op = 1; 
+    }//GEN-LAST:event_novaTransButtonActionPerformed
+
+    private void removerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerButtonActionPerformed
+        this.op = 2;
+    }//GEN-LAST:event_removerButtonActionPerformed
+
+    private void arrastarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arrastarButtonActionPerformed
+        this.op = 3;
+    }//GEN-LAST:event_arrastarButtonActionPerformed
+
+    private void jPanel1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyTyped
+
+    }//GEN-LAST:event_jPanel1KeyTyped
+
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+  
+    }//GEN-LAST:event_formKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -921,8 +969,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JPanel PanelStep;
     private javax.swing.JCheckBoxMenuItem PopUpItem1;
     private javax.swing.JCheckBoxMenuItem PopUpItem2;
-    private javax.swing.JRadioButton RBRemove;
-    private javax.swing.JRadioButton RBTrans;
     private javax.swing.JButton StepBtn;
     private javax.swing.JScrollPane StepPanel;
     private javax.swing.JLabel StringInfoLabel;
@@ -930,8 +976,8 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JTextField TFletra;
     private javax.swing.JPanel TablePanel;
     private javax.swing.JScrollPane TelaPanel;
+    private javax.swing.JButton arrastarButton;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JRadioButton dragButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -949,7 +995,9 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JMenuItem mi_Exe1;
     private javax.swing.JMenuItem mi_ExeStep;
     private javax.swing.JMenuItem mi_MultEntradas;
-    private javax.swing.JRadioButton newButton;
+    private javax.swing.JButton novaTransButton;
+    private javax.swing.JButton novoEstadoButton;
+    private javax.swing.JButton removerButton;
     private javax.swing.JLabel resultLabel;
     // End of variables declaration//GEN-END:variables
 }
