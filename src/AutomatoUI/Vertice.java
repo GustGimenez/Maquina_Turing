@@ -22,6 +22,7 @@ public class Vertice {
     private Color cor;
     private boolean inicial;
     private boolean fim;
+    private String label;
     
     private int pos;
     private boolean visitado;
@@ -185,5 +186,9 @@ public class Vertice {
         g.fillRect(y + xc, -x + yc, (int) contorno, (int) contorno);
         g.fillRect(-y + xc, -x + yc, (int) contorno, (int) contorno);
 
+    }
+    
+    public void setLabel(String label){
+        this.label = label;
     }
 }
