@@ -108,7 +108,7 @@ public class Tela extends javax.swing.JFrame {
         Menu = new javax.swing.JPopupMenu();
         PopUpItem1 = new javax.swing.JCheckBoxMenuItem();
         PopUpItem2 = new javax.swing.JCheckBoxMenuItem();
-        PopUpItem3 = new javax.swing.JCheckBoxMenuItem();
+        CriarLabel_PopUpItem3 = new javax.swing.JMenuItem();
         AutomatoLayout = new javax.swing.JPanel();
         PanelAutomato = new javax.swing.JPanel();
         TelaPanel = new javax.swing.JScrollPane(this.view);
@@ -165,15 +165,13 @@ public class Tela extends javax.swing.JFrame {
         });
         Menu.add(PopUpItem2);
 
-        PopUpItem3.setActionCommand("Criar Label");
-        PopUpItem3.setLabel("Criar Label");
-        PopUpItem3.addActionListener(new java.awt.event.ActionListener() {
+        CriarLabel_PopUpItem3.setLabel("Criar Label");
+        CriarLabel_PopUpItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PopUpItem3ActionPerformed(evt);
+                CriarLabel_PopUpItem3ActionPerformed(evt);
             }
         });
-        Menu.add(PopUpItem3);
-        PopUpItem3.getAccessibleContext().setAccessibleName("Criar Label");
+        Menu.add(CriarLabel_PopUpItem3);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -254,11 +252,11 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(novoEstadoButton, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                    .addComponent(novoEstadoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(novaTransButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(removerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(arrastarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         TFletra.setText("jTextField1");
@@ -293,7 +291,7 @@ public class Tela extends javax.swing.JFrame {
             PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -911,13 +909,6 @@ public class Tela extends javax.swing.JFrame {
         this.TelaPanel.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
   
-     private void PopUpItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopUpItem3ActionPerformed
-        // TODO add your handling code here:
-        String label = JOptionPane.showInputDialog("Insira o label!");
-        this.grafo.criarLabel(label, this.vertice);
-        this.TelaPanel.repaint();
-    }//GEN-LAST:event_PopUpItem3ActionPerformed
-
 
     private void novoEstadoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoEstadoButtonActionPerformed
         this.op = 0;
@@ -934,6 +925,13 @@ public class Tela extends javax.swing.JFrame {
     private void arrastarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arrastarButtonActionPerformed
         this.op = 3;
     }//GEN-LAST:event_arrastarButtonActionPerformed
+
+    private void CriarLabel_PopUpItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarLabel_PopUpItem3ActionPerformed
+        // TODO add your handling code here:
+        String label = JOptionPane.showInputDialog("Insira o label!");
+        this.grafo.criarLabel(label, this.vertice);
+        this.TelaPanel.repaint();
+    }//GEN-LAST:event_CriarLabel_PopUpItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -954,6 +952,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JPanel AutomatoLayout;
     private javax.swing.JLabel CharLabel;
     private javax.swing.JTextField CharTF;
+    private javax.swing.JMenuItem CriarLabel_PopUpItem3;
     private javax.swing.JButton ExitStepBtn;
     private javax.swing.JPopupMenu Menu;
     private javax.swing.JMenu Menu1;
@@ -994,8 +993,5 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton novoEstadoButton;
     private javax.swing.JButton removerButton;
     private javax.swing.JLabel resultLabel;
-  private javax.swing.JCheckBoxMenuItem PopUpItem3;
-    private javax.swing.JRadioButton RBRemove;
-    private javax.swing.JRadioButton RBTrans;
     // End of variables declaration//GEN-END:variables
 }
