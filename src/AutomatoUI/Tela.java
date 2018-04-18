@@ -108,6 +108,7 @@ public class Tela extends javax.swing.JFrame {
         Menu = new javax.swing.JPopupMenu();
         PopUpItem1 = new javax.swing.JCheckBoxMenuItem();
         PopUpItem2 = new javax.swing.JCheckBoxMenuItem();
+        PopUpItem3 = new javax.swing.JCheckBoxMenuItem();
         AutomatoLayout = new javax.swing.JPanel();
         PanelAutomato = new javax.swing.JPanel();
         TelaPanel = new javax.swing.JScrollPane(this.view);
@@ -163,6 +164,16 @@ public class Tela extends javax.swing.JFrame {
             }
         });
         Menu.add(PopUpItem2);
+
+        PopUpItem3.setActionCommand("Criar Label");
+        PopUpItem3.setLabel("Criar Label");
+        PopUpItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PopUpItem3ActionPerformed(evt);
+            }
+        });
+        Menu.add(PopUpItem3);
+        PopUpItem3.getAccessibleContext().setAccessibleName("Criar Label");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -899,6 +910,14 @@ public class Tela extends javax.swing.JFrame {
         this.grafo.removeVazio();
         this.TelaPanel.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+  
+     private void PopUpItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopUpItem3ActionPerformed
+        // TODO add your handling code here:
+        String label = JOptionPane.showInputDialog("Insira o label!");
+        this.grafo.criarLabel(label, this.vertice);
+        this.TelaPanel.repaint();
+    }//GEN-LAST:event_PopUpItem3ActionPerformed
+
 
     private void novoEstadoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoEstadoButtonActionPerformed
         this.op = 0;
@@ -975,5 +994,8 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton novoEstadoButton;
     private javax.swing.JButton removerButton;
     private javax.swing.JLabel resultLabel;
+  private javax.swing.JCheckBoxMenuItem PopUpItem3;
+    private javax.swing.JRadioButton RBRemove;
+    private javax.swing.JRadioButton RBTrans;
     // End of variables declaration//GEN-END:variables
 }
