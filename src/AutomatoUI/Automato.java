@@ -399,5 +399,13 @@ public class Automato {
             this.removeVazio(v);
         }
     }
+    
+    public void criarLabel(String label, Vertice vertice){
+        for (int i = 0; i < this.vertices.size(); i++) {
+            if(this.vertices.get(i).equals(vertice)){
+                this.vertices.get(i).setLabel(label);
+            }
+        }
+    }
 
 }
