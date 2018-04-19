@@ -37,7 +37,7 @@ public class Vertice {
     }
 
     public Vertice(int x, int y, String estado) {
-        this.raio = 15;
+        this.raio = 20;
         this.x = x;
         this.y = y;
         this.estado = estado;
