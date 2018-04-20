@@ -11,9 +11,12 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -32,6 +35,7 @@ public class Tela extends javax.swing.JFrame {
     private No camAux;
     private int camCount;
     private boolean gr;
+    int auxX, auxY;
 
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
@@ -48,16 +52,19 @@ public class Tela extends javax.swing.JFrame {
         this.view3 = new ViewPanel(grafo);
         this.view3.setBackground(Color.white);
         initComponents();
-        this.view.add(this.TFletra);
+        //this.view.add(this.TFletra);
+        this.InputTable.add(this.CBDirection);
+        this.view.add(this.InputTable);
         this.CharTF.setEditable(false);
-        this.InputPanel.setVisible(false);
+        this.InputTable.setVisible(false);
         this.TFletra.setSize(35, 20);
         this.TFletra.setBackground(Color.LIGHT_GRAY);
         this.TFletra.setVisible(false);
 
+        TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
+        tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
 
         this.op = 0; //começa com novo estado
-
 
         this.view.setBackground(Color.white);
         this.TelaPanel.add(this.TFletra);
@@ -85,7 +92,6 @@ public class Tela extends javax.swing.JFrame {
         this.TFletra.setVisible(false);
 
         this.op = 0; // começa com novo estado
-
 
         this.view.setBackground(Color.white);
         this.TelaPanel.add(this.TFletra);
@@ -118,9 +124,7 @@ public class Tela extends javax.swing.JFrame {
         removerButton = new javax.swing.JButton();
         arrastarButton = new javax.swing.JButton();
         TFletra = new javax.swing.JTextField();
-        InputPanel = new javax.swing.JPanel();
-        TFWrite = new javax.swing.JTextField();
-        TFRead = new javax.swing.JTextField();
+        InputTable = new javax.swing.JTable();
         CBDirection = new javax.swing.JComboBox<>();
         PanelStep = new javax.swing.JPanel();
         StepPanel = new javax.swing.JScrollPane(this.view2);
@@ -281,75 +285,98 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        TFWrite.setColumns(25);
-        TFWrite.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        InputTable.setBackground(new java.awt.Color(204, 204, 204));
+        InputTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"$", null, null}
+            },
+            new String [] {
+                "null", "null", "null"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
 
-        TFRead.setColumns(25);
-        TFRead.setMargin(new java.awt.Insets(1, 1, 1, 1));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        InputTable.setDragEnabled(true);
+        InputTable.getTableHeader().setReorderingAllowed(false);
+        InputTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentMoved(java.awt.event.ComponentEvent evt) {
+                InputTableComponentMoved(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                InputTableComponentShown(evt);
+            }
+        });
+        InputTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                InputTablePropertyChange(evt);
+            }
+        });
 
         CBDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "R", "L" }));
-
-        javax.swing.GroupLayout InputPanelLayout = new javax.swing.GroupLayout(InputPanel);
-        InputPanel.setLayout(InputPanelLayout);
-        InputPanelLayout.setHorizontalGroup(
-            InputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(InputPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TFRead, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TFWrite, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CBDirection, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        InputPanelLayout.setVerticalGroup(
-            InputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(InputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(TFRead, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(TFWrite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(CBDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
 
         javax.swing.GroupLayout PanelAutomatoLayout = new javax.swing.GroupLayout(PanelAutomato);
         PanelAutomato.setLayout(PanelAutomatoLayout);
         PanelAutomatoLayout.setHorizontalGroup(
             PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                        .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                                .addGap(297, 297, 297)
+                                .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                                .addGap(255, 255, 255)
+                                .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(InputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CBDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         PanelAutomatoLayout.setVerticalGroup(
             PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
                 .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                                .addGap(123, 123, 123)
+                                .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                                .addGap(125, 125, 125)
+                                .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(198, 209, Short.MAX_VALUE))
+                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(InputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CBDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
+
+        if (InputTable.getColumnModel().getColumnCount() > 0) {
+            InputTable.getColumnModel().getColumn(0).setResizable(false);
+            InputTable.getColumnModel().getColumn(1).setResizable(false);
+            InputTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         AutomatoLayout.add(PanelAutomato, "AutomatoEdit");
 
@@ -428,7 +455,7 @@ public class Tela extends javax.swing.JFrame {
             PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -685,15 +712,17 @@ public class Tela extends javax.swing.JFrame {
                 if (v == null) {
                     return;
                 }
-                int aux;
                 this.aresta = this.grafo.addAresta(this.vertice, v);
                 if (this.aresta.getTipo() == 4) {
-                    this.InputPanel.setLocation(this.vertice.getX() - 25, this.vertice.getY() + 25);
+                    this.auxX = this.vertice.getX() - 114;
+                    this.auxY = this.vertice.getY() + 25;
+                    
                 } else {
-                    this.InputPanel.setLocation((this.vertice.getX() + p.x) / 2, (this.vertice.getY() + p.y) / 2 - 10);
+                    this.auxX = (this.vertice.getX() + p.x) / 2;
+                    this.auxY = (this.vertice.getY() + p.y) / 2 - 10;              
                 }
-                this.InputPanel.setVisible(true);
-                this.TFRead.requestFocus();
+                this.InputTable.setVisible(true);
+                this.InputTable.requestFocus();
 
             }
 
@@ -701,6 +730,7 @@ public class Tela extends javax.swing.JFrame {
 
         } finally {
             this.view.updateUI();
+            this.InputTable.setLocation(this.auxX, this.auxY);
         }
     }//GEN-LAST:event_TelaPanelMouseReleased
 
@@ -728,6 +758,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void TelaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseClicked
         Point p = this.view.getMousePosition();
+
         if (this.op == 0) {//novo estado
             if (this.vertice != null) {
                 return;
@@ -947,7 +978,7 @@ public class Tela extends javax.swing.JFrame {
         this.grafo.removeVazio();
         this.TelaPanel.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-  
+
 
     private void novoEstadoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoEstadoButtonActionPerformed
         this.op = 0;
@@ -971,6 +1002,27 @@ public class Tela extends javax.swing.JFrame {
         this.grafo.criarLabel(label, this.vertice);
         this.TelaPanel.repaint();
     }//GEN-LAST:event_CriarLabel_PopUpItem3ActionPerformed
+
+    private void InputTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentShown
+
+        
+    }//GEN-LAST:event_InputTableComponentShown
+
+    private void InputTableComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentMoved
+        System.out.println("hey");
+        int x = this.InputTable.getLocation().x;
+        int y = this.InputTable.getLocation().y;
+        System.out.println("x= "+ x+ ": y= " + y);
+        if(x == 5 && y == 5){
+            this.InputTable.setLocation(this.auxX,this.auxY);
+        }
+        
+        
+    }//GEN-LAST:event_InputTableComponentMoved
+
+    private void InputTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_InputTablePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InputTablePropertyChange
 
     /**
      * @param args the command line arguments
@@ -998,7 +1050,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton ExecBtn;
     private javax.swing.JButton ExitMultBtn;
     private javax.swing.JButton ExitStepBtn;
-    private javax.swing.JPanel InputPanel;
+    private javax.swing.JTable InputTable;
     private javax.swing.JPopupMenu Menu;
     private javax.swing.JMenu Menu1;
     private javax.swing.JTable MultEntradaTable;
@@ -1014,8 +1066,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JScrollPane StepPanel;
     private javax.swing.JLabel StringInfoLabel;
     private javax.swing.JLabel StringLabel;
-    private javax.swing.JTextField TFRead;
-    private javax.swing.JTextField TFWrite;
     private javax.swing.JTextField TFletra;
     private javax.swing.JScrollPane TabelPanel;
     private javax.swing.JPanel TablePanel;
