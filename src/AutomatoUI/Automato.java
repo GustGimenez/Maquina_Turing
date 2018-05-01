@@ -219,99 +219,103 @@ public class Automato {
         return Inicial;
     }
 
-    public void afnd2afd() {
-        this.removeVazio();
-
-        this.setEstados();
-        ArrayList<Character> alfabeto = this.getAlfabeto();
-        ArrayList<Linha> tabela = new ArrayList();
-        ArrayList<Integer> algo = new ArrayList();
-        algo.add(this.Inicial.getPos());
-        tabela.add(new Linha(Linha.geraID(algo), alfabeto.size(), this.Inicial.isFim()));
-        tabela.get(0).setInicial(true);
-        int i = 0;
-        boolean fim = false;
-
-        String id;
-        ArrayList<Integer> vert = null;
-        for (i = 0; i < tabela.size(); i++) {
-            Linha l = tabela.get(i);
-            String aux = l.getId();
-            for (int k = 0; k < alfabeto.size(); k++) {
-                fim = false;
-                boolean add = true;
-                vert = new ArrayList();
-                for (int j = 0; j < aux.length(); j++) {
-
-                    int origem = Integer.parseInt(Character.toString(aux.charAt(j)));
-                    for (Aresta a : arestas) {
-                        if (a.getOrigem().getPos() == origem) {
-                            ArrayList<Character> trans = a.getTrans();
-                            for (Character c : trans) {
-                                if (c.equals(alfabeto.get(k))) {
-                                    if (a.getDestino().isFim()) {
-                                        fim = true;
-                                    }
-                                    if (!vert.contains(a.getDestino().getPos())) {
-                                        vert.add(a.getDestino().getPos());
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-                if (!vert.isEmpty()) {
-                    id = Linha.geraID(vert);
-                    for (Linha l2 : tabela) {
-                        if (l2.getId().equals(id)) {
-                            add = false;
-                            break;
-                        }
-                    }
-                    if (add) {
-                        tabela.add(new Linha(id, alfabeto.size(), fim));
-                    }
-                    l.add(id, k);
-                }
-            }
-        }
-        for (Linha l : tabela) {
-            System.out.println(l.exibe());
-        }
-
-        this.vertices.removeAll(this.vertices);
-        this.arestas.removeAll(arestas);
-        i = 0;
-        Hashtable<String, Integer> hash = new Hashtable();
-        for (Linha l : tabela) {
-            this.addVertice(new Vertice(50 + 100 * i, 100, "q"));
-            hash.put(l.getId(), i++);
-        }
-
-        for (Linha l : tabela) {
-            Vertice v = vertices.get(hash.get(l.getId()));
-            v.setFim(l.isFim());
-            v.setInicial(l.isInicial());
-            String[] strAux = l.getVert();
-            for (int j = 0; j < strAux.length; j++) {
-                if (strAux[j] != null) {
-                    Vertice v2 = this.vertices.get(hash.get(strAux[j]));
-                    Aresta a = this.addAresta(v, v2);
-                    a.addEstado(alfabeto.get(j));
-                }
-            }
-        }
-
-    }
+//    public void afnd2afd() {
+//        this.removeVazio();
+//
+//        this.setEstados();
+//        ArrayList<Character> alfabeto = this.getAlfabeto();
+//        ArrayList<Linha> tabela = new ArrayList();
+//        ArrayList<Integer> algo = new ArrayList();
+//        algo.add(this.Inicial.getPos());
+//        tabela.add(new Linha(Linha.geraID(algo), alfabeto.size(), this.Inicial.isFim()));
+//        tabela.get(0).setInicial(true);
+//        int i = 0;
+//        boolean fim = false;
+//
+//        String id;
+//        ArrayList<Integer> vert = null;
+//        for (i = 0; i < tabela.size(); i++) {
+//            Linha l = tabela.get(i);
+//            String aux = l.getId();
+//            for (int k = 0; k < alfabeto.size(); k++) {
+//                fim = false;
+//                boolean add = true;
+//                vert = new ArrayList();
+//                for (int j = 0; j < aux.length(); j++) {
+//
+//                    int origem = Integer.parseInt(Character.toString(aux.charAt(j)));
+//                    for (Aresta a : arestas) {
+//                        if (a.getOrigem().getPos() == origem) {
+//                            ArrayList<String> trans = a.getTrans();
+//                            for (String c : trans) {
+//                                if (c.equals(alfabeto.get(k))) {
+//                                    if (a.getDestino().isFim()) {
+//                                        fim = true;
+//                                    }
+//                                    if (!vert.contains(a.getDestino().getPos())) {
+//                                        vert.add(a.getDestino().getPos());
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (!vert.isEmpty()) {
+//                    id = Linha.geraID(vert);
+//                    for (Linha l2 : tabela) {
+//                        if (l2.getId().equals(id)) {
+//                            add = false;
+//                            break;
+//                        }
+//                    }
+//                    if (add) {
+//                        tabela.add(new Linha(id, alfabeto.size(), fim));
+//                    }
+//                    l.add(id, k);
+//                }
+//            }
+//        }
+//        for (Linha l : tabela) {
+//            System.out.println(l.exibe());
+//        }
+//
+//        this.vertices.removeAll(this.vertices);
+//        this.arestas.removeAll(arestas);
+//        i = 0;
+//        Hashtable<String, Integer> hash = new Hashtable();
+//        for (Linha l : tabela) {
+//            this.addVertice(new Vertice(50 + 100 * i, 100, "q"));
+//            hash.put(l.getId(), i++);
+//        }
+//
+//        for (Linha l : tabela) {
+//            Vertice v = vertices.get(hash.get(l.getId()));
+//            v.setFim(l.isFim());
+//            v.setInicial(l.isInicial());
+//            String[] strAux = l.getVert();
+//            for (int j = 0; j < strAux.length; j++) {
+//                if (strAux[j] != null) {
+//                    Vertice v2 = this.vertices.get(hash.get(strAux[j]));
+//                    Aresta a = this.addAresta(v, v2);
+//                    a.addEstado(alfabeto.get(j));
+//                }
+//            }
+//        }
+//
+//    }
 
     public ArrayList<Character> getAlfabeto() {
         ArrayList<Character> alfa = new ArrayList();
 
         for (Aresta a : arestas) {
-            for (Character c : a.getTrans()) {
-                if (!alfa.contains(c)) {
-                    alfa.add(c);
+            for (String s : a.getTrans()) {
+                String[] arrayStr = s.split(";");
+                if (!alfa.contains(arrayStr[0].charAt(0))) {
+                    alfa.add(arrayStr[0].charAt(0));
+                }
+                if (!alfa.contains(arrayStr[1].charAt(0))) {
+                    alfa.add(arrayStr[1].charAt(0));
                 }
             }
         }
@@ -324,8 +328,8 @@ public class Automato {
             Aresta a = this.arestas.get(i);
             if (a.getOrigem().equals(v1)) {
                 Aresta a2 = this.addAresta(vc, a.getDestino());
-                for (Character c : a.getTrans()) {
-                    a2.addEstado(c.charValue());
+                for (String s : a.getTrans()) {
+                    a2.addEstado(s,null);
                 }
             }
         }
@@ -340,9 +344,9 @@ public class Automato {
     private boolean tranVazia(Vertice v) {
         for (Aresta a : this.arestas) {
             if (a.getOrigem().equals(v)) {
-                ArrayList<Character> trans = a.getTrans();
-                for (Character c : trans) {
-                    if (c.charValue() == '\u03bb') {
+                ArrayList<String> trans = a.getTrans();
+                for (String s : trans) {
+                    if (s.charAt(0) == '\u25A1') {
                         return true;
                     }
                 }
@@ -352,11 +356,11 @@ public class Automato {
     }
 
     private int tranVazia(Aresta a, int i) {
-        ArrayList<Character> trans = a.getTrans();
+        ArrayList<String> trans = a.getTrans();
 
         for (; i < a.getTrans().size(); i++) {
-            Character c = a.getTrans().get(i);
-            if (c == '\u03bb') {
+            String c = a.getTrans().get(i);
+            if (c.charAt(0) == '\u25A1') {
                 return i;
 
             }
@@ -399,13 +403,35 @@ public class Automato {
             this.removeVazio(v);
         }
     }
-    
-    public void criarLabel(String label, Vertice vertice){
+
+    public void criarLabel(String label, Vertice vertice) {
         for (int i = 0; i < this.vertices.size(); i++) {
-            if(this.vertices.get(i).equals(vertice)){
+            if (this.vertices.get(i).equals(vertice)) {
                 this.vertices.get(i).setLabel(label);
             }
         }
+    }
+
+    String getStrTrans(Point p) {
+        String str;
+        for (Aresta a : this.arestas) {
+            str = a.editaTransicao(p);
+            if (str != null) {
+                return str; 
+            }
+        }
+        return null;
+    }
+
+    Aresta getArestas(Point p) {
+        String str;
+        for (Aresta a : this.arestas) {
+            str = a.editaTransicao(p);
+            if (str != null) {
+                return a; 
+            }
+        }
+        return null;
     }
 
 }

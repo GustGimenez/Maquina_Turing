@@ -35,7 +35,8 @@ public class Tela extends javax.swing.JFrame {
     private No camAux;
     private int camCount;
     private boolean gr;
-    int auxX, auxY;
+    private int auxX, auxY;
+    private String strTrans;
 
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
@@ -67,7 +68,6 @@ public class Tela extends javax.swing.JFrame {
         this.op = 0; //começa com novo estado
 
         this.view.setBackground(Color.white);
-        this.TelaPanel.add(this.TFletra);
         this.TFletra.setText("");
         this.TelaPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.TelaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -215,6 +215,11 @@ public class Tela extends javax.swing.JFrame {
                 TelaPanelMouseReleased(evt);
             }
         });
+        TelaPanel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TelaPanelKeyTyped(evt);
+            }
+        });
 
         EstadosBtnPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -302,9 +307,17 @@ public class Tela extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        InputTable.setDragEnabled(true);
+        InputTable.setGridColor(new java.awt.Color(204, 204, 255));
         InputTable.getTableHeader().setReorderingAllowed(false);
+        InputTable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                InputTableFocusLost(evt);
+            }
+        });
         InputTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                InputTableComponentHidden(evt);
+            }
             public void componentMoved(java.awt.event.ComponentEvent evt) {
                 InputTableComponentMoved(evt);
             }
@@ -317,8 +330,14 @@ public class Tela extends javax.swing.JFrame {
                 InputTablePropertyChange(evt);
             }
         });
+        InputTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                InputTableKeyTyped(evt);
+            }
+        });
 
         CBDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "R", "L" }));
+        CBDirection.setSelectedIndex(1);
 
         javax.swing.GroupLayout PanelAutomatoLayout = new javax.swing.GroupLayout(PanelAutomato);
         PanelAutomato.setLayout(PanelAutomatoLayout);
@@ -684,7 +703,7 @@ public class Tela extends javax.swing.JFrame {
         }
         this.TFletra.setText("");
 
-        this.aresta.addEstado(aux);
+        this.aresta.addEstado(aux.toString(),null);
         this.TelaPanel.repaint();
     }//GEN-LAST:event_TFletraFocusLost
 
@@ -715,14 +734,21 @@ public class Tela extends javax.swing.JFrame {
                 this.aresta = this.grafo.addAresta(this.vertice, v);
                 if (this.aresta.getTipo() == 4) {
                     this.auxX = this.vertice.getX() - 114;
+                    if (auxX < 6) {
+                        auxX = 6;
+                    }
                     this.auxY = this.vertice.getY() + 25;
-                    
+
                 } else {
                     this.auxX = (this.vertice.getX() + p.x) / 2;
-                    this.auxY = (this.vertice.getY() + p.y) / 2 - 10;              
+                    if (auxX < 6) {
+                        auxX = 6;
+                    }
+                    this.auxY = (this.vertice.getY() + p.y) / 2 - 10;
                 }
                 this.InputTable.setVisible(true);
                 this.InputTable.requestFocus();
+                this.cleanInput();
 
             }
 
@@ -740,6 +766,9 @@ public class Tela extends javax.swing.JFrame {
                 this.vertice.setFocus(false);
             }
             Point p = this.view.getMousePosition();
+            if (this.InputTable.isVisible()) {
+                verificaClick(p.x, p.y);
+            }
             this.vertice = grafo.busca(p.x, p.y);
             if (vertice != null) {
                 this.vertice.setFocus(true);
@@ -775,6 +804,16 @@ public class Tela extends javax.swing.JFrame {
                 this.grafo.removeVertice(this.vertice);
             } else {
                 this.grafo.removeTransicao(p);
+            }
+        }
+        if (this.op == 3) { // verificar edição de estado
+            this.strTrans = this.grafo.getStrTrans(p);
+            this.aresta = this.grafo.getArestas(p);
+            if (strTrans != null) {
+                this.InputTable.setLocation(p);
+                this.setInputTable(this.strTrans);
+                this.InputTable.setVisible(true);
+                this.InputTable.requestFocus();
             }
         }
         this.view.repaint();
@@ -970,7 +1009,7 @@ public class Tela extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
-        this.grafo.afnd2afd();
+        //this.grafo.afnd2afd();
         this.TelaPanel.repaint();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -1005,24 +1044,63 @@ public class Tela extends javax.swing.JFrame {
 
     private void InputTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentShown
 
-        
+
     }//GEN-LAST:event_InputTableComponentShown
 
     private void InputTableComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentMoved
-        System.out.println("hey");
         int x = this.InputTable.getLocation().x;
         int y = this.InputTable.getLocation().y;
-        System.out.println("x= "+ x+ ": y= " + y);
-        if(x == 5 && y == 5){
-            this.InputTable.setLocation(this.auxX,this.auxY);
+        if (x == 5 && y == 5) {
+            this.InputTable.setLocation(this.auxX, this.auxY);
         }
-        
-        
+
+
     }//GEN-LAST:event_InputTableComponentMoved
 
     private void InputTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_InputTablePropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_InputTablePropertyChange
+
+    private void InputTableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_InputTableFocusLost
+        //    this.InputTable.setVisible(false);
+    }//GEN-LAST:event_InputTableFocusLost
+
+    private void InputTableComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentHidden
+        if (this.aresta == null) {
+            return;
+        }
+        String texto;
+        String text1 = (String) this.InputTable.getValueAt(0, 0);
+        String text2 = (String) this.InputTable.getValueAt(0, 1);
+        String text3 = (String) this.InputTable.getValueAt(0, 2);
+
+        if (text1 == null || text1.equals("")) {
+            text1 = "\u25A1";
+        }
+        if (text2 == null || text2.equals("")) {
+            text2 = "\u25A1";
+        }
+        if (text3 == null || text3.equals("")) {
+            text3 = "R";
+        }
+        texto = text1 + ";" + text2 + ";" + text3;
+
+        this.aresta.addEstado(texto,this.strTrans);
+        this.TelaPanel.repaint();
+        this.strTrans = null;
+    }//GEN-LAST:event_InputTableComponentHidden
+
+    private void InputTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_InputTableKeyTyped
+        if ((int) evt.getKeyChar() == 27) {
+            this.verificaClick(0, 0);
+        }
+    }//GEN-LAST:event_InputTableKeyTyped
+
+    private void TelaPanelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TelaPanelKeyTyped
+        if ((int) evt.getKeyChar() == 27) {
+            this.verificaClick(0, 0);
+        }
+    }//GEN-LAST:event_TelaPanelKeyTyped
 
     /**
      * @param args the command line arguments
@@ -1034,6 +1112,35 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+    }
+
+    private void verificaClick(int x, int y) {
+        int tableX, tableY;
+
+        tableX = this.InputTable.getLocation().x;
+        tableY = this.InputTable.getLocation().y;
+
+        if (x < tableX || x > tableX + 225 || y < tableY || y > tableY + 16) {
+            if (this.InputTable.isEditing()) {
+                this.InputTable.getCellEditor().stopCellEditing();
+            }
+            this.InputTable.setVisible(false);
+        }
+    }
+
+    private void cleanInput() {
+        this.InputTable.setValueAt("", 0, 0);
+        this.InputTable.setValueAt("", 0, 1);
+        this.InputTable.setValueAt("R", 0, 2);
+    }
+
+    private void setInputTable(String strTrans) {
+        String[] aux;
+        
+        aux = strTrans.split(";");
+        this.InputTable.setValueAt(aux[0], 0, 0);
+        this.InputTable.setValueAt(aux[1], 0, 1);
+        this.InputTable.setValueAt(aux[2], 0, 2);
     }
 
     public class MeuPanel extends javax.swing.JPanel {

@@ -29,7 +29,7 @@ public class Resolve {
         this.terminal = new boolean[numVert];
         this.inicial = auto.getIni();
         ArrayList<Aresta> arestas = auto.getArestas();
-        ArrayList<Character> trans;
+        ArrayList<String> trans;
         int o, d;
         No aux;
         for (Aresta a : arestas) {
@@ -67,7 +67,7 @@ public class Resolve {
                 aux = this.estados[vert];
                 while (aux != null) {
                     for (Character c : aux.getTransicao()) {
-                        if (c == '\u03bb') {
+                        if (c == '\u25A1') {
 
                             if (!vazio.contains(aux.getEstado())) {
 
@@ -102,7 +102,7 @@ public class Resolve {
 
                     }
                 }
-                if (c == '\u03bb') {
+                if (c == '\u25A1') {
 
                     if (!vazio.contains(aux.getEstado())) {
 
@@ -163,7 +163,7 @@ public class Resolve {
             while (aux != null) {
                 t = aux.getTransicao();
                 for (Character c : t) {
-                    if (!alfabeto.contains(c) && c != '\u03bb') {
+                    if (!alfabeto.contains(c) && c != '\u25A1') {
                         alfabeto.add(c);
                     }
                 }
@@ -201,7 +201,7 @@ public class Resolve {
                 }
             }
             if (this.terminal[i]) {
-                result.append("q" + i + " -> \u03bb \n");
+                result.append("q" + i + " -> \u25A1 \n");
             }
         }
         result.append("\n}");
