@@ -5,11 +5,8 @@
  */
 package AutomatoUI;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.awt.geom.QuadCurve2D;
 
@@ -21,7 +18,7 @@ public class Aresta {
 
     private Vertice origem;
     private Vertice destino;
-    private ArrayList<Character> trans;
+    private ArrayList<String> trans;
     private int tipo;
 
     public Aresta(Vertice o, Vertice d, int tipo) {
@@ -49,8 +46,8 @@ public class Aresta {
                 g.drawLine(p1.x, p1.y, p2.x, p2.y);
                 des = -12;
                 g.setStroke(new java.awt.BasicStroke(1f));
-                for (Character c : trans) {
-                    g.drawString(c.toString(), x, y + des);
+                for (String s : trans) {
+                    g.drawString(s, x, y + des);
                     des -= 13;
                 }
                 break;
@@ -59,8 +56,8 @@ public class Aresta {
                 g.draw(q);
                 des = -22;
                 g.setStroke(new java.awt.BasicStroke(1f));
-                for (Character c : trans) {
-                    g.drawString(c.toString(), x, y + des);
+                for (String s : trans) {
+                    g.drawString(s, x, y + des);
                     des -= 13;
                 }
                 break;
@@ -74,9 +71,9 @@ public class Aresta {
                 g.drawLine(p2.x, p2.y, p2.x + 6, p2.y - 8);
                 g.drawLine(p2.x, p2.y, p2.x - 8, p2.y - 7);
                 g.setStroke(new java.awt.BasicStroke(1f));
-                for (Character c : trans) {
+                for (String s : trans) {
                     int yAux = this.origem.getY() + des;
-                    g.drawString(c.toString(), po.x - 4, yAux);
+                    g.drawString(s, po.x - 4, yAux);
                     des -= 13;
                 }
                 break;
@@ -86,8 +83,8 @@ public class Aresta {
                 g.draw(q);
                 des = 32;
                 g.setStroke(new java.awt.BasicStroke(1f));
-                for (Character c : trans) {
-                    g.drawString(c.toString(), x, y + des);
+                for (String s : trans) {
+                    g.drawString(s, x, y + des);
                     des += 13;
                 }
                 break;
@@ -132,7 +129,7 @@ public class Aresta {
         return destino;
     }
 
-    public ArrayList<Character> getTrans() {
+    public ArrayList<String> getTrans() {
         return trans;
     }
 
@@ -140,10 +137,17 @@ public class Aresta {
         return this.tipo;
     }
 
-    public void addEstado(Character aux) {
-        if (!this.trans.contains(aux)) {
-            this.trans.add(aux);
+    public void addEstado(String aux, String strComp) {
+        if (strComp == null) {
+            if (!this.trans.contains(aux)) {
+                this.trans.add(aux);
+            }
+        } else {
+            int i = this.trans.indexOf(strComp);
+            this.trans.remove(i);
+            this.trans.add(i, aux);
         }
+
     }
 
     public void setTipo(int tipo) {
@@ -173,9 +177,9 @@ public class Aresta {
 
         }
         int y = (po.y + pd.y) / 2 - 10 + offset;
-        int x = (po.x + pd.x) / 2 - 2;
+        int x = (po.x + pd.x) / 2 - 7;
         for (int i = 0; i < max; i++) {
-            if (p.x > x && p.x < x + 10 && p.y > y && p.y < y + 12) {
+            if (p.x > x && p.x < x + 50 && p.y > y && p.y < y + 12) {
                 this.trans.remove(i);
                 break;
             }
@@ -185,4 +189,37 @@ public class Aresta {
         return (max > this.trans.size());
     }
 
+    public String editaTransicao(Point p) {
+        int max = this.trans.size();
+        Point po = new Point(this.origem.getX(), this.origem.getY());
+        Point pd = new Point(this.destino.getX(), this.destino.getY());
+        int offset = 0;
+        int mult = -1;
+        switch (this.tipo) {
+            case 1:
+                offset = -12;
+                break;
+            case 2:
+                offset = -22;
+                break;
+            case 3:
+                offset = 32;
+                mult = 1;
+                break;
+            case 4:
+                offset = -65;
+                break;
+
+        }
+        int y = (po.y + pd.y) / 2 - 10 + offset;
+        int x = (po.x + pd.x) / 2 - 7;
+        for (int i = 0; i < max; i++) {
+            if (p.x > x && p.x < x + 50 && p.y > y && p.y < y + 12) {
+                return this.trans.get(i);
+            }
+            y += 13 * mult;
+        }
+
+        return null;
+    }
 }
