@@ -46,6 +46,8 @@ public class Vertice {
         this.fim = false;
         this.label = null;
     }
+    
+    
 
     public int getPos() {
         return pos;
@@ -194,6 +196,10 @@ public class Vertice {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+    
+    public String getLabel(){
+        return this.label;
     }
 
     public void desenhaLabel(Graphics2D g) {
