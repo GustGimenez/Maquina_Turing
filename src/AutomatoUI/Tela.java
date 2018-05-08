@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +23,7 @@ import javax.swing.table.TableColumn;
  */
 public class Tela extends javax.swing.JFrame {
 
-    private Automato grafo;
+    private final Automato grafo;
     private Vertice vertice;
     private Aresta aresta;
     private ViewPanel view;
@@ -34,70 +33,64 @@ public class Tela extends javax.swing.JFrame {
     private No cam;
     private No camAux;
     private int camCount;
-    private boolean gr;
+    private final boolean gr;
     private int auxX, auxY;
     private String strTrans;
 
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
-    /**
-     * Creates new form Tela
+    private final int NOVO_ESTADO = 0;
+    private final int NOVA_TRANSICAO = 1;
+    private final int REMOVER = 2;
+    private final int ARRASTAR = 3;
+
+    /*
+        *Inicializa as Views
+        *Deve ser chamado ANTES initComponents
      */
+    private void initTela() {
+        this.view = new ViewPanel(grafo);
+        this.view2 = new ViewPanel(grafo);
+        this.view2.setBackground(Color.white);
+        this.view3 = new ViewPanel(grafo);
+        this.view3.setBackground(Color.white);
+    }
+
+    /*
+        *Setar valores iniciais dos componentes
+        *Deve ser chamado DEPOIS initComponents
+     */
+    private void setComp() {
+        this.InputTable.add(this.CBDirection);
+        this.view.add(this.InputTable);
+        this.InputTable.setVisible(false);
+        this.op = this.NOVO_ESTADO; //começa com novo estado
+        this.view.setBackground(Color.white);
+        this.TelaPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.TelaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
+        tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
+    }
+
     public Tela() {
         grafo = new Automato();
         this.gr = false;
-        this.view = new ViewPanel(grafo);
-        this.view.setBackground(Color.white);
-        this.view2 = new ViewPanel(grafo);
-        this.view2.setBackground(Color.white);
-        this.view3 = new ViewPanel(grafo);
-        this.view3.setBackground(Color.white);
+        this.initTela();
         initComponents();
-        //this.view.add(this.TFletra);
-        this.InputTable.add(this.CBDirection);
-        this.view.add(this.InputTable);
-        this.CharTF.setEditable(false);
-        this.InputTable.setVisible(false);
-        this.TFletra.setSize(35, 20);
-        this.TFletra.setBackground(Color.LIGHT_GRAY);
-        this.TFletra.setVisible(false);
-
-        TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
-        tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
-
-        this.op = 0; //começa com novo estado
-
-        this.view.setBackground(Color.white);
-        this.TFletra.setText("");
-        this.TelaPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.TelaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.setComp();
 
     }
 
+    /*
+        *Herdado do projeto de automatos
+     */
     public Tela(Automato a) {
         this.gr = true;
         this.grafo = a;
-        this.view = new ViewPanel(grafo);
-        this.view.setBackground(Color.white);
-        this.view2 = new ViewPanel(grafo);
-        this.view2.setBackground(Color.white);
-        this.view3 = new ViewPanel(grafo);
-        this.view3.setBackground(Color.white);
+        this.initTela();
         initComponents();
-        this.view.add(this.TFletra);
-        this.CharTF.setEditable(false);
+        this.setComp();
 
-        this.TFletra.setSize(35, 20);
-        this.TFletra.setBackground(Color.LIGHT_GRAY);
-        this.TFletra.setVisible(false);
-
-        this.op = 0; // começa com novo estado
-
-        this.view.setBackground(Color.white);
-        this.TelaPanel.add(this.TFletra);
-        this.TFletra.setText("");
-        this.TelaPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.TelaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
 
     /**
@@ -123,7 +116,6 @@ public class Tela extends javax.swing.JFrame {
         novaTransButton = new javax.swing.JButton();
         removerButton = new javax.swing.JButton();
         arrastarButton = new javax.swing.JButton();
-        TFletra = new javax.swing.JTextField();
         InputTable = new javax.swing.JTable();
         CBDirection = new javax.swing.JComboBox<>();
         PanelStep = new javax.swing.JPanel();
@@ -132,10 +124,10 @@ public class Tela extends javax.swing.JFrame {
         StepBtn = new javax.swing.JButton();
         ExitStepBtn = new javax.swing.JButton();
         StringLabel = new javax.swing.JLabel();
-        CharLabel = new javax.swing.JLabel();
-        CharTF = new javax.swing.JTextField();
         StringInfoLabel = new javax.swing.JLabel();
         resultLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TPFita = new javax.swing.JTextPane();
         PanelMultEntradas = new javax.swing.JPanel();
         TablePanel = new javax.swing.JPanel();
         TabelPanel = new javax.swing.JScrollPane();
@@ -150,12 +142,6 @@ public class Tela extends javax.swing.JFrame {
         mi_Exe1 = new javax.swing.JMenuItem();
         mi_ExeStep = new javax.swing.JMenuItem();
         mi_MultEntradas = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
 
         PopUpItem1.setText("Inicial");
         PopUpItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -278,18 +264,6 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        TFletra.setText("jTextField1");
-        TFletra.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                TFletraFocusLost(evt);
-            }
-        });
-        TFletra.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                TFletraKeyPressed(evt);
-            }
-        });
-
         InputTable.setBackground(new java.awt.Color(204, 204, 204));
         InputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -351,13 +325,8 @@ public class Tela extends javax.swing.JFrame {
                         .addContainerGap())
                     .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                                .addGap(297, 297, 297)
-                                .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                                .addGap(255, 255, 255)
-                                .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(255, 255, 255)
+                        .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
@@ -372,14 +341,9 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                                .addGap(123, 123, 123)
-                                .addComponent(TFletra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                                .addGap(125, 125, 125)
-                                .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(198, 209, Short.MAX_VALUE))
+                        .addGap(125, 125, 125)
+                        .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(200, 211, Short.MAX_VALUE))
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -413,11 +377,11 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        CharLabel.setText("Character aceito:");
-
         StringInfoLabel.setText("String:");
 
         resultLabel.setText("--");
+
+        jScrollPane1.setViewportView(TPFita);
 
         javax.swing.GroupLayout StepBtnPanelLayout = new javax.swing.GroupLayout(StepBtnPanel);
         StepBtnPanel.setLayout(StepBtnPanelLayout);
@@ -430,11 +394,9 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(ExitStepBtn)
                 .addGap(94, 94, 94)
                 .addComponent(StringLabel)
-                .addGap(59, 59, 59)
-                .addComponent(CharLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CharTF, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addGap(78, 78, 78)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(StringInfoLabel)
                     .addComponent(resultLabel))
@@ -442,21 +404,21 @@ public class Tela extends javax.swing.JFrame {
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(StepBtn)
-                    .addComponent(ExitStepBtn)
-                    .addComponent(StringLabel))
-                .addContainerGap())
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CharLabel)
-                    .addComponent(CharTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(StringInfoLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(StringInfoLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(resultLabel))
+            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(StepBtn)
+                            .addComponent(ExitStepBtn)
+                            .addComponent(StringLabel)))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout PanelStepLayout = new javax.swing.GroupLayout(PanelStep);
@@ -474,7 +436,7 @@ public class Tela extends javax.swing.JFrame {
             PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -623,46 +585,6 @@ public class Tela extends javax.swing.JFrame {
 
         jMenuBar1.add(Menu1);
 
-        jMenu1.setText("Conversão");
-
-        jMenuItem1.setText("Gramatica");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
-        jMenuItem2.setText("Expressão Regular");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.setText("AFD");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Remover Transições Vazias");
-
-        jMenuItem4.setText("Remover");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem4);
-
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -681,31 +603,6 @@ public class Tela extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void TFletraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TFletraKeyPressed
-        if (evt.getKeyChar() == '\n') {
-            this.TFletra.setVisible(false);
-        }
-    }//GEN-LAST:event_TFletraKeyPressed
-
-    private void TFletraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TFletraFocusLost
-        String aux1 = this.TFletra.getText();
-        aux1 = aux1.trim();
-        Character aux;
-
-        if (aux1.equals("")) {
-            aux = '\u03bb';
-        } else {
-            if (aux1.length() > 1) {
-                JOptionPane.showMessageDialog(this, "Apenas o primeiro caracter será foi registrado");
-            }
-            aux = aux1.charAt(0);
-        }
-        this.TFletra.setText("");
-
-        this.aresta.addEstado(aux.toString(),null);
-        this.TelaPanel.repaint();
-    }//GEN-LAST:event_TFletraFocusLost
 
     private void TelaPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseReleased
         try {
@@ -727,7 +624,7 @@ public class Tela extends javax.swing.JFrame {
                 this.Menu.show(this.view, p.x, p.y);
                 return;
             }
-            if (this.op == 1) {//transição
+            if (this.op == this.NOVA_TRANSICAO) {//transição
                 if (v == null) {
                     return;
                 }
@@ -773,12 +670,7 @@ public class Tela extends javax.swing.JFrame {
             if (vertice != null) {
                 this.vertice.setFocus(true);
             }
-            if (this.TFletra.isVisible()) {
-                Point pAux = this.TFletra.getLocation();
-                if ((p.x - pAux.x) > 50 || (p.y - pAux.y) > 20) {
-                    this.TFletra.setVisible(false);
-                }
-            }
+
             this.TelaPanel.repaint();
         } catch (NullPointerException e) {
 
@@ -788,7 +680,7 @@ public class Tela extends javax.swing.JFrame {
     private void TelaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseClicked
         Point p = this.view.getMousePosition();
 
-        if (this.op == 0) {//novo estado
+        if (this.op == this.NOVO_ESTADO) {//novo estado
             if (this.vertice != null) {
                 return;
             }
@@ -796,7 +688,7 @@ public class Tela extends javax.swing.JFrame {
             this.grafo.addVertice(this.vertice);
 
         }
-        if (this.op == 2) {//remove
+        if (this.op == this.REMOVER) {//remove
             if (this.vertice != null) {
                 if (this.vertice.isInicial()) {
                     this.grafo.setInicial(null);
@@ -806,7 +698,7 @@ public class Tela extends javax.swing.JFrame {
                 this.grafo.removeTransicao(p);
             }
         }
-        if (this.op == 3) { // verificar edição de estado
+        if (this.op == this.ARRASTAR) { // verificar edição de estado
             this.strTrans = this.grafo.getStrTrans(p);
             this.aresta = this.grafo.getArestas(p);
             if (strTrans != null) {
@@ -821,7 +713,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void TelaPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseDragged
         try {
-            if (this.op == 3) {//arrastar
+            if (this.op == this.ARRASTAR) {//arrastar
 
                 Point p = this.view.getMousePosition();
 
@@ -830,7 +722,7 @@ public class Tela extends javax.swing.JFrame {
                     this.vertice.setY(p.y);
                 }
 
-            } else if (this.vertice != null && this.op == 1) {//transição
+            } else if (this.vertice != null && this.op == this.NOVA_TRANSICAO) {//transição
                 Point2D p = (Point2D) this.view.getMousePosition();
                 this.view.getS().setLine(p.getX(), p.getY(), vertice.getX(), vertice.getY());
             }
@@ -874,7 +766,6 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.grafo.setPos();
-        this.CharTF.setText("");
         this.resultLabel.setText("");
 
         if (this.grafo.getInicial() == null) {
@@ -899,11 +790,11 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_mi_ExeStepActionPerformed
 
     private void StepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StepBtnActionPerformed
+
         if (this.camCount == 2) {
             this.camCount = 0;
             this.StepBtn.setText("Começar");
             this.vertice.setFocus(false);
-            this.CharTF.setText("");
             this.resultLabel.setText("");
         } else {
 
@@ -916,7 +807,7 @@ public class Tela extends javax.swing.JFrame {
             }
             if (!camAux.getTransicao().isEmpty()) {
                 String aux = camAux.getTransicao().get(0).toString();
-                this.CharTF.setText(aux);
+
                 if (!aux.equals("" + '\u03bb')) {
                     this.resultLabel.setText(this.resultLabel.getText() + aux);
                 }
@@ -978,61 +869,20 @@ public class Tela extends javax.swing.JFrame {
         model.addRow(new Object[2]);
     }//GEN-LAST:event_AddLineBtnActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        this.grafo.setPos();
-
-        if (this.grafo.getInicial() == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
-            return;
-        }
-        Resolve r = new Resolve(this.grafo);
-
-        JOptionPane.showMessageDialog(this, r.AF2GR());
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        this.grafo.setPos();
-
-        if (this.grafo.getInicial() == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
-            return;
-        }
-        Resolve r = new Resolve(this.grafo);
-
-        JOptionPane.showMessageDialog(this, r.AF2ER());
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        this.grafo.setPos();
-
-        if (this.grafo.getInicial() == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
-            return;
-        }
-        //this.grafo.afnd2afd();
-        this.TelaPanel.repaint();
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        this.grafo.removeVazio();
-        this.TelaPanel.repaint();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-
     private void novoEstadoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoEstadoButtonActionPerformed
-        this.op = 0;
+        this.op = this.NOVO_ESTADO;
     }//GEN-LAST:event_novoEstadoButtonActionPerformed
 
     private void novaTransButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaTransButtonActionPerformed
-        this.op = 1;
+        this.op = this.NOVA_TRANSICAO;
     }//GEN-LAST:event_novaTransButtonActionPerformed
 
     private void removerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerButtonActionPerformed
-        this.op = 2;
+        this.op = this.REMOVER;
     }//GEN-LAST:event_removerButtonActionPerformed
 
     private void arrastarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arrastarButtonActionPerformed
-        this.op = 3;
+        this.op = this.ARRASTAR;
     }//GEN-LAST:event_arrastarButtonActionPerformed
 
     private void CriarLabel_PopUpItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarLabel_PopUpItem3ActionPerformed
@@ -1070,29 +920,37 @@ public class Tela extends javax.swing.JFrame {
             return;
         }
         String texto;
-        String text1 = (String) this.InputTable.getValueAt(0, 0);
-        String text2 = (String) this.InputTable.getValueAt(0, 1);
-        String text3 = (String) this.InputTable.getValueAt(0, 2);
-
+        
+        //Pega os valores da tabela, ignorando espacos
+        String text1 = ((String) this.InputTable.getValueAt(0, 0)).trim();
+        String text2 = ((String) this.InputTable.getValueAt(0, 1)).trim();
+        String text3 = ((String) this.InputTable.getValueAt(0, 2)).trim();
+        
+        
+        //substitui vazio por caracter quadrado
         if (text1 == null || text1.equals("")) {
             text1 = "\u25A1";
         }
         if (text2 == null || text2.equals("")) {
             text2 = "\u25A1";
         }
+        
+        //Default de andamento da fita: Direita
         if (text3 == null || text3.equals("")) {
             text3 = "R";
         }
-        texto = text1 + ";" + text2 + ";" + text3;
+        
+        //Forma string que será armazenada. Apenas 1 caractere por campo
+        texto = text1.charAt(0) + ";" + text2.charAt(0) + ";" + text3.charAt(0);
 
-        this.aresta.addEstado(texto,this.strTrans);
+        this.aresta.addEstado(texto, this.strTrans);
         this.TelaPanel.repaint();
         this.strTrans = null;
     }//GEN-LAST:event_InputTableComponentHidden
 
     private void InputTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_InputTableKeyTyped
-        if ((int) evt.getKeyChar() == 27) {
-            this.verificaClick(0, 0);
+        if ((int) evt.getKeyChar() == 27) {// digitou esc
+            this.verificaClick(0, 0); //Esconde tela
         }
     }//GEN-LAST:event_InputTableKeyTyped
 
@@ -1136,7 +994,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void setInputTable(String strTrans) {
         String[] aux;
-        
+
         aux = strTrans.split(";");
         this.InputTable.setValueAt(aux[0], 0, 0);
         this.InputTable.setValueAt(aux[1], 0, 1);
@@ -1150,8 +1008,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton AddLineBtn;
     private javax.swing.JPanel AutomatoLayout;
     private javax.swing.JComboBox<String> CBDirection;
-    private javax.swing.JLabel CharLabel;
-    private javax.swing.JTextField CharTF;
     private javax.swing.JMenuItem CriarLabel_PopUpItem3;
     private javax.swing.JPanel EstadosBtnPanel;
     private javax.swing.JButton ExecBtn;
@@ -1173,20 +1029,15 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JScrollPane StepPanel;
     private javax.swing.JLabel StringInfoLabel;
     private javax.swing.JLabel StringLabel;
-    private javax.swing.JTextField TFletra;
+    private javax.swing.JTextPane TPFita;
     private javax.swing.JScrollPane TabelPanel;
     private javax.swing.JPanel TablePanel;
     private javax.swing.JScrollPane TelaPanel;
     private javax.swing.JButton arrastarButton;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem mi_Exe1;
     private javax.swing.JMenuItem mi_ExeStep;
     private javax.swing.JMenuItem mi_MultEntradas;
