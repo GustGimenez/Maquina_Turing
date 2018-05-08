@@ -38,6 +38,8 @@ public class Vertice {
         this.fim = false;
         this.label = null;
     }
+    
+    
 
     public boolean isVisitado() {
         return visitado;
@@ -119,8 +121,12 @@ public class Vertice {
         return this.inicial;
     }
 
-    public void setLabel(String label) {
+        public void setLabel(String label) {
         this.label = label;
+    }
+    
+    public String getLabel(){
+        return this.label;
     }
     
     //Funções de desenho e manipulação
@@ -199,7 +205,7 @@ public class Vertice {
         g.fillRect(-y + xc, -x + yc, (int) contorno, (int) contorno);
 
     }
-    
+
     //Desenha label abaixo do vertice
     public void desenhaLabel(Graphics2D g) {
         int largura = 15;

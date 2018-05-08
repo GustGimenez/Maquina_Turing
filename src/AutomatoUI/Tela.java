@@ -697,6 +697,7 @@ public class Tela extends javax.swing.JFrame {
             } else {
                 this.grafo.removeTransicao(p);
             }
+            this.grafo.verificaLabel(p);
         }
         if (this.op == this.ARRASTAR) { // verificar edição de estado
             this.strTrans = this.grafo.getStrTrans(p);
