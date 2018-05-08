@@ -22,6 +22,8 @@ public class Resolve {
     private No caminho;
     private boolean[] terminal;
     private ArrayList<Integer> vazio;
+    
+    private final String VAZIO = "\u25A1";
 
     public Resolve(Automato auto) { // Transforma a representação de desenho para uma representação lógica
         this.numVert = auto.getVertices().size();
@@ -147,133 +149,6 @@ public class Resolve {
         }
         arrumaCaminho(atual.getProx());
 
-    }
-
-    public String AF2GR() {
-        StringBuilder result = new StringBuilder("G = ({");
-        No aux;
-        ArrayList<Character> t, alfabeto = new ArrayList();
-        for (int i = 0; i < this.numVert; i++) {
-            if (i != 0) {
-                result.append(", ");
-            }
-            result.append("q" + i);
-
-            aux = this.estados[i];
-            while (aux != null) {
-                t = aux.getTransicao();
-                for (Character c : t) {
-                    if (!alfabeto.contains(c) && c != '\u25A1') {
-                        alfabeto.add(c);
-                    }
-                }
-                aux = aux.getProx();
-            }
-        }
-        result.append("}, {");
-        int j = 0;
-        for (Character c : alfabeto) {
-            result.append(c);
-            if (j++ < alfabeto.size() - 1) {
-                result.append(", ");
-            }
-        }
-        result.append("}, P, q" + this.inicial + ")\n\n\nP = {\n");
-
-        aux = this.estados[inicial];
-        while (aux != null) {
-            t = aux.getTransicao();
-            for (Character c : t) {
-                result.append("q" + inicial + " -> " + c + " q" + aux.getEstado() + "\n");
-            }
-            aux = aux.getProx();
-        }
-
-        for (int i = 0; i < this.numVert; i++) {
-            if (i != inicial) {
-                aux = this.estados[i];
-                while (aux != null) {
-                    t = aux.getTransicao();
-                    for (Character c : t) {
-                        result.append("q" + i + " -> " + c + " q" + aux.getEstado() + "\n");
-                    }
-                    aux = aux.getProx();
-                }
-            }
-            if (this.terminal[i]) {
-                result.append("q" + i + " -> \u25A1 \n");
-            }
-        }
-        result.append("\n}");
-
-        return result.toString();
-    }
-
-    public String AF2ER() {
-        StringBuilder result = new StringBuilder();
-        String expresao = "";
-        String vetor[] = new String[100];
-        String strAux;
-
-        int cont = 0;
-        int k = 0;
-        for (int i = 0; i < this.numVert; i++) {
-            No aux = this.estados[i];
-            cont = 0;
-            while (aux != null) {
-                ArrayList<Character> transAux = aux.getTransicao();
-
-                if (i == aux.getEstado()) {
-                    strAux = "";
-                    for (Character c : transAux) {
-                        strAux += c;
-                    }
-                    vetor[k] = "(" + strAux + ")* ";
-                    k++;
-                    System.out.println("if 1");
-                } else if (this.estados[i].getProx() == null) {
-                    strAux = "";
-                    for (Character c : transAux) {
-                        strAux += c;
-                    }
-                    vetor[k] = "(" + strAux + ")";
-                    k++;
-                    System.out.println("if 2");
-                } else if (cont == 0) {
-                    strAux = "";
-                    for (Character c : transAux) {
-                        strAux += c;
-                    }
-                    vetor[k] = "" + strAux + "";
-                    k++;
-                    System.out.println("if 3");
-                } else if (aux.getProx() == null) {
-                    strAux = "";
-                    for (Character c : transAux) {
-                        strAux += c;
-                    }
-                    vetor[k] = "+" + strAux + ")";
-                    k++;
-                    System.out.println("if 4");
-                } else {
-                    strAux = "";
-                    for (Character c : transAux) {
-                        strAux += c;
-                    }
-                    vetor[k] = "+" + strAux;
-                    k++;
-                    System.out.println("if 5");
-                }
-                cont++;
-                System.out.println("cont: " + cont);
-                aux = aux.getProx();
-            }
-        }
-
-        for (int i = 0; vetor[i] != null; i++) {
-            expresao += vetor[i];
-        }
-        return expresao;
     }
 
 }
