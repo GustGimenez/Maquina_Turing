@@ -16,9 +16,9 @@ import java.awt.geom.QuadCurve2D;
  */
 public class Aresta {
 
-    private Vertice origem;
-    private Vertice destino;
-    private ArrayList<String> trans;
+    private final Vertice origem;
+    private final Vertice destino;
+    private final ArrayList<String> trans;
     private int tipo;
 
     public Aresta(Vertice o, Vertice d, int tipo) {
@@ -28,7 +28,34 @@ public class Aresta {
         this.trans = new ArrayList();
 
     }
+    
+    // Constantes para desenho:
+    private static final int TIPO_SIMPLES = 1; // DE UM VERTICE A OUTRO
+    private static final int TIPO_SELF = 4; // DE UM VERTICE ATE ELE MESMO
+    private static final int TIPO_CURVADO_SUPERIOR = 2; // QUANDO EXISTE TRANSICAO IDA E VOLTA
+    private static final int TIPO_CURVADO_INFERIOR = 3; // QUANDO EXISTE TRANSICAO IDA E VOLTA
+    
+    public Vertice getOrigem() {
+        return origem;
+    }
 
+    public Vertice getDestino() {
+        return destino;
+    }
+
+    public ArrayList<String> getTrans() {
+        return trans;
+    }
+
+    public int getTipo() {
+        return this.tipo;
+    }
+    
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+    
+    //Função para desenho 
     public void draw(Graphics2D g) {
         int des;
         g.setStroke(new java.awt.BasicStroke(2.0f));
@@ -42,7 +69,7 @@ public class Aresta {
         int x = (po.x + pd.x) / 2;
         int y = (po.y + pd.y) / 2;
         switch (this.tipo) {
-            case 1:
+            case Aresta.TIPO_SIMPLES:
                 g.drawLine(p1.x, p1.y, p2.x, p2.y);
                 des = -12;
                 g.setStroke(new java.awt.BasicStroke(1f));
@@ -51,7 +78,7 @@ public class Aresta {
                     des -= 13;
                 }
                 break;
-            case 2: {
+            case Aresta.TIPO_CURVADO_SUPERIOR: {
                 QuadCurve2D q = new QuadCurve2D.Float((float) p1.x, (float) p1.y, (float) (p1.x + p2.x) / 2f, (float) (p1.y + p2.y) / 2f - 30, (float) p2.x, (float) p2.y);
                 g.draw(q);
                 des = -22;
@@ -62,7 +89,7 @@ public class Aresta {
                 }
                 break;
             }
-            case 4: {
+            case Aresta.TIPO_SELF: {
                 p2 = new Point((int) (Math.cos(1.04) * this.origem.getRaio() + this.origem.getX()), (int) (Math.sin(4.18) * this.origem.getRaio() + this.origem.getY()));
                 p1 = new Point((int) (Math.cos(2.08) * this.origem.getRaio() + this.origem.getX()), (int) (Math.sin(5.93) * this.origem.getRaio() + this.origem.getY()) - 13);
                 QuadCurve2D q = new QuadCurve2D.Float((float) p1.x, (float) p1.y, (float) this.origem.getX(), (float) this.destino.getY() - 100, (float) p2.x, (float) p2.y);
@@ -78,7 +105,7 @@ public class Aresta {
                 }
                 break;
             }
-            default: {
+            default: {  //Aresta.TIPO_CURVADO_INFERIOR
                 QuadCurve2D q = new QuadCurve2D.Float((float) p1.x, (float) p1.y, (float) (p1.x + p2.x) / 2f, ((float) (p1.y + p2.y) / 2f) + 30, (float) p2.x, (float) p2.y);
                 g.draw(q);
                 des = 32;
@@ -94,7 +121,8 @@ public class Aresta {
         this.drawArrowNew(g, po, pd, 6, r);
 
     }
-
+    
+    //Desenha setinha ao final da linha
     private void drawArrowNew(Graphics2D g2, Point s, Point t, int size, int deslocamento) {
         float r = (float) Math.sqrt(Math.pow(s.x - t.x, 2) + Math.pow(s.y - t.y, 2));
 
@@ -111,7 +139,8 @@ public class Aresta {
         g2.drawLine(pc.x, pc.y, pa.x, pa.y);
         g2.drawLine(pc.x, pc.y, pb.x, pb.y);
     }
-
+    
+    //Verifica o ponto onde a aresta encosta no vertice
     private Point calculaAresta(Point s, Point t, int deslocamento) {
         float r = (float) Math.sqrt(Math.pow(s.x - t.x, 2) + Math.pow(s.y - t.y, 2));
 
@@ -120,29 +149,15 @@ public class Aresta {
         return new Point(Math.round(deslocamento * -cos) + t.x, Math.round(deslocamento * -sen) + t.y);
 
     }
-
-    public Vertice getOrigem() {
-        return origem;
-    }
-
-    public Vertice getDestino() {
-        return destino;
-    }
-
-    public ArrayList<String> getTrans() {
-        return trans;
-    }
-
-    public int getTipo() {
-        return this.tipo;
-    }
-
-    public void addEstado(String aux, String strComp) {
-        if (strComp == null) {
+    
+    //Adiciona ou edita uma transição
+    //strComp serve para comparação
+    public void addTrasicao(String aux, String strComp) {
+        if (strComp == null) {  //se strComp é null, então é um novo estado
             if (!this.trans.contains(aux)) {
                 this.trans.add(aux);
             }
-        } else {
+        } else { // se strComp não é null, estamos editando um estado
             int i = this.trans.indexOf(strComp);
             this.trans.remove(i);
             this.trans.add(i, aux);
@@ -150,10 +165,7 @@ public class Aresta {
 
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
+    // verifica a partir do ponto do click se existe uma transição desenhada no local
     public boolean excluiTransicao(Point p) {
         int max = this.trans.size();
         Point po = new Point(this.origem.getX(), this.origem.getY());
@@ -161,17 +173,17 @@ public class Aresta {
         int offset = 0;
         int mult = -1;
         switch (this.tipo) {
-            case 1:
+            case Aresta.TIPO_SIMPLES:
                 offset = -12;
                 break;
-            case 2:
+            case Aresta.TIPO_CURVADO_SUPERIOR:
                 offset = -22;
                 break;
-            case 3:
+            case Aresta.TIPO_CURVADO_INFERIOR:
                 offset = 32;
                 mult = 1;
                 break;
-            case 4:
+            case Aresta.TIPO_SELF:
                 offset = -65;
                 break;
 
@@ -188,7 +200,8 @@ public class Aresta {
 
         return (max > this.trans.size());
     }
-
+    
+    // Verifica a partir de um click se existe uma transição para ser editada
     public String editaTransicao(Point p) {
         int max = this.trans.size();
         Point po = new Point(this.origem.getX(), this.origem.getY());
@@ -196,17 +209,17 @@ public class Aresta {
         int offset = 0;
         int mult = -1;
         switch (this.tipo) {
-            case 1:
+            case Aresta.TIPO_SIMPLES:
                 offset = -12;
                 break;
-            case 2:
+            case Aresta.TIPO_CURVADO_SUPERIOR:
                 offset = -22;
                 break;
-            case 3:
+            case Aresta.TIPO_CURVADO_INFERIOR:
                 offset = 32;
                 mult = 1;
                 break;
-            case 4:
+            case Aresta.TIPO_SELF:
                 offset = -65;
                 break;
 

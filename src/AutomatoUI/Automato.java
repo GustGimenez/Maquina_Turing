@@ -10,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
 
 /**
  *
@@ -21,7 +19,7 @@ public class Automato {
 
     ArrayList<Vertice> vertices;
     ArrayList<Aresta> arestas;
-    private Vertice Inicial;
+    private Vertice Inicial; // Mantém o inicial para ser mais facilmente manipulado
 
     public Automato() {
         this.vertices = new ArrayList();
@@ -34,6 +32,21 @@ public class Automato {
 
     public ArrayList<Aresta> getArestas() {
         return arestas;
+    }
+
+    //Retona a posição do inicial
+    public int getIni() {
+        return this.Inicial.getPos();
+    }
+
+    // Seta um novo vertice inicial
+    public void setInicial(Vertice Inicial) {
+        this.Inicial = Inicial;
+    }
+
+    // Retona o objeto vertice inicial
+    public Vertice getInicial() {
+        return Inicial;
     }
 
     public void addVertice(Vertice v) {
@@ -51,31 +64,31 @@ public class Automato {
         }
     }
 
-    public void draw(Graphics2D g) {
-        for (Vertice v : vertices) {
-            v.desenha(g);
-        }
-
-        for (Aresta a : arestas) {
-            a.draw(g);
-        }
-
-    }
-
-    public Vertice busca(int x, int y) {
-        int x1, y1, r;
-        r = 20;
-        for (Vertice v : vertices) {
-            x1 = Math.abs(v.getX() - x);
-            y1 = Math.abs(v.getY() - y);
-
-            if (x1 < r && y1 < r) {
-                return v;
+    // retona a string de uma transição que foi clicada
+    public String getStrTrans(Point p) {
+        String str;
+        for (Aresta a : this.arestas) {
+            str = a.editaTransicao(p);
+            if (str != null) {
+                return str;
             }
         }
         return null;
     }
 
+    //retorna uma aresta que foi clicada
+    public Aresta getArestas(Point p) {
+        String str;
+        for (Aresta a : this.arestas) {
+            str = a.editaTransicao(p);
+            if (str != null) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    // Retorna uma dimensão baseado nos vertices mais distantes em relação a origem
     public java.awt.Dimension getSize() {
         if (this.vertices.size() > 0) {
             float maxX = vertices.get(0).getX();
@@ -108,6 +121,92 @@ public class Automato {
 
     }
 
+    public Dimension getDimensao() {
+        int x = 0, y = 0;
+        for (Vertice v : vertices) {
+            if (v.getX() > x) {
+                x = v.getX();
+            }
+
+            if (v.getY() > y) {
+                y = v.getY();
+            }
+        }
+
+        return new Dimension(x + 50, y + 50);
+    }
+
+    // Normaliza os estados apos uma alteração (remoção de um estado)
+    private void setEstados() {
+        int i = 0;
+        for (Vertice v : vertices) {
+            v.setEstado("q" + i++);
+            v.setPos(i);
+        }
+    }
+
+    // Normaliza as posições do vertice de acordo com ArrayList
+    public void setPos() {
+        int i = 0;
+        for (Vertice v : vertices) {
+            v.setPos(i++);
+        }
+    }
+
+    /*
+    *@arg estado posição do estado que está sendo selecionado
+    Seta estado como selecionado e retorna para que possa ser manipulado
+     */
+    public Vertice setSelected(int estado) {
+        Vertice v = this.vertices.get(estado);
+        v.setFocus(true);
+        return v;
+    }
+
+    // Percorre as transições para recuperar o alfabeto
+    public ArrayList<Character> getAlfabeto() {
+        ArrayList<Character> alfa = new ArrayList();
+
+        for (Aresta a : arestas) {
+            for (String s : a.getTrans()) {
+                String[] arrayStr = s.split(";");
+                if (!alfa.contains(arrayStr[0].charAt(0))) {
+                    alfa.add(arrayStr[0].charAt(0));
+                }
+                if (!alfa.contains(arrayStr[1].charAt(0))) {
+                    alfa.add(arrayStr[1].charAt(0));
+                }
+            }
+        }
+
+        return alfa;
+    }
+
+    public void draw(Graphics2D g) {
+        for (Vertice v : vertices) {
+            v.desenha(g);
+        }
+
+        for (Aresta a : arestas) {
+            a.draw(g);
+        }
+
+    }
+
+    public Vertice busca(int x, int y) {
+        int x1, y1, r;
+        r = 20;
+        for (Vertice v : vertices) {
+            x1 = Math.abs(v.getX() - x);
+            y1 = Math.abs(v.getY() - y);
+
+            if (x1 < r && y1 < r) {
+                return v;
+            }
+        }
+        return null;
+    }
+
     public Aresta addAresta(Vertice v1, Vertice v2) {
         for (Aresta a : arestas) {
             Vertice vo = a.getOrigem();
@@ -136,21 +235,6 @@ public class Automato {
         }
         this.arestas.add(a);
         return a;
-    }
-
-    public Dimension getDimensao() {
-        int x = 0, y = 0;
-        for (Vertice v : vertices) {
-            if (v.getX() > x) {
-                x = v.getX();
-            }
-
-            if (v.getY() > y) {
-                y = v.getY();
-            }
-        }
-
-        return new Dimension(x + 50, y + 50);
     }
 
     public void removeTransicao(Point p) {
@@ -186,161 +270,30 @@ public class Automato {
         setEstados();
     }
 
-    private void setEstados() {
-        int i = 0;
-        for (Vertice v : vertices) {
-            v.setEstado("q" + i++);
-            v.setPos(i);
-        }
-    }
-
-    public void setPos() {
-        int i = 0;
-        for (Vertice v : vertices) {
-            v.setPos(i++);
-        }
-    }
-
-    Vertice setSelected(int estado) {
-        Vertice v = this.vertices.get(estado);
-        v.setFocus(true);
-        return v;
-    }
-
-    public int getIni() {
-        return this.Inicial.getPos();
-    }
-
-    public void setInicial(Vertice Inicial) {
-        this.Inicial = Inicial;
-    }
-
-    public Vertice getInicial() {
-        return Inicial;
-    }
-
-//    public void afnd2afd() {
-//        this.removeVazio();
-//
-//        this.setEstados();
-//        ArrayList<Character> alfabeto = this.getAlfabeto();
-//        ArrayList<Linha> tabela = new ArrayList();
-//        ArrayList<Integer> algo = new ArrayList();
-//        algo.add(this.Inicial.getPos());
-//        tabela.add(new Linha(Linha.geraID(algo), alfabeto.size(), this.Inicial.isFim()));
-//        tabela.get(0).setInicial(true);
-//        int i = 0;
-//        boolean fim = false;
-//
-//        String id;
-//        ArrayList<Integer> vert = null;
-//        for (i = 0; i < tabela.size(); i++) {
-//            Linha l = tabela.get(i);
-//            String aux = l.getId();
-//            for (int k = 0; k < alfabeto.size(); k++) {
-//                fim = false;
-//                boolean add = true;
-//                vert = new ArrayList();
-//                for (int j = 0; j < aux.length(); j++) {
-//
-//                    int origem = Integer.parseInt(Character.toString(aux.charAt(j)));
-//                    for (Aresta a : arestas) {
-//                        if (a.getOrigem().getPos() == origem) {
-//                            ArrayList<String> trans = a.getTrans();
-//                            for (String c : trans) {
-//                                if (c.equals(alfabeto.get(k))) {
-//                                    if (a.getDestino().isFim()) {
-//                                        fim = true;
-//                                    }
-//                                    if (!vert.contains(a.getDestino().getPos())) {
-//                                        vert.add(a.getDestino().getPos());
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                }
-//                if (!vert.isEmpty()) {
-//                    id = Linha.geraID(vert);
-//                    for (Linha l2 : tabela) {
-//                        if (l2.getId().equals(id)) {
-//                            add = false;
-//                            break;
-//                        }
-//                    }
-//                    if (add) {
-//                        tabela.add(new Linha(id, alfabeto.size(), fim));
-//                    }
-//                    l.add(id, k);
-//                }
-//            }
-//        }
-//        for (Linha l : tabela) {
-//            System.out.println(l.exibe());
-//        }
-//
-//        this.vertices.removeAll(this.vertices);
-//        this.arestas.removeAll(arestas);
-//        i = 0;
-//        Hashtable<String, Integer> hash = new Hashtable();
-//        for (Linha l : tabela) {
-//            this.addVertice(new Vertice(50 + 100 * i, 100, "q"));
-//            hash.put(l.getId(), i++);
-//        }
-//
-//        for (Linha l : tabela) {
-//            Vertice v = vertices.get(hash.get(l.getId()));
-//            v.setFim(l.isFim());
-//            v.setInicial(l.isInicial());
-//            String[] strAux = l.getVert();
-//            for (int j = 0; j < strAux.length; j++) {
-//                if (strAux[j] != null) {
-//                    Vertice v2 = this.vertices.get(hash.get(strAux[j]));
-//                    Aresta a = this.addAresta(v, v2);
-//                    a.addEstado(alfabeto.get(j));
-//                }
-//            }
-//        }
-//
-//    }
-
-    public ArrayList<Character> getAlfabeto() {
-        ArrayList<Character> alfa = new ArrayList();
-
-        for (Aresta a : arestas) {
-            for (String s : a.getTrans()) {
-                String[] arrayStr = s.split(";");
-                if (!alfa.contains(arrayStr[0].charAt(0))) {
-                    alfa.add(arrayStr[0].charAt(0));
-                }
-                if (!alfa.contains(arrayStr[1].charAt(0))) {
-                    alfa.add(arrayStr[1].charAt(0));
-                }
-            }
-        }
-
-        return alfa;
-    }
-
+    /*
+    Pega as transições de v1 para os outros vertices e copia para v2
+    ou seja, para cada transição de v1 para vx, cria uma transição v2 para vx
+     */
     private void copiaTrans(Vertice v1, Vertice vc) {
         for (int i = 0; i < this.arestas.size(); i++) {
             Aresta a = this.arestas.get(i);
             if (a.getOrigem().equals(v1)) {
                 Aresta a2 = this.addAresta(vc, a.getDestino());
                 for (String s : a.getTrans()) {
-                    a2.addEstado(s,null);
+                    a2.addTrasicao(s, null);
                 }
             }
         }
     }
 
+    // nome auto explicativo
     private void resetVisita() {
         for (Vertice v : this.vertices) {
             v.setVisitado(false);
         }
     }
 
+    //verifica se existe uma transição vazia saindo de v
     private boolean tranVazia(Vertice v) {
         for (Aresta a : this.arestas) {
             if (a.getOrigem().equals(v)) {
@@ -355,9 +308,9 @@ public class Automato {
         return false;
     }
 
+    // dada uma aresta, verificar qual posição da aresta corresponde a transição vazia
+    // retorna -1 em caso não exista tal transição
     private int tranVazia(Aresta a, int i) {
-        ArrayList<String> trans = a.getTrans();
-
         for (; i < a.getTrans().size(); i++) {
             String c = a.getTrans().get(i);
             if (c.charAt(0) == '\u25A1') {
@@ -369,6 +322,7 @@ public class Automato {
         return -1;
     }
 
+    //remove transição vazia de um vertice
     private void removeVazio(Vertice v) {
         if (v.isVisitado()) {
             return;
@@ -397,6 +351,7 @@ public class Automato {
         }
     }
 
+    // Remove transições vazias (Função de automatos) de todos os vertices
     public void removeVazio() {
         this.resetVisita();
         for (Vertice v : this.vertices) {
@@ -404,34 +359,13 @@ public class Automato {
         }
     }
 
+    // Cria label de descrição para um vertice
     public void criarLabel(String label, Vertice vertice) {
         for (int i = 0; i < this.vertices.size(); i++) {
             if (this.vertices.get(i).equals(vertice)) {
                 this.vertices.get(i).setLabel(label);
             }
         }
-    }
-
-    String getStrTrans(Point p) {
-        String str;
-        for (Aresta a : this.arestas) {
-            str = a.editaTransicao(p);
-            if (str != null) {
-                return str; 
-            }
-        }
-        return null;
-    }
-
-    Aresta getArestas(Point p) {
-        String str;
-        for (Aresta a : this.arestas) {
-            str = a.editaTransicao(p);
-            if (str != null) {
-                return a; 
-            }
-        }
-        return null;
     }
 
 }

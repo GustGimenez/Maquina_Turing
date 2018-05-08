@@ -7,7 +7,6 @@ package AutomatoUI;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import javax.swing.JTextField;
 
 /**
  *
@@ -15,27 +14,20 @@ import javax.swing.JTextField;
  */
 public class Vertice {
 
-    private int x;
-    private int y;
-    private int raio;
-    private String estado;
-    private boolean focus;
-    private Color cor;
-    private boolean inicial;
+    private int x; //coordenadas do desenho
+    private int y; //coordenadas do desenho
+    private int raio; // dimensao do circulo
+    private String estado; // oque será escrito no centro do circulo
+    private boolean focus; // desenha com cor diferente
+    private Color cor;  // cor padrão do contorno
+    private boolean inicial; // apenas um inicial
     private boolean fim;
     private String label;   // Atributo que contém a descrição do label
 
-    private int pos;
-    private boolean visitado;
+    private int pos; // posição no ArrayList da maquina
+    private boolean visitado; // auxiliar
 
-    public boolean isVisitado() {
-        return visitado;
-    }
-
-    public void setVisitado(boolean visitado) {
-        this.visitado = visitado;
-    }
-
+    // Gets e Sets e construtor
     public Vertice(int x, int y, String estado) {
         this.raio = 20;
         this.x = x;
@@ -45,6 +37,14 @@ public class Vertice {
         this.inicial = false;
         this.fim = false;
         this.label = null;
+    }
+
+    public boolean isVisitado() {
+        return visitado;
+    }
+
+    public void setVisitado(boolean visitado) {
+        this.visitado = visitado;
     }
 
     public int getPos() {
@@ -95,44 +95,11 @@ public class Vertice {
         this.focus = focus;
     }
 
-    public void desenha(Graphics2D g) {
-        if (focus) {
-            g.setColor(Color.cyan);
-        } else {
-            g.setColor(Color.yellow);
-        }
-        g.fillOval(x - raio, y - raio, raio * 2, raio * 2);
-
-        if (fim) {
-            g.setStroke(new java.awt.BasicStroke(1.5f));
-            g.setColor(cor);
-            this.desenhaCirculoBresenham(x, y, x, y + raio, g);
-            this.desenhaCirculoBresenham(x, y, x, y + raio - 3, g);
-        } else {
-            g.setStroke(new java.awt.BasicStroke(3f));
-            g.setColor(cor);
-            g.drawOval(x - raio, y - raio, raio * 2, raio * 2);
-        }
-        
-        if (this.label != null) {
-            this.desenhaLabel(g);
-        }
-
-        if (this.inicial) {
-            g.setStroke(new java.awt.BasicStroke(2f));
-            g.drawLine(x - raio, y, x - 2 * raio, y + raio);
-            g.drawLine(x - raio, y, x - 2 * raio, y - raio);
-            g.drawLine(x - 2 * raio, y + raio, x - 2 * raio, y - raio);
-        }
-        g.drawString(estado, x - 4, y + 4);
-
-    }
-
     public void setColor(Color c) {
         this.cor = c;
     }
 
-    Color getColor() {
+    public Color getColor() {
         return this.cor;
     }
 
@@ -152,6 +119,46 @@ public class Vertice {
         return this.inicial;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    //Funções de desenho e manipulação
+    //Desenho
+    public void desenha(Graphics2D g) {
+        if (this.focus) { // cor se está sendo focado
+            g.setColor(Color.cyan);
+        } else { // cor padrão do circulo interno
+            g.setColor(Color.yellow);
+        }
+        g.fillOval(x - raio, y - raio, raio * 2, raio * 2);
+
+        g.setColor(this.cor); // cor da borda
+        if (this.fim) { // de é final, possui um circulo interno
+            g.setStroke(new java.awt.BasicStroke(1.5f));
+            this.desenhaCirculoBresenham(x, y, x, y + raio, g);
+            this.desenhaCirculoBresenham(x, y, x, y + raio - 3, g);
+        } else {// borda simples
+            g.setStroke(new java.awt.BasicStroke(3f));
+            g.drawOval(x - raio, y - raio, raio * 2, raio * 2);
+        }
+
+        if (this.label != null) {
+            this.desenhaLabel(g);
+        }
+
+        if (this.inicial) { // Se é inicial, desenha um triangulo ao lado do vertice
+            g.setStroke(new java.awt.BasicStroke(2f));
+            g.drawLine(this.x - this.raio, this.y, this.x - 2 * this.raio, this.y + this.raio);
+            g.drawLine(this.x - this.raio, this.y, this.x - 2 * this.raio, this.y - this.raio);
+            g.drawLine(this.x - 2 * this.raio, this.y + this.raio, this.x - 2 * this.raio, this.y - this.raio);
+        }
+        g.drawString(this.estado, this.x - 4, this.y + 4);
+
+    }
+    
+    
+    // Funçao com parametros mais simples para desenhar circulos 
     public void desenhaCirculoBresenham(int x1, int y1, int x2, int y2, Graphics2D g) {
         int r, x, y, d, dE, dSE;
         r = (int) Math.round(Math.sqrt(Math.pow((double) (x2 - x1), 2) + Math.pow((double) (y2 - y1), 2)));
@@ -177,7 +184,8 @@ public class Vertice {
         }
 
     }
-
+    
+    // Funcao auxiliar ao DesenhaCirculoBresenham
     private void simetria8(int x, int y, Graphics2D g, int xc, int yc) {
         float contorno = 2f;
 
@@ -191,11 +199,8 @@ public class Vertice {
         g.fillRect(-y + xc, -x + yc, (int) contorno, (int) contorno);
 
     }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
+    
+    //Desenha label abaixo do vertice
     public void desenhaLabel(Graphics2D g) {
         int largura = 15;
         largura += 5 * this.label.length();
@@ -211,10 +216,10 @@ public class Vertice {
         int larguraAux = (this.x + raio + largura / 2) - (this.x - raio - largura / 2);
         g.setColor(Color.yellow);
         g.fillRect(this.x - raio - largura / 2, this.y + raio, larguraAux + 1, 16);
-        
+
         // Escrevendo o valor do label
         g.setColor(Color.black);
-        g.drawString(this.label, this.x - (this.label.length() * 2 ), this.y + raio + 12);
+        g.drawString(this.label, this.x - (this.label.length() * 2), this.y + raio + 12);
         g.setColor(this.cor);
     }
 }
