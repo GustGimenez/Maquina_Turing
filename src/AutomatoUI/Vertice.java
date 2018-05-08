@@ -7,6 +7,7 @@ package AutomatoUI;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import javax.swing.JTextField;
 
 /**
  *
@@ -22,7 +23,8 @@ public class Vertice {
     private Color cor;
     private boolean inicial;
     private boolean fim;
-    
+    private String label;   // Atributo que contém a descrição do label
+
     private int pos;
     private boolean visitado;
 
@@ -33,9 +35,7 @@ public class Vertice {
     public void setVisitado(boolean visitado) {
         this.visitado = visitado;
     }
-    
-    
-    
+
     public Vertice(int x, int y, String estado) {
         this.raio = 20;
         this.x = x;
@@ -44,7 +44,7 @@ public class Vertice {
         this.focus = false;
         this.inicial = false;
         this.fim = false;
-
+        this.label = null;
     }
 
     public int getPos() {
@@ -54,7 +54,7 @@ public class Vertice {
     public void setPos(int pos) {
         this.pos = pos;
     }
-    
+
     public int getX() {
         return x;
     }
@@ -106,21 +106,26 @@ public class Vertice {
         if (fim) {
             g.setStroke(new java.awt.BasicStroke(1.5f));
             g.setColor(cor);
-            this.desenhaCirculoBresenham(x, y, x, y+raio, g);
-            this.desenhaCirculoBresenham(x, y, x, y+raio-3, g);
+            this.desenhaCirculoBresenham(x, y, x, y + raio, g);
+            this.desenhaCirculoBresenham(x, y, x, y + raio - 3, g);
         } else {
             g.setStroke(new java.awt.BasicStroke(3f));
             g.setColor(cor);
             g.drawOval(x - raio, y - raio, raio * 2, raio * 2);
         }
         
-        if(this.inicial){
-            g.setStroke(new java.awt.BasicStroke(2f));
-            g.drawLine(x-raio, y, x-2*raio, y+raio);
-            g.drawLine(x-raio, y, x-2*raio, y-raio);
-            g.drawLine(x-2*raio, y+raio, x-2*raio, y-raio);
+        if (this.label != null) {
+            this.desenhaLabel(g);
         }
-        g.drawString(estado, x - 4, y+4);
+
+        if (this.inicial) {
+            g.setStroke(new java.awt.BasicStroke(2f));
+            g.drawLine(x - raio, y, x - 2 * raio, y + raio);
+            g.drawLine(x - raio, y, x - 2 * raio, y - raio);
+            g.drawLine(x - 2 * raio, y + raio, x - 2 * raio, y - raio);
+        }
+        g.drawString(estado, x - 4, y + 4);
+
     }
 
     public void setColor(Color c) {
@@ -142,8 +147,8 @@ public class Vertice {
     public boolean isFim() {
         return fim;
     }
-    
-    public boolean isInicial(){
+
+    public boolean isInicial() {
         return this.inicial;
     }
 
@@ -185,5 +190,31 @@ public class Vertice {
         g.fillRect(y + xc, -x + yc, (int) contorno, (int) contorno);
         g.fillRect(-y + xc, -x + yc, (int) contorno, (int) contorno);
 
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void desenhaLabel(Graphics2D g) {
+        int largura = 15;
+        largura += 5 * this.label.length();
+
+        // Contornos do label
+        g.setColor(Color.BLACK);
+        g.drawLine(this.x - raio - largura / 2, this.y + raio, this.x + raio + largura / 2, this.y + raio);     // Linha de cima na horizontal
+        g.drawLine(this.x - raio - largura / 2, this.y + raio + 15, this.x + raio + largura / 2, this.y + raio + 15); // Linha de baixo na horizontal
+        g.drawLine(this.x - raio - largura / 2, this.y + raio, this.x - raio - largura / 2, this.y + raio + 15);    // Linha mais a esquerda na vertical
+        g.drawLine(this.x + raio + largura / 2, this.y + raio, this.x + raio + largura / 2, this.y + raio + 15);  // Linha mais a direita na vertical
+
+        // Pintando o label
+        int larguraAux = (this.x + raio + largura / 2) - (this.x - raio - largura / 2);
+        g.setColor(Color.yellow);
+        g.fillRect(this.x - raio - largura / 2, this.y + raio, larguraAux + 1, 16);
+        
+        // Escrevendo o valor do label
+        g.setColor(Color.black);
+        g.drawString(this.label, this.x - (this.label.length() * 2 ), this.y + raio + 12);
+        g.setColor(this.cor);
     }
 }
