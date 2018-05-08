@@ -13,7 +13,8 @@ import java.util.ArrayList;
  */
 public class No {
     private int estado;
-    private ArrayList<Character> transicao;
+    private ArrayList<String> transicao;
+    private char direcao;
     private boolean terminal;
     private No prox;
 
@@ -25,7 +26,7 @@ public class No {
         this.estado = estado;
     }
 
-    public ArrayList<Character> getTransicao() {
+    public ArrayList<String> getTransicao() {
         return transicao;
     }
 
@@ -40,6 +41,16 @@ public class No {
     public void setProx(No prox) {
         this.prox = prox;
     }
+
+    public char getDirecao() {
+        return direcao;
+    }
+
+    public void setDirecao(char direcao) {
+        this.direcao = direcao;
+    }
+    
+    
 
     public boolean isTerminal() {
         return terminal;
