@@ -152,7 +152,7 @@ public class Aresta {
     
     //Adiciona ou edita uma transição
     //strComp serve para comparação
-    public void addTrasicao(String aux, String strComp) {
+    public void addTransicao(String aux, String strComp) {
         if (strComp == null) {  //se strComp é null, então é um novo estado
             if (!this.trans.contains(aux)) {
                 this.trans.add(aux);

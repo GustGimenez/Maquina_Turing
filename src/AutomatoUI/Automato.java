@@ -280,7 +280,7 @@ public class Automato {
             if (a.getOrigem().equals(v1)) {
                 Aresta a2 = this.addAresta(vc, a.getDestino());
                 for (String s : a.getTrans()) {
-                    a2.addTrasicao(s, null);
+                    a2.addTransicao(s, null);
                 }
             }
         }

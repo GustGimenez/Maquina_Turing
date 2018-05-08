@@ -943,7 +943,7 @@ public class Tela extends javax.swing.JFrame {
         //Forma string que será armazenada. Apenas 1 caractere por campo
         texto = text1.charAt(0) + ";" + text2.charAt(0) + ";" + text3.charAt(0);
 
-        this.aresta.addEstado(texto, this.strTrans);
+        this.aresta.addTransicao(texto, this.strTrans);
         this.TelaPanel.repaint();
         this.strTrans = null;
     }//GEN-LAST:event_InputTableComponentHidden
