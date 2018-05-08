@@ -8,8 +8,6 @@ package automatos;
 import AutomatoUI.Aresta;
 import AutomatoUI.Automato;
 import AutomatoUI.Vertice;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -255,6 +253,6 @@ public class FileManager {
         aresta = automato.addAresta(v1, v2);
         
         // Adiciona a transição em si
-        aresta.addEstado(tran, null);
+        aresta.addTransicao(tran, null);
     }
 }
