@@ -54,7 +54,7 @@ public class Resolve {
         this.caminho = null;
         boolean aux = busca(s, this.inicial, 0);
         return aux;
-
+        
     }
 
     private boolean busca(String s, int vert, int pos) { //Executa busca de verificação
@@ -69,7 +69,7 @@ public class Resolve {
                 aux = this.estados[vert];
                 while (aux != null) {
                     for (String s : aux.getTransicao()) {
-                        if (s == '\u25A1') {
+                        if (s.equals("\u25A1")) {
 
                             if (!vazio.contains(aux.getEstado())) {
 
