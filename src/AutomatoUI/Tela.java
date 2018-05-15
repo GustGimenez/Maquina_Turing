@@ -5,17 +5,22 @@
  */
 package AutomatoUI;
 
+import automatos.FileManager;
 import automatos.No;
 import automatos.Resolve;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -138,6 +143,8 @@ public class Tela extends javax.swing.JFrame {
         AddLineBtn = new javax.swing.JButton();
         MultScrollPane1 = new javax.swing.JScrollPane(this.view3);
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         Menu1 = new javax.swing.JMenu();
         mi_Exe1 = new javax.swing.JMenuItem();
         mi_ExeStep = new javax.swing.JMenuItem();
@@ -343,7 +350,7 @@ public class Tela extends javax.swing.JFrame {
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(200, 211, Short.MAX_VALUE))
+                        .addGap(200, 213, Short.MAX_VALUE))
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -436,7 +443,7 @@ public class Tela extends javax.swing.JFrame {
             PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -557,6 +564,18 @@ public class Tela extends javax.swing.JFrame {
 
         AutomatoLayout.add(PanelMultEntradas, "AutomatoMult");
 
+        jMenu1.setText("Arquivo");
+
+        jMenuItem1.setText("Carregar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
         Menu1.setText("Executar");
 
         mi_Exe1.setText("Uma entrada");
@@ -643,9 +662,11 @@ public class Tela extends javax.swing.JFrame {
                     }
                     this.auxY = (this.vertice.getY() + p.y) / 2 - 10;
                 }
+                this.cleanInput();
                 this.InputTable.setVisible(true);
                 this.InputTable.requestFocus();
-                this.cleanInput();
+                this.InputTable.changeSelection(0,0,false, false);;
+                this.InputTable.editCellAt(0, 0);
 
             }
 
@@ -921,13 +942,12 @@ public class Tela extends javax.swing.JFrame {
             return;
         }
         String texto;
-        
+
         //Pega os valores da tabela, ignorando espacos
         String text1 = ((String) this.InputTable.getValueAt(0, 0)).trim();
         String text2 = ((String) this.InputTable.getValueAt(0, 1)).trim();
         String text3 = ((String) this.InputTable.getValueAt(0, 2)).trim();
-        
-        
+
         //substitui vazio por caracter quadrado
         if (text1 == null || text1.equals("")) {
             text1 = "\u25A1";
@@ -935,12 +955,12 @@ public class Tela extends javax.swing.JFrame {
         if (text2 == null || text2.equals("")) {
             text2 = "\u25A1";
         }
-        
+
         //Default de andamento da fita: Direita
         if (text3 == null || text3.equals("")) {
             text3 = "R";
         }
-        
+
         //Forma string que será armazenada. Apenas 1 caractere por campo
         texto = text1.charAt(0) + ";" + text2.charAt(0) + ";" + text3.charAt(0);
 
@@ -960,6 +980,18 @@ public class Tela extends javax.swing.JFrame {
             this.verificaClick(0, 0);
         }
     }//GEN-LAST:event_TelaPanelKeyTyped
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        FileManager fm = new FileManager();
+        try {
+            fm.carregaMT(this.grafo);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.TelaPanel.repaint();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1036,7 +1068,9 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JScrollPane TelaPanel;
     private javax.swing.JButton arrastarButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem mi_Exe1;
