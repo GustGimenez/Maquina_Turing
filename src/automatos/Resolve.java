@@ -32,7 +32,7 @@ public class Resolve {
         this.inicial = auto.getIni();
         ArrayList<Aresta> arestas = auto.getArestas();
         ArrayList<String> trans;
-        int o, d;
+        int o, d; // o - Origem, d- Destino
         No aux;
         for (Aresta a : arestas) {
             trans = a.getTrans();
@@ -68,14 +68,14 @@ public class Resolve {
             } else {
                 aux = this.estados[vert];
                 while (aux != null) {
-                    for (Character c : aux.getTransicao()) {
-                        if (c == '\u25A1') {
+                    for (String s : aux.getTransicao()) {
+                        if (s == '\u25A1') {
 
                             if (!vazio.contains(aux.getEstado())) {
 
                                 vazio.add(aux.getEstado());
                                 if (busca(s, aux.getEstado(), pos)) {
-                                    this.caminho.getTransicao().add(c);
+                                    this.caminho.getTransicao().add(s);
                                     aux1.setProx(this.caminho);
                                     this.caminho = (aux1);
                                     return true;
