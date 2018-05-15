@@ -69,7 +69,7 @@ public class Resolve {
                 aux = this.estados[vert];
                 while (aux != null) {
                     for (String s : aux.getTransicao()) {
-                        if (s == '\u25A1') {
+                        if (s == "\u25A1") {
 
                             if (!vazio.contains(aux.getEstado())) {
 
