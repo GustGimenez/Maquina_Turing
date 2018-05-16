@@ -209,19 +209,26 @@ public class FileManager {
 
     private void lerEstado(Automato automato, Node no) {
         Element estado = (Element) no;
-        String est;
+        Element ini, fim;
         int x, y;
         float aux;
 
         // Acessa as tags do objeto
-        est = estado.getAttribute("name");
         aux = Float.valueOf(estado.getElementsByTagName("x").item(0).getTextContent());
         x = (int) aux;
         aux = Float.valueOf(estado.getElementsByTagName("y").item(0).getTextContent());
         y = (int) aux;
 
         // Cria um novo vertice (estado) e o adiciona
-        automato.addVertice(new Vertice(x, y, "q"));
+        ini = (Element) estado.getElementsByTagName("initial").item(0);
+        fim = (Element) estado.getElementsByTagName("final").item(0);
+        Vertice vert = new Vertice(x, y, "q");
+        vert.setInicial(ini != null);
+        if(ini != null){
+            automato.setInicial(vert);
+        }
+        vert.setFim(fim != null);
+        automato.addVertice(vert);
     }
 
     private void lerTransicao(Automato automato, Node no) {

@@ -686,7 +686,7 @@ public class Tela extends javax.swing.JFrame {
         } catch (NullPointerException e) {
 
         } finally {
-            this.view.updateUI();
+            this.TelaPanel.updateUI();
             this.InputTable.setLocation(this.auxX, this.auxY);
         }
     }//GEN-LAST:event_TelaPanelMouseReleased
@@ -737,13 +737,14 @@ public class Tela extends javax.swing.JFrame {
             this.strTrans = this.grafo.getStrTrans(p);
             this.aresta = this.grafo.getArestas(p);
             if (strTrans != null) {
-                this.InputTable.setLocation(p);
+                this.auxX = p.x;
+                this.auxY = p.y;
                 this.setInputTable(this.strTrans);
                 this.InputTable.setVisible(true);
                 this.InputTable.requestFocus();
             }
         }
-        this.view.repaint();
+        this.TelaPanel.repaint();
     }//GEN-LAST:event_TelaPanelMouseClicked
 
     private void TelaPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseDragged
@@ -1009,6 +1010,8 @@ public class Tela extends javax.swing.JFrame {
         FileManager fm;
         fm = new FileManager();
         try {
+            grafo.getArestas().removeAll(grafo.getArestas());
+            grafo.getVertices().removeAll(grafo.getVertices());
             fm.carregaMT(grafo);
         } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
