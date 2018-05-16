@@ -70,6 +70,10 @@ public class Resolve {
     public boolean isValido() {
         return this.valido;
     }
+    
+    public int getNumIt(){
+        return this.numIt;
+    }
 
     private boolean busca(String str, int vert, int pos) { //Executa busca de verificação
         this.numIt++;
