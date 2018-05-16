@@ -9,6 +9,7 @@ import AutomatoUI.Aresta;
 import AutomatoUI.Automato;
 import AutomatoUI.Vertice;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,17 +17,20 @@ import java.util.ArrayList;
  */
 public class Resolve {
 
-    private No[] estados;
-    private int numVert;
-    private int inicial;
+    private final No[] estados;
+    private final int numVert;
+    private final int inicial;
     private No caminho;
-    private boolean[] terminal;
-    private ArrayList<Integer> vazio;
-    
-    private final String VAZIO = "\u25A1";
+    private final boolean[] terminal;
+    private boolean valido;
+    private int numIt;
+    private int lim;
+    private final char VAZIO = '\u25A1';
+    private boolean stopExec;
 
     public Resolve(Automato auto) { // Transforma a representação de desenho para uma representação lógica
         this.numVert = auto.getVertices().size();
+        this.valido = true;
         this.estados = new No[numVert];
         this.terminal = new boolean[numVert];
         this.inicial = auto.getIni();
@@ -34,93 +38,97 @@ public class Resolve {
         ArrayList<String> trans;
         int o, d; // o - Origem, d- Destino
         No aux;
+        int i = 0;
+        for (Vertice v : auto.getVertices()) {
+            this.terminal[i++] = v.isFim();
+        }
         for (Aresta a : arestas) {
             trans = a.getTrans();
             o = a.getOrigem().getPos();
+            if (this.terminal[o]) {
+                this.valido = false;
+            }
             d = a.getDestino().getPos();
             aux = new No(d, trans);
             aux.setProx(this.estados[o]);
             this.estados[o] = aux;
 
         }
-        int i = 0;
-        for (Vertice v : auto.getVertices()) {
-            this.terminal[i++] = v.isFim();
-        }
-        this.vazio = new ArrayList();
     }
 
     public boolean busca(String s) { // Verifica validade de uma String (Chamada na interface)
         this.caminho = null;
+        this.numIt = 0;
+        this.lim = 500;
+        this.stopExec = false;
         boolean aux = busca(s, this.inicial, 0);
         return aux;
 
     }
 
-    private boolean busca(String s, int vert, int pos) { //Executa busca de verificação
-        No aux1 = new No(vert);
+    public boolean isValido() {
+        return this.valido;
+    }
 
-        No aux;
-        if (pos == s.length()) {
-            if (this.terminal[vert]) {
-                aux1.setProx(this.caminho);
-                this.caminho = aux1;
+    private boolean busca(String str, int vert, int pos) { //Executa busca de verificação
+        this.numIt++;
+        if (numIt > this.lim) {
+            int resp = JOptionPane.showConfirmDialog(null, "Numero de iteracoes passou de " + this.lim + ". Deseja continuar?");
+            if (resp == JOptionPane.OK_OPTION) {
+                this.lim *= 2;
             } else {
-                aux = this.estados[vert];
-                while (aux != null) {
-                    for (String s : aux.getTransicao()) {
-                        if (s == '\u25A1') {
-
-                            if (!vazio.contains(aux.getEstado())) {
-
-                                vazio.add(aux.getEstado());
-                                if (busca(s, aux.getEstado(), pos)) {
-                                    this.caminho.getTransicao().add(s);
-                                    aux1.setProx(this.caminho);
-                                    this.caminho = (aux1);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    aux = aux.getProx();
-                }
+                this.stopExec = true;
+                return false;
             }
-            return (this.terminal[vert]);
         }
-
-        char c1 = s.charAt(pos);
-
+        No aux1 = new No(vert); //Estado Atual
+        No aux; // Possivel proximo estado
+        int posAux;
+        char ch;
+        StringBuilder strB;
+        String[] split;
+        ArrayList<String> trans;
+        if (this.terminal[vert]) { // Chegou em um estado final
+            aux1.setProx(this.caminho);
+            this.caminho = aux1;
+            return true;
+        }
         aux = this.estados[vert];
-        while (aux != null) {
-            for (Character c : aux.getTransicao()) {
-                if (c == c1) {
-                    this.vazio.removeAll(vazio);//O ERRO
-                    if (busca(s, aux.getEstado(), pos + 1)) {
-                        this.caminho.getTransicao().add(c);
-                        aux1.setProx(this.caminho);
-                        this.caminho = (aux1);
-                        return true;
-
-                    }
-                }
-                if (c == '\u25A1') {
-
-                    if (!vazio.contains(aux.getEstado())) {
-
-                        vazio.add(aux.getEstado());
-                        if (busca(s, aux.getEstado(), pos)) {
-                            this.caminho.getTransicao().add(c);
-                            aux1.setProx(this.caminho);
-                            this.caminho = (aux1);
-                            return true;
+        while (aux != null) { // Verifica se existe uma transicao valida
+            trans = aux.getTransicao();
+            for (String s : trans) {
+                split = s.split(";");
+                ch = split[0].charAt(0); //split(";")[0] -> valor de leitura 
+                if (ch == str.charAt(pos)) { // Se o caracter de leitura corresponde a posicao inicial
+                    //Grava o novo valor
+                    strB = new StringBuilder(str);
+                    strB.setCharAt(pos, split[1].charAt(0));
+                    str = strB.toString();
+                    if ("L".equals(split[2])) { // Se vai para esquerda
+                        if (pos == 0) { // Se está no inicio da fita
+                            return false;
                         }
+                        posAux = pos - 1;
+                    } else { // Se vai pra direita
+                        posAux = pos + 1;
+                        if (posAux >= str.length()) {
+                            str += this.VAZIO;
+                        }
+                    }
+                    if (this.busca(str, aux.getEstado(), posAux)) { // Se chegou encontrou uma solucao
+                        this.caminho.getTransicao().add(str);
+                        aux1.setProx(this.caminho);
+                        this.caminho = aux1;
+                        return true;
+                    }
+                    if (this.stopExec) {
+                        return false;
                     }
                 }
             }
-            aux = aux.getProx();
+            aux = aux.getProx(); // Testa proxima transicao
         }
-        return false;
+        return false; // Caso nenhuma transicao desse estado funcione
     }
 
     public void exibeCaminho() { //exibe o caminho percorrido para encontrar a solucao
