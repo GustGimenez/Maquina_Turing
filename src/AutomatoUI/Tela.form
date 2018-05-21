@@ -142,7 +142,7 @@
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="TelaPanel" pref="654" max="32767" attributes="0"/>
+                              <Component id="TelaPanel" pref="787" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Component id="EstadosBtnPanel" max="32767" attributes="0"/>
@@ -379,7 +379,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="StepPanel" max="32767" attributes="0"/>
-                          <Component id="StepBtnPanel" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="StepBtnPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -389,7 +392,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="StepPanel" pref="350" max="32767" attributes="0"/>
+                      <Component id="StepPanel" pref="355" max="32767" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="StepBtnPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -415,38 +418,48 @@
                           <Component id="StepBtn" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="ExitStepBtn" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
-                          <Component id="StringLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="181" max="-2" attributes="0"/>
-                          <EmptySpace pref="31" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="StringLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="StringInfoLabel" min="-2" max="-2" attributes="0"/>
                               <Component id="resultLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
+                          <EmptySpace pref="161" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="NumTranLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="ResultNumTranLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="StringInfoLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="9" max="32767" attributes="0"/>
-                          <Component id="resultLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="12" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="StepBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="ExitStepBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="StringLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="StringInfoLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="NumTranLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="resultLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ResultNumTranLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -472,11 +485,6 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="StringLabel">
                 </Component>
-                <Component class="javax.swing.JLabel" name="StringInfoLabel">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="String:"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="resultLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="--"/>
@@ -493,6 +501,21 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JLabel" name="StringInfoLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="String:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="NumTranLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="N&#xba; Transi&#xe7;&#xf5;es Totais:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="ResultNumTranLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="--"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -532,7 +555,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="MultScrollPane1" pref="392" max="32767" attributes="0"/>
+                          <Component id="MultScrollPane1" pref="523" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="TabelPanel" pref="0" max="32767" attributes="0"/>
@@ -564,13 +587,19 @@
                     <Component class="javax.swing.JTable" name="MultEntradaTable">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="2" rowCount="2">
+                          <Table columnCount="3" rowCount="2">
                             <Column editable="true" title="Entrada" type="java.lang.String"/>
-                            <Column editable="true" title="Resultado" type="java.lang.String"/>
+                            <Column editable="false" title="Resultado" type="java.lang.String"/>
+                            <Column editable="false" title="N&#xba; Transi&#xe7;&#xf5;es" type="java.lang.Integer"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
                             <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                               <Title/>
                               <Editor/>

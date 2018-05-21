@@ -124,10 +124,12 @@ public class Tela extends javax.swing.JFrame {
         StepBtn = new javax.swing.JButton();
         ExitStepBtn = new javax.swing.JButton();
         StringLabel = new javax.swing.JLabel();
-        StringInfoLabel = new javax.swing.JLabel();
         resultLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TPFita = new javax.swing.JTextPane();
+        StringInfoLabel = new javax.swing.JLabel();
+        NumTranLabel = new javax.swing.JLabel();
+        ResultNumTranLabel = new javax.swing.JLabel();
         PanelMultEntradas = new javax.swing.JPanel();
         TablePanel = new javax.swing.JPanel();
         TabelPanel = new javax.swing.JScrollPane();
@@ -321,7 +323,7 @@ public class Tela extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                        .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
                         .addContainerGap())
                     .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
@@ -377,11 +379,15 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        StringInfoLabel.setText("String:");
-
         resultLabel.setText("--");
 
         jScrollPane1.setViewportView(TPFita);
+
+        StringInfoLabel.setText("String:");
+
+        NumTranLabel.setText("Nº Transições Totais:");
+
+        ResultNumTranLabel.setText("--");
 
         javax.swing.GroupLayout StepBtnPanelLayout = new javax.swing.GroupLayout(StepBtnPanel);
         StepBtnPanel.setLayout(StepBtnPanelLayout);
@@ -392,32 +398,39 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(StepBtn)
                 .addGap(18, 18, 18)
                 .addComponent(ExitStepBtn)
-                .addGap(94, 94, 94)
-                .addComponent(StringLabel)
-                .addGap(78, 78, 78)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(StringLabel)
+                .addGap(18, 18, 18)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(StringInfoLabel)
                     .addComponent(resultLabel))
-                .addGap(84, 84, 84))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(NumTranLabel)
+                    .addComponent(ResultNumTranLabel))
+                .addGap(91, 91, 91))
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(StringInfoLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(resultLabel))
-            .addGroup(StepBtnPanelLayout.createSequentialGroup()
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(12, Short.MAX_VALUE)
                         .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(StepBtn)
                             .addComponent(ExitStepBtn)
                             .addComponent(StringLabel)))
-                    .addComponent(jScrollPane1))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(StringInfoLabel)
+                            .addComponent(NumTranLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(resultLabel)
+                            .addComponent(ResultNumTranLabel))))
                 .addContainerGap())
         );
 
@@ -429,14 +442,16 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(StepPanel)
-                    .addComponent(StepBtnPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(PanelStepLayout.createSequentialGroup()
+                        .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelStepLayout.setVerticalGroup(
             PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -446,19 +461,26 @@ public class Tela extends javax.swing.JFrame {
 
         MultEntradaTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Entrada", "Resultado"
+                "Entrada", "Resultado", "Nº Transições"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         MultEntradaTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -466,6 +488,7 @@ public class Tela extends javax.swing.JFrame {
         if (MultEntradaTable.getColumnModel().getColumnCount() > 0) {
             MultEntradaTable.getColumnModel().getColumn(0).setResizable(false);
             MultEntradaTable.getColumnModel().getColumn(1).setResizable(false);
+            MultEntradaTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         ExecBtn.setText("Executar");
@@ -522,7 +545,7 @@ public class Tela extends javax.swing.JFrame {
             TablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TablePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(MultScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                .addComponent(MultScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(TablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(TabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -751,6 +774,8 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_Exe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_Exe1ActionPerformed
         this.grafo.setPos();
+        int contadorTransicao = 0;
+        boolean resultado;
 
         if (this.grafo.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
@@ -758,16 +783,22 @@ public class Tela extends javax.swing.JFrame {
         }
         Resolve r = new Resolve(this.grafo);
         String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
-        if (r.busca(aux)) {
-            JOptionPane.showMessageDialog(this, "Aceito");
+        resultado = r.busca(aux);
+        // contadorTransicao = r.getNumIt();
+        if (resultado) {
+            JOptionPane.showMessageDialog(this, "Aceito, com " + contadorTransicao +
+                    " transicoes.");
         } else {
-            JOptionPane.showMessageDialog(this, "Rejeitado");
+            JOptionPane.showMessageDialog(this, "Rejeitado, com " + contadorTransicao +
+                    " transicoes.");
         }
     }//GEN-LAST:event_mi_Exe1ActionPerformed
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.grafo.setPos();
         this.resultLabel.setText("");
+        boolean result;
+        int contTransicoes = 0;
 
         if (this.grafo.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
@@ -775,7 +806,9 @@ public class Tela extends javax.swing.JFrame {
         }
         Resolve r = new Resolve(this.grafo);
         String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
-        if (r.busca(aux)) {
+        result = r.busca(aux);
+        // contadorTransicao = r.getNumIt();
+        if (result) {
             if (vertice != null) {
                 this.vertice.setFocus(false);
             }
@@ -785,6 +818,7 @@ public class Tela extends javax.swing.JFrame {
             this.StepPanel.repaint();
             CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
             card.show(this.AutomatoLayout, "AutomatoStep");
+            this.ResultNumTranLabel.setText(String.valueOf(contTransicoes));
         } else {
             JOptionPane.showMessageDialog(this, "Entrada rejeitada");
         }
@@ -844,6 +878,8 @@ public class Tela extends javax.swing.JFrame {
 
     private void ExecBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExecBtnActionPerformed
         int i = this.MultEntradaTable.getRowCount();
+        int contTransicoes = 0;
+        boolean resultado;
         DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
         this.grafo.setPos();
         this.MultEntradaTable.getCellEditor().stopCellEditing();
@@ -855,10 +891,14 @@ public class Tela extends javax.swing.JFrame {
         for (int j = 0; j < i; j++) {
             String aux = (String) model.getValueAt(j, 0);
             if (aux != null) {
-                if (r.busca(aux)) {
+                resultado = r.busca(aux);
+                // contTransicoes = r.getNumIt();
+                if (resultado) {
                     model.setValueAt("Aceito", j, 1);
+                    model.setValueAt(contTransicoes, j, 2);
                 } else {
                     model.setValueAt("Rejeitado", j, 1);
+                    model.setValueAt(contTransicoes, j, 2);
                 }
             }
 
@@ -1020,11 +1060,13 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JTable MultEntradaTable;
     private javax.swing.JPanel MultEntradassBtnPanel;
     private javax.swing.JScrollPane MultScrollPane1;
+    private javax.swing.JLabel NumTranLabel;
     private javax.swing.JPanel PanelAutomato;
     private javax.swing.JPanel PanelMultEntradas;
     private javax.swing.JPanel PanelStep;
     private javax.swing.JCheckBoxMenuItem PopUpItem1;
     private javax.swing.JCheckBoxMenuItem PopUpItem2;
+    private javax.swing.JLabel ResultNumTranLabel;
     private javax.swing.JButton StepBtn;
     private javax.swing.JPanel StepBtnPanel;
     private javax.swing.JScrollPane StepPanel;
