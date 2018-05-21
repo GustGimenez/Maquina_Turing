@@ -64,7 +64,7 @@ public class Resolve {
         this.stopExec = false;
         boolean aux = busca(s, this.inicial, 1);
         return aux;
-
+        
     }
 
     public boolean isValido() {
@@ -82,8 +82,10 @@ public class Resolve {
             if (resp == JOptionPane.OK_OPTION) {
                 this.lim *= 2;
             } else {
+
                 this.stopExec = true;
                 return false;
+
             }
         }
         No aux1 = new No(vert); //Estado Atual
