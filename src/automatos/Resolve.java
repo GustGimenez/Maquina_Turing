@@ -58,27 +58,34 @@ public class Resolve {
 
     public boolean busca(String s) { // Verifica validade de uma String (Chamada na interface)
         this.caminho = null;
+        s = '@' + s;
         this.numIt = 0;
         this.lim = 500;
         this.stopExec = false;
-        boolean aux = busca(s, this.inicial, 0);
+        boolean aux = busca(s, this.inicial, 1);
         return aux;
-
+        
     }
 
     public boolean isValido() {
         return this.valido;
     }
+    
+    public int getNumIt(){
+        return this.numIt;
+    }
 
     private boolean busca(String str, int vert, int pos) { //Executa busca de verificação
         this.numIt++;
-        if(numIt > this.lim){
-            int resp = JOptionPane.showConfirmDialog(null, "Numero de iteracoes passou de " + this.lim+ ". Deseja continuar?");
-            if(resp == JOptionPane.OK_OPTION){
+        if (numIt > this.lim) {
+            int resp = JOptionPane.showConfirmDialog(null, "Numero de iteracoes passou de " + this.lim + ". Deseja continuar?");
+            if (resp == JOptionPane.OK_OPTION) {
                 this.lim *= 2;
-            }else{
+            } else {
+
                 this.stopExec = true;
                 return false;
+
             }
         }
         No aux1 = new No(vert); //Estado Atual
@@ -88,6 +95,7 @@ public class Resolve {
         StringBuilder strB;
         String[] split;
         ArrayList<String> trans;
+        String novoStr;
         if (this.terminal[vert]) { // Chegou em um estado final
             aux1.setProx(this.caminho);
             this.caminho = aux1;
@@ -103,7 +111,7 @@ public class Resolve {
                     //Grava o novo valor
                     strB = new StringBuilder(str);
                     strB.setCharAt(pos, split[1].charAt(0));
-                    str = strB.toString();
+                    novoStr = strB.toString();
                     if ("L".equals(split[2])) { // Se vai para esquerda
                         if (pos == 0) { // Se está no inicio da fita
                             return false;
@@ -112,16 +120,16 @@ public class Resolve {
                     } else { // Se vai pra direita
                         posAux = pos + 1;
                         if (posAux >= str.length()) {
-                            str += this.VAZIO;
+                            novoStr += this.VAZIO;
                         }
                     }
-                    if (this.busca(str, aux.getEstado(), posAux)) { // Se chegou encontrou uma solucao
+                    if (this.busca(novoStr, aux.getEstado(), posAux)) { // Se chegou encontrou uma solucao
                         this.caminho.getTransicao().add(str);
                         aux1.setProx(this.caminho);
                         this.caminho = aux1;
                         return true;
                     }
-                    if(this.stopExec){
+                    if (this.stopExec) {
                         return false;
                     }
                 }

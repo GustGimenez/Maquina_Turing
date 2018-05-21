@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
@@ -143,8 +144,9 @@ public class Tela extends javax.swing.JFrame {
         AddLineBtn = new javax.swing.JButton();
         MultScrollPane1 = new javax.swing.JScrollPane(this.view3);
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        File_menu = new javax.swing.JMenu();
+        save_menu = new javax.swing.JMenuItem();
+        load_menu = new javax.swing.JMenuItem();
         Menu1 = new javax.swing.JMenu();
         mi_Exe1 = new javax.swing.JMenuItem();
         mi_ExeStep = new javax.swing.JMenuItem();
@@ -564,17 +566,27 @@ public class Tela extends javax.swing.JFrame {
 
         AutomatoLayout.add(PanelMultEntradas, "AutomatoMult");
 
-        jMenu1.setText("Arquivo");
+        File_menu.setText("Arquivos");
 
-        jMenuItem1.setText("Carregar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        save_menu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        save_menu.setText("Salvar");
+        save_menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                save_menuActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        File_menu.add(save_menu);
 
-        jMenuBar1.add(jMenu1);
+        load_menu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        load_menu.setText("Carregar");
+        load_menu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                load_menuActionPerformed(evt);
+            }
+        });
+        File_menu.add(load_menu);
+
+        jMenuBar1.add(File_menu);
 
         Menu1.setText("Executar");
 
@@ -665,15 +677,15 @@ public class Tela extends javax.swing.JFrame {
                 this.cleanInput();
                 this.InputTable.setVisible(true);
                 this.InputTable.requestFocus();
-                this.InputTable.changeSelection(0,0,false, false);;
                 this.InputTable.editCellAt(0, 0);
+                this.InputTable.changeSelection(0, 0, false, false);
 
             }
 
         } catch (NullPointerException e) {
 
         } finally {
-            this.view.updateUI();
+            this.TelaPanel.updateUI();
             this.InputTable.setLocation(this.auxX, this.auxY);
         }
     }//GEN-LAST:event_TelaPanelMouseReleased
@@ -720,17 +732,18 @@ public class Tela extends javax.swing.JFrame {
             }
             this.grafo.verificaLabel(p);
         }
-        if (this.op == this.ARRASTAR) { // verificar edição de estado
+        if (evt.getClickCount() == 2) { // verificar edição de estado
             this.strTrans = this.grafo.getStrTrans(p);
             this.aresta = this.grafo.getArestas(p);
             if (strTrans != null) {
-                this.InputTable.setLocation(p);
+                this.auxX = p.x;
+                this.auxY = p.y;
                 this.setInputTable(this.strTrans);
                 this.InputTable.setVisible(true);
                 this.InputTable.requestFocus();
             }
         }
-        this.view.repaint();
+        this.TelaPanel.repaint();
     }//GEN-LAST:event_TelaPanelMouseClicked
 
     private void TelaPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseDragged
@@ -981,17 +994,29 @@ public class Tela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TelaPanelKeyTyped
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        FileManager fm = new FileManager();
+    private void save_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_menuActionPerformed
+        FileManager fm;
+        fm = new FileManager();
+        this.grafo.setPos();
         try {
-            fm.carregaMT(this.grafo);
-        } catch (ParserConfigurationException ex) {
+            fm.saveMT(this.grafo);
+        } catch (TransformerConfigurationException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
+        }
+    }//GEN-LAST:event_save_menuActionPerformed
+
+    private void load_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load_menuActionPerformed
+        FileManager fm;
+        fm = new FileManager();
+        try {
+            grafo.getArestas().removeAll(grafo.getArestas());
+            grafo.getVertices().removeAll(grafo.getVertices());
+            fm.carregaMT(grafo);
+        } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.TelaPanel.repaint();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_load_menuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1046,6 +1071,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton ExecBtn;
     private javax.swing.JButton ExitMultBtn;
     private javax.swing.JButton ExitStepBtn;
+    private javax.swing.JMenu File_menu;
     private javax.swing.JTable InputTable;
     private javax.swing.JPopupMenu Menu;
     private javax.swing.JMenu Menu1;
@@ -1073,6 +1099,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem load_menu;
     private javax.swing.JMenuItem mi_Exe1;
     private javax.swing.JMenuItem mi_ExeStep;
     private javax.swing.JMenuItem mi_MultEntradas;
@@ -1080,5 +1107,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton novoEstadoButton;
     private javax.swing.JButton removerButton;
     private javax.swing.JLabel resultLabel;
+    private javax.swing.JMenuItem save_menu;
     // End of variables declaration//GEN-END:variables
 }
