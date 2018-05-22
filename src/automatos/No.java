@@ -17,7 +17,17 @@ public class No {
     private char direcao;
     private boolean terminal;
     private No prox;
+    private char escreve;
 
+    public char getEscreve() {
+        return escreve;
+    }
+
+    public void setEscreve(char escreve) {
+        this.escreve = escreve;
+    }
+    
+    
     public int getEstado() {
         return estado;
     }

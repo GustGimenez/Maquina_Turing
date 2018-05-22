@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import org.xml.sax.SAXException;
@@ -43,6 +45,8 @@ public class Tela extends javax.swing.JFrame {
     private final boolean gr;
     private int auxX, auxY;
     private String strTrans;
+    private int step;
+    private String TPFitaText;
 
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
@@ -50,6 +54,9 @@ public class Tela extends javax.swing.JFrame {
     private final int NOVA_TRANSICAO = 1;
     private final int REMOVER = 2;
     private final int ARRASTAR = 3;
+    private final char VAZIO = '\u25A1';
+
+    private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
 
     /*
         *Inicializa as Views
@@ -131,8 +138,6 @@ public class Tela extends javax.swing.JFrame {
         StepBtn = new javax.swing.JButton();
         ExitStepBtn = new javax.swing.JButton();
         StringLabel = new javax.swing.JLabel();
-        StringInfoLabel = new javax.swing.JLabel();
-        resultLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TPFita = new javax.swing.JTextPane();
         PanelMultEntradas = new javax.swing.JPanel();
@@ -353,7 +358,7 @@ public class Tela extends javax.swing.JFrame {
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(200, 213, Short.MAX_VALUE))
+                        .addGap(200, 248, Short.MAX_VALUE))
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -387,10 +392,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        StringInfoLabel.setText("String:");
-
-        resultLabel.setText("--");
-
+        TPFita.setEditable(false);
         jScrollPane1.setViewportView(TPFita);
 
         javax.swing.GroupLayout StepBtnPanelLayout = new javax.swing.GroupLayout(StepBtnPanel);
@@ -399,35 +401,31 @@ public class Tela extends javax.swing.JFrame {
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepBtn)
-                .addGap(18, 18, 18)
-                .addComponent(ExitStepBtn)
-                .addGap(94, 94, 94)
-                .addComponent(StringLabel)
-                .addGap(78, 78, 78)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(StringInfoLabel)
-                    .addComponent(resultLabel))
-                .addGap(84, 84, 84))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addGap(242, 242, 242)
+                        .addComponent(StringLabel))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(StepBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(ExitStepBtn)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(StringInfoLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(resultLabel))
-            .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(StepBtn)
-                            .addComponent(ExitStepBtn)
-                            .addComponent(StringLabel)))
-                    .addComponent(jScrollPane1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(StringLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(StepBtn)
+                        .addComponent(ExitStepBtn)))
                 .addContainerGap())
         );
 
@@ -438,7 +436,7 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(StepPanel)
+                    .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
                     .addComponent(StepBtnPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -446,9 +444,9 @@ public class Tela extends javax.swing.JFrame {
             PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(StepPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(StepBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -802,7 +800,6 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.grafo.setPos();
-        this.resultLabel.setText("");
 
         if (this.grafo.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
@@ -815,9 +812,12 @@ public class Tela extends javax.swing.JFrame {
                 this.vertice.setFocus(false);
             }
             this.camCount = 0;
+            this.step = 1;
             this.cam = r.getCaminnho();
             this.camAux = this.cam;
             this.StepPanel.repaint();
+            this.TPFitaText = "@" + aux + "□□□□□□";
+            this.TPFita.setText(this.TPFitaText);
             CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
             card.show(this.AutomatoLayout, "AutomatoStep");
         } else {
@@ -826,12 +826,13 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_mi_ExeStepActionPerformed
 
     private void StepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StepBtnActionPerformed
+        StringBuilder str = new StringBuilder(this.TPFita.getText());
 
         if (this.camCount == 2) {
+            this.step = 1;
             this.camCount = 0;
             this.StepBtn.setText("Começar");
             this.vertice.setFocus(false);
-            this.resultLabel.setText("");
         } else {
 
             if (this.camCount != 1) {
@@ -843,17 +844,32 @@ public class Tela extends javax.swing.JFrame {
             }
             if (!camAux.getTransicao().isEmpty()) {
                 String aux = camAux.getTransicao().get(0).toString();
-
-                if (!aux.equals("" + '\u03bb')) {
-                    this.resultLabel.setText(this.resultLabel.getText() + aux);
-                }
             }
             this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+            
+            try {
+                if (str.charAt(this.step) != camAux.getEscreve()) {
+                    str.setCharAt(this.step, camAux.getEscreve());
+                    this.TPFita.setText(str.toString());
+                }
+                this.TPFita.getHighlighter().removeAllHighlights();
+                this.TPFita.getHighlighter().addHighlight(this.step, this.step + 1, highlightPainter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if (camAux.getDirecao() == 'R') { //Direção do highlight
+                this.step += 1;
+            } else {
+                this.step -= 1;
+            }
             if (this.camAux.getProx() != null) {
                 this.camAux = this.camAux.getProx();
             } else {
+                this.step = 1;
                 this.camCount = 2;
                 this.camAux = this.cam;
+                this.TPFita.setText(this.TPFitaText);
                 this.StepBtn.setText("Recomeçar");
 
             }
@@ -1087,7 +1103,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton StepBtn;
     private javax.swing.JPanel StepBtnPanel;
     private javax.swing.JScrollPane StepPanel;
-    private javax.swing.JLabel StringInfoLabel;
     private javax.swing.JLabel StringLabel;
     private javax.swing.JTextPane TPFita;
     private javax.swing.JScrollPane TabelPanel;
@@ -1105,7 +1120,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton novaTransButton;
     private javax.swing.JButton novoEstadoButton;
     private javax.swing.JButton removerButton;
-    private javax.swing.JLabel resultLabel;
     private javax.swing.JMenuItem save_menu;
     // End of variables declaration//GEN-END:variables
 }
