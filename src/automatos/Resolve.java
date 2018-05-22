@@ -96,6 +96,7 @@ public class Resolve {
         String[] split;
         ArrayList<String> trans;
         String novoStr;
+        
         if (this.terminal[vert]) { // Chegou em um estado final
             aux1.setProx(this.caminho);
             this.caminho = aux1;
@@ -125,6 +126,8 @@ public class Resolve {
                     }
                     if (this.busca(novoStr, aux.getEstado(), posAux)) { // Se chegou encontrou uma solucao
                         this.caminho.getTransicao().add(str);
+                        aux1.setDirecao(split[2].charAt(0));
+                        aux1.setEscreve(split[1].charAt(0));
                         aux1.setProx(this.caminho);
                         this.caminho = aux1;
                         return true;
