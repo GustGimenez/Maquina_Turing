@@ -254,23 +254,25 @@ public class Automato {
             }
         }
     }
-    
-    public void verificaLabel(Point p){
+
+    public void verificaLabel(Point p) {
         int yC, yB, xD, xE;
         int largura;
         for (Vertice v : this.vertices) {
-            largura = v.getLabel().length() * 5 + 15;
-            yC =  v.getY()+ v.getRaio();
-            xD = v.getX() + v.getRaio() + largura / 2;
-            yB = v.getY()+ v.getRaio() + 15;            
-            xE = v.getX() - v.getRaio() - largura / 2;
-            
-            if (p.getX() >= xE && p.getX() <= xD){
-                if (p.getY() >= yC && p.getY() <= yB){
-                    v.setLabel(null);
+            if (v.getLabel() != null) {
+                largura = v.getLabel().length() * 5 + 15;
+                yC = v.getY() + v.getRaio();
+                xD = v.getX() + v.getRaio() + largura / 2;
+                yB = v.getY() + v.getRaio() + 15;
+                xE = v.getX() - v.getRaio() - largura / 2;
+
+                if (p.getX() >= xE && p.getX() <= xD) {
+                    if (p.getY() >= yC && p.getY() <= yB) {
+                        v.setLabel(null);
+                    }
                 }
-            }
-            
+            }//Verifica se tem label
+
         }
     }
 
