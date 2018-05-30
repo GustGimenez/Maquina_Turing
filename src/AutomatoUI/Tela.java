@@ -615,6 +615,7 @@ public class Tela extends javax.swing.JFrame {
 
         Menu1.setText("Executar");
 
+        mi_Exe1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         mi_Exe1.setText("Uma entrada");
         mi_Exe1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -623,6 +624,7 @@ public class Tela extends javax.swing.JFrame {
         });
         Menu1.add(mi_Exe1);
 
+        mi_ExeStep.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         mi_ExeStep.setText("Passo a passo");
         mi_ExeStep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -631,6 +633,7 @@ public class Tela extends javax.swing.JFrame {
         });
         Menu1.add(mi_ExeStep);
 
+        mi_MultEntradas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         mi_MultEntradas.setText("Multiplas Entradas");
         mi_MultEntradas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -818,9 +821,9 @@ public class Tela extends javax.swing.JFrame {
         Resolve r = new Resolve(this.grafo);
         String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
         if (r.busca(aux)) {
-            JOptionPane.showMessageDialog(this, "Aceito com "+r.getNumIt()+" passos !");
+            JOptionPane.showMessageDialog(this, "Aceito com " + r.getNumIt() + " passos !");
         } else {
-            JOptionPane.showMessageDialog(this, "Rejeitado com "+r.getNumIt()+" passos !");
+            JOptionPane.showMessageDialog(this, "Rejeitado com " + r.getNumIt() + " passos !");
         }
     }//GEN-LAST:event_mi_Exe1ActionPerformed
 
@@ -865,40 +868,48 @@ public class Tela extends javax.swing.JFrame {
             if (this.camCount != 1) {
                 this.camCount = 1;
                 this.StepBtn.setText("Próximo");
-            }
-            if (this.vertice != null) {
-                this.vertice.setFocus(false);
-            }
-            if (!camAux.getTransicao().isEmpty()) {
-                String aux = camAux.getTransicao().get(0).toString();
-            }
-            this.vertice = this.grafo.setSelected(this.camAux.getEstado());
-
-            try {
-                if (str.charAt(this.step) != camAux.getEscreve()) {
-                    str.setCharAt(this.step, camAux.getEscreve());
-                    this.TPFita.setText(str.toString());
+                this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+                try {
+                    this.TPFita.getHighlighter().removeAllHighlights();
+                    this.TPFita.getHighlighter().addHighlight(this.step, this.step + 1, highlightPainter);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                this.TPFita.getHighlighter().removeAllHighlights();
-                this.TPFita.getHighlighter().addHighlight(this.step, this.step + 1, highlightPainter);
-            } catch (BadLocationException ex) {
-                Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            if (camAux.getDirecao() == 'R') { //Direção do highlight
-                this.step += 1;
             } else {
-                this.step -= 1;
-            }
-            if (this.camAux.getProx() != null) {
-                this.camAux = this.camAux.getProx();
-            } else {
-                this.step = 1;
-                this.camCount = 2;
-                this.camAux = this.cam;
-                this.TPFita.setText(this.TPFitaText);
-                this.StepBtn.setText("Recomeçar");
+                if (this.vertice != null) {
+                    this.vertice.setFocus(false);
+                }
+                if (str.charAt(this.step) != camAux.getEscreve()) {
+                        str.setCharAt(this.step, camAux.getEscreve());
+                        this.TPFita.setText(str.toString());
+                    }
+                if (camAux.getDirecao() == 'R') { //Direção do highlight
+                    this.step += 1;
+                } else {
+                    this.step -= 1;
+                }
+                
+                try {
+                    this.TPFita.getHighlighter().removeAllHighlights();
+                    this.TPFita.getHighlighter().addHighlight(this.step, this.step + 1, highlightPainter);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
+                
+                if (this.camAux.getProx() != null) {
+                    this.camAux = this.camAux.getProx();
+                     this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+                } else {
+                    this.step = 1;
+                    this.camCount = 2;
+                    this.camAux = this.cam;
+                    this.TPFita.setText(this.TPFitaText);
+                    this.StepBtn.setText("Recomeçar");
+                    this.vertice = null;
+
+                }
+               
             }
         }
         this.StepPanel.repaint();
@@ -1144,7 +1155,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem load_menu;
