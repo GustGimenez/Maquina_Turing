@@ -58,7 +58,7 @@ public class Resolve {
 
     public boolean busca(String s) { // Verifica validade de uma String (Chamada na interface)
         this.caminho = null;
-        s = '@' + s;
+        s = '@' + s + this.VAZIO;
         this.numIt = 0;
         this.lim = 500;
         this.stopExec = false;
@@ -153,21 +153,7 @@ public class Resolve {
     }
 
     public No getCaminnho() {
-
         return this.caminho;
-    }
-
-    public void arrumaCaminho(No atual) { //Formata a saída da solução
-        if (atual.getProx() == null) {
-            return;
-        }
-        try {
-            atual.getTransicao().set(0, atual.getProx().getTransicao().get(0));
-        } catch (IndexOutOfBoundsException e) {
-            atual.getTransicao().add(atual.getProx().getTransicao().get(0));
-        }
-        arrumaCaminho(atual.getProx());
-
     }
 
 }
