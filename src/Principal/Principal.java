@@ -20,6 +20,6 @@ public class Principal {
                 new Tela().setVisible(true);
             }
         });
-
+        
     }
 }

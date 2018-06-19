@@ -223,8 +223,9 @@ public class FileManager {
         ini = (Element) estado.getElementsByTagName("initial").item(0);
         fim = (Element) estado.getElementsByTagName("final").item(0);
         Vertice vert = new Vertice(x, y, "q");
+        
         vert.setInicial(ini != null);
-        if(ini != null){
+        if (ini != null) {
             automato.setInicial(vert);
         }
         vert.setFim(fim != null);
@@ -236,29 +237,52 @@ public class FileManager {
         Aresta aresta;
         int origem, destino;
         Vertice v1, v2;
-        String tran = "";
-        char le, escreve, move;
+        int numFitas = 5;
+        int fita;
+        //numFitas = automato.getNumFitas();
+        String[] tran = new String[numFitas];
 
-        // Lê os vértices de origem e estino
+        // Lê os vértices de origem e destino
         origem = Integer.valueOf(transicao.getElementsByTagName("from").item(0).
                 getTextContent());
         destino = Integer.valueOf(transicao.getElementsByTagName("to").item(0).
                 getTextContent());
-
+        
+        
+        
         // Lê o que compõe a transição
-        if (transicao.getElementsByTagName("read").item(0).getTextContent().equals("")) {
-            le = '\u25A1';
-        } else {
-            le = transicao.getElementsByTagName("read").item(0).getTextContent().charAt(0);
-        }
+        for (int i = 0; i < numFitas; i++) {
+            
+            fita = Integer.valueOf(transicao.getElementsByTagName("read").
+                    item(i).getAttributes().getNamedItem("tape").getTextContent()) - 1;
+            tran[fita] = "";
+            if (transicao.getElementsByTagName("read").item(i).getTextContent().equals("")) {
+                tran[fita] += '\u25A1';
+            } else {
+                tran[fita] += transicao.getElementsByTagName("read").item(i).
+                        getTextContent().charAt(0);
+            }
 
-        if (transicao.getElementsByTagName("write").item(0).getTextContent().equals("")) {
-            escreve = '\u25A1';
-        } else {
-            escreve = transicao.getElementsByTagName("write").item(0).getTextContent().charAt(0);
-        }
+            tran[fita] += "&pv";
 
-        move = transicao.getElementsByTagName("move").item(0).getTextContent().charAt(0);
+            if (transicao.getElementsByTagName("write").item(i).getTextContent().
+                    equals("")) {
+                tran[fita] += '\u25A1';
+            } else {
+                tran[fita] += transicao.getElementsByTagName("write").item(i).
+                        getTextContent().charAt(0);
+            }
+
+            tran[fita] += "&pv";
+
+            tran[fita] += transicao.getElementsByTagName("move").item(0).
+                    getTextContent().charAt(0);
+
+            tran[fita] += "&pv";
+
+            tran[fita] += "&bv";
+            System.out.println(tran[fita]);
+        }
 
         // Acessa o vetor de vértices do automato e pega os vértices que compõe a transição;
         v1 = automato.getVertices().get(origem);
@@ -267,9 +291,7 @@ public class FileManager {
         // Cria a aresta no automato
         aresta = automato.addAresta(v1, v2);
 
-        // Adiciona a transição em si
-        tran = le + ";" + escreve + ";" + move;
-        aresta.addTransicao(tran, null);
+        aresta.addTransicao(tran.toString(), null);
     }
 
     public void saveMT(Automato mt) throws TransformerConfigurationException {
