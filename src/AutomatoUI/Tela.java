@@ -12,12 +12,15 @@ import automatos.Resolve;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
@@ -58,6 +61,14 @@ public class Tela extends javax.swing.JFrame {
     private final char VAZIO = '\u25A1';
 
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
+
+    public int getNumFItas() {
+        return this.numFitas;
+    }
+    
+    public void setNumFitas(int num){
+        this.numFitas = num;
+    }
 
     /*
         *Inicializa as Views
@@ -139,10 +150,18 @@ public class Tela extends javax.swing.JFrame {
         StepBtn = new javax.swing.JButton();
         ExitStepBtn = new javax.swing.JButton();
         StringLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TPFita = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
         numItLabel = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        TPFita1 = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        TPFita2 = new javax.swing.JTextPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        TPFita3 = new javax.swing.JTextPane();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        TPFita4 = new javax.swing.JTextPane();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        TPFita5 = new javax.swing.JTextPane();
         PanelMultEntradas = new javax.swing.JPanel();
         TablePanel = new javax.swing.JPanel();
         TabelPanel = new javax.swing.JScrollPane();
@@ -328,8 +347,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        CBDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "R", "L" }));
-        CBDirection.setSelectedIndex(1);
+        CBDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "R", "L", "S" }));
 
         javax.swing.GroupLayout PanelAutomatoLayout = new javax.swing.GroupLayout(PanelAutomato);
         PanelAutomato.setLayout(PanelAutomatoLayout);
@@ -361,7 +379,7 @@ public class Tela extends javax.swing.JFrame {
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(200, 248, Short.MAX_VALUE))
+                        .addGap(200, 357, Short.MAX_VALUE))
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -395,12 +413,20 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        TPFita.setEditable(false);
-        jScrollPane1.setViewportView(TPFita);
-
         jLabel1.setText("Número de Passos :");
 
         numItLabel.setText("______________");
+
+        TPFita1.setEditable(false);
+        jScrollPane6.setViewportView(TPFita1);
+
+        jScrollPane7.setViewportView(TPFita2);
+
+        jScrollPane8.setViewportView(TPFita3);
+
+        jScrollPane9.setViewportView(TPFita4);
+
+        jScrollPane10.setViewportView(TPFita5);
 
         javax.swing.GroupLayout StepBtnPanelLayout = new javax.swing.GroupLayout(StepBtnPanel);
         StepBtnPanel.setLayout(StepBtnPanelLayout);
@@ -408,41 +434,60 @@ public class Tela extends javax.swing.JFrame {
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addComponent(StepBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ExitStepBtn)))
-                .addGap(242, 242, 242)
-                .addComponent(StringLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane10)
+                    .addComponent(jScrollPane9)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(67, 67, 67)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(StepBtn)
+                    .addComponent(ExitStepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(195, 195, 195)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(numItLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addComponent(StringLabel)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(numItLabel))
+                        .addGap(61, 61, 61))))
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(StepBtn)
-                            .addComponent(ExitStepBtn)))
+                .addContainerGap(82, Short.MAX_VALUE)
+                .addComponent(StringLabel)
+                .addContainerGap(83, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(StringLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(StepBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ExitStepBtn))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, StepBtnPanelLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(numItLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(numItLabel)))
+                .addGap(80, 80, 80))
+            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout PanelStepLayout = new javax.swing.GroupLayout(PanelStep);
@@ -452,7 +497,7 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                    .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                     .addComponent(StepBtnPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -570,7 +615,7 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(TabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(MultEntradassBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 33, Short.MAX_VALUE))
+                .addGap(0, 142, Short.MAX_VALUE))
             .addComponent(MultScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -858,7 +903,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_mi_ExeStepActionPerformed
 
     private void StepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StepBtnActionPerformed
-                int i = 0;
+        int i = 0;
         ArrayList<StringBuilder> str = new ArrayList();
         ArrayList<JTextPane> JTPs = new ArrayList();
         int[] steps = new int[this.numFitas];
@@ -1067,7 +1112,7 @@ public class Tela extends javax.swing.JFrame {
             text3 = text3.replaceAll(";", "&pv").replaceAll("|", "&bv");
             //Forma string que será armazenada. Apenas 1 caractere por campo
             texto = text1 + ";" + text2 + ";" + text3;
-            if(i < this.numFitas -1){
+            if (i < this.numFitas - 1) {
                 texto += "|";
             }
         }
@@ -1181,7 +1226,11 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JPanel StepBtnPanel;
     private javax.swing.JScrollPane StepPanel;
     private javax.swing.JLabel StringLabel;
-    private javax.swing.JTextPane TPFita;
+    private javax.swing.JTextPane TPFita1;
+    private javax.swing.JTextPane TPFita2;
+    private javax.swing.JTextPane TPFita3;
+    private javax.swing.JTextPane TPFita4;
+    private javax.swing.JTextPane TPFita5;
     private javax.swing.JScrollPane TabelPanel;
     private javax.swing.JPanel TablePanel;
     private javax.swing.JScrollPane TelaPanel;
@@ -1190,7 +1239,11 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JMenuItem load_menu;
     private javax.swing.JMenuItem mi_Exe1;
     private javax.swing.JMenuItem mi_ExeStep;
