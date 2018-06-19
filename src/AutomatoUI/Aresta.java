@@ -74,7 +74,7 @@ public class Aresta {
                 des = -12;
                 g.setStroke(new java.awt.BasicStroke(1f));
                 for (String s : trans) {
-                    g.drawString(s, x, y + des);
+                    g.drawString(s.replaceAll("&pv", ";").replaceAll("&bv", "|"), x, y + des);
                     des -= 13;
                 }
                 break;
@@ -84,7 +84,7 @@ public class Aresta {
                 des = -22;
                 g.setStroke(new java.awt.BasicStroke(1f));
                 for (String s : trans) {
-                    g.drawString(s, x, y + des);
+                    g.drawString(s.replaceAll("&pv", ";").replaceAll("&bv", "|"), x, y + des);
                     des -= 13;
                 }
                 break;
@@ -100,7 +100,7 @@ public class Aresta {
                 g.setStroke(new java.awt.BasicStroke(1f));
                 for (String s : trans) {
                     int yAux = this.origem.getY() + des;
-                    g.drawString(s, po.x - 4, yAux);
+                    g.drawString(s.replaceAll("&pv", ";").replaceAll("&bv", "|"), po.x - 4, yAux);
                     des -= 13;
                 }
                 break;
@@ -111,7 +111,7 @@ public class Aresta {
                 des = 32;
                 g.setStroke(new java.awt.BasicStroke(1f));
                 for (String s : trans) {
-                    g.drawString(s, x, y + des);
+                    g.drawString(s.replaceAll("&pv", ";").replaceAll("&bv", "|"), x, y + des);
                     des += 13;
                 }
                 break;
