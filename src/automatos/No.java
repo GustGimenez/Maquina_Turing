@@ -14,16 +14,16 @@ import java.util.ArrayList;
 public class No {
     private int estado;
     private ArrayList<String> transicao;
-    private char direcao;
+    private ArrayList<Character> direcao;
     private boolean terminal;
     private No prox;
-    private char escreve;
+    private ArrayList<Character> escreve;
 
-    public char getEscreve() {
+    public ArrayList<Character> getEscreve() {
         return escreve;
     }
 
-    public void setEscreve(char escreve) {
+    public void setEscreve(ArrayList<Character> escreve) {
         this.escreve = escreve;
     }
     
@@ -52,11 +52,11 @@ public class No {
         this.prox = prox;
     }
 
-    public char getDirecao() {
+    public ArrayList getDirecao() {
         return direcao;
     }
 
-    public void setDirecao(char direcao) {
+    public void setDirecao(ArrayList direcao) {
         this.direcao = direcao;
     }
     
