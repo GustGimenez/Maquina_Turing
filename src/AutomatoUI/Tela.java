@@ -37,6 +37,7 @@ public class Tela extends javax.swing.JFrame {
     private ViewPanel view;
     private ViewPanel view2;
     private ViewPanel view3;
+    private int numFitas;
 
     private No cam;
     private No camAux;
@@ -286,7 +287,7 @@ public class Tela extends javax.swing.JFrame {
                 {"$", null, null}
             },
             new String [] {
-                "null", "null", "null"
+                "Lê", "Escreve", "Vai para"
             }
         ) {
             Class[] types = new Class [] {
@@ -880,15 +881,15 @@ public class Tela extends javax.swing.JFrame {
                     this.vertice.setFocus(false);
                 }
                 if (str.charAt(this.step) != camAux.getEscreve()) {
-                        str.setCharAt(this.step, camAux.getEscreve());
-                        this.TPFita.setText(str.toString());
-                    }
+                    str.setCharAt(this.step, camAux.getEscreve());
+                    this.TPFita.setText(str.toString());
+                }
                 if (camAux.getDirecao() == 'R') { //Direção do highlight
                     this.step += 1;
                 } else {
                     this.step -= 1;
                 }
-                
+
                 try {
                     this.TPFita.getHighlighter().removeAllHighlights();
                     this.TPFita.getHighlighter().addHighlight(this.step, this.step + 1, highlightPainter);
@@ -896,10 +897,9 @@ public class Tela extends javax.swing.JFrame {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                
                 if (this.camAux.getProx() != null) {
                     this.camAux = this.camAux.getProx();
-                     this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+                    this.vertice = this.grafo.setSelected(this.camAux.getEstado());
                 } else {
                     this.step = 1;
                     this.camCount = 2;
@@ -909,7 +909,7 @@ public class Tela extends javax.swing.JFrame {
                     this.vertice = null;
 
                 }
-               
+
             }
         }
         this.StepPanel.repaint();
@@ -1014,29 +1014,40 @@ public class Tela extends javax.swing.JFrame {
         if (this.aresta == null) {
             return;
         }
-        String texto;
+        String texto = "";
 
         //Pega os valores da tabela, ignorando espacos
-        String text1 = ((String) this.InputTable.getValueAt(0, 0)).trim();
-        String text2 = ((String) this.InputTable.getValueAt(0, 1)).trim();
-        String text3 = ((String) this.InputTable.getValueAt(0, 2)).trim();
+        for (int i = 0; i < this.numFitas; i++) {
 
-        //substitui vazio por caracter quadrado
-        if (text1 == null || text1.equals("")) {
-            text1 = "\u25A1";
+            String text1 = ((String) this.InputTable.getValueAt(i, 0)).trim();
+            String text2 = ((String) this.InputTable.getValueAt(i, 1)).trim();
+            String text3 = ((String) this.InputTable.getValueAt(i, 2)).trim();
+
+            //substitui vazio por caracter quadrado
+            if (text1 == null || text1.equals("")) {
+                text1 = "\u25A1";
+            }
+            if (text2 == null || text2.equals("")) {
+                text2 = "\u25A1";
+            }
+
+            //Default de andamento da fita: Direita
+            if (text3 == null || text3.equals("")) {
+                text3 = "R";
+            }
+            text1 = "" + text1.charAt(0);
+            text2 = "" + text2.charAt(0);
+            text3 = "" + text3.charAt(0);
+
+            text1 = text1.replaceAll(";", "&pv").replaceAll("|", "&bv");
+            text2 = text2.replaceAll(";", "&pv").replaceAll("|", "&bv");
+            text3 = text3.replaceAll(";", "&pv").replaceAll("|", "&bv");
+            //Forma string que será armazenada. Apenas 1 caractere por campo
+            texto = text1 + ";" + text2 + ";" + text3;
+            if(i < this.numFitas -1){
+                texto += "|";
+            }
         }
-        if (text2 == null || text2.equals("")) {
-            text2 = "\u25A1";
-        }
-
-        //Default de andamento da fita: Direita
-        if (text3 == null || text3.equals("")) {
-            text3 = "R";
-        }
-
-        //Forma string que será armazenada. Apenas 1 caractere por campo
-        texto = text1.charAt(0) + ";" + text2.charAt(0) + ";" + text3.charAt(0);
-
         this.aresta.addTransicao(texto, this.strTrans);
         this.TelaPanel.repaint();
         this.strTrans = null;
