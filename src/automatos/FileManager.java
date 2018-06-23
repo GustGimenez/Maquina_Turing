@@ -44,125 +44,6 @@ import org.w3c.dom.Comment;
  */
 public class FileManager {
 
-    public void salvarMT(Automato automato) throws IOException {
-        ArrayList<Vertice> vertices;
-        ArrayList<Aresta> transicoes;
-        JFileChooser escolhedor = new JFileChooser();
-        String nomeArq;
-
-        escolhedor.setMultiSelectionEnabled(false);
-        escolhedor.setDialogTitle("Escolha o local do arquivo");
-        escolhedor.setCurrentDirectory(new File("C:\\"));
-
-        vertices = automato.getVertices();
-        transicoes = automato.getArestas();
-        int result = escolhedor.showDialog(null, "Salvar");
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
-                nomeArq = escolhedor.getSelectedFile().getAbsolutePath();
-                nomeArq += ".jff";
-                FileWriter aux = new FileWriter(nomeArq);
-                PrintWriter file = new PrintWriter(aux);
-                this.escreveCabecalho(file);
-
-                // Escreve cada um dos vértices
-                file.write("      <!--The list of states.-->&#13;\n");
-                for (Vertice v : vertices) {
-                    this.escreveEstado(file, v);
-                }
-
-                // Escreve cada um das transições
-                file.write("<!--The list of transitions.-->&#13;\n");
-                for (Aresta t : transicoes) {
-                    this.escreveTransicao(file, t);
-                }
-
-                // Escreve as máquinas
-                file.write("		<!--The list of automata-->&#13;\n");
-                for (Vertice v : vertices) {
-                    file.write("		<Machine" + v.getEstado().charAt(1) + "/>&#13;\n");
-                }
-                file.close();
-            } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    }
-
-    // Método que cria o cabeçalho comum a todos os arquivos de máquina de turing
-    public void escreveCabecalho(PrintWriter file) {
-        file.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
-                + "<!--Created with Maquina_Turing--><structure>&#13;\n");
-
-        file.write("	<type>turing</type>&#13;\n");
-        file.write("	<automaton>&#13;\n");
-    }
-
-    public void escreveEstado(PrintWriter file, Vertice vertice) {
-        // Escreve sua identificação e seu nome
-        file.write("		<block id=\"" + vertice.getEstado().substring(1)
-                + "\" name=\"" + vertice.getEstado() + "\">&#13;\n");
-
-        // Escreve sua tag
-        file.write("			<tag>Machine" + vertice.getEstado().substring(1)
-                + "</tag>&#13;\n");
-
-        // Escreve suas posições
-        file.write("			<x>" + vertice.getX() + "</x>&#13;\n");
-        file.write("			<y>" + vertice.getY() + "</y>&#13;\n");
-
-        // Se for inicial, deve ser salvo a tag
-        if (vertice.isInicial()) {
-            file.write("			<initial/>&#13;\n");
-        }
-
-        // Fechar o bloco do estado
-        file.write("		</block>&#13;\n");
-    }
-
-    public void escreveTransicao(PrintWriter file, Aresta t) {
-        ArrayList<String> trans = new ArrayList();
-        Character ch;
-        //trans = t.getTrans();
-        for (String aux : trans) {
-            // Escreve o começo da trasição
-            file.write("		<transition>&#13;\n");
-
-            // Escreve de qual estado para qual estado ela vai
-            file.write("			<from>" + t.getOrigem().getEstado().substring(1) + "</from>&#13;\n");
-            file.write("			<to>" + t.getDestino().getEstado().substring(1) + "</to>&#13;\n");
-
-            // Símbolo de leitura
-            ch = aux.charAt(0);
-            if (ch.equals('\u25A1')) {
-                file.write("			<read/>&#13;\n");
-            } else {
-                file.write("			<read>" + ch + "</read>&#13;\n");
-            }
-
-            // Símbolo de escrita
-            ch = aux.charAt(2);
-            if (ch.equals('\u25A1')) {
-                file.write("			<write/>&#13;\n");
-            } else {
-                file.write("			<write>" + ch + "</write>&#13;\n");
-            }
-
-            // Direcionamento
-            ch = aux.charAt(4);
-            if (ch.equals('R')) {
-                file.write("			<move>R</move>&#13;\n");
-            } else {
-                file.write("			<move>L</move>&#13;\n");
-            }
-
-            // Finaliza escrita da transição
-            file.write("		</transition>&#13;\n");
-        }
-
-    }
-
     public void carregaMT(Automato automato) throws ParserConfigurationException, SAXException {
         JFileChooser fc = new JFileChooser("C:\\");
         int result = fc.showOpenDialog(fc);
@@ -223,7 +104,7 @@ public class FileManager {
         ini = (Element) estado.getElementsByTagName("initial").item(0);
         fim = (Element) estado.getElementsByTagName("final").item(0);
         Vertice vert = new Vertice(x, y, "q");
-        
+
         vert.setInicial(ini != null);
         if (ini != null) {
             automato.setInicial(vert);
@@ -247,42 +128,45 @@ public class FileManager {
                 getTextContent());
         destino = Integer.valueOf(transicao.getElementsByTagName("to").item(0).
                 getTextContent());
-        
-        
-        
+
         // Lê o que compõe a transição
         for (int i = 0; i < numFitas; i++) {
-            
+
             fita = Integer.valueOf(transicao.getElementsByTagName("read").
                     item(i).getAttributes().getNamedItem("tape").getTextContent()) - 1;
             tran[fita] = "";
             if (transicao.getElementsByTagName("read").item(i).getTextContent().equals("")) {
                 tran[fita] += '\u25A1';
+            } else if (transicao.getElementsByTagName("read").item(i).getTextContent().equals(";")) {
+                tran[fita] += "&pv";
+            } else if (transicao.getElementsByTagName("read").item(i).getTextContent().equals("|")) {
+                tran[fita] += "$bv";
             } else {
                 tran[fita] += transicao.getElementsByTagName("read").item(i).
                         getTextContent().charAt(0);
             }
 
-            tran[fita] += "&pv";
+            tran[fita] += ";";
 
-            if (transicao.getElementsByTagName("write").item(i).getTextContent().
-                    equals("")) {
+            if (transicao.getElementsByTagName("write").item(i).getTextContent().equals("")) {
                 tran[fita] += '\u25A1';
+            } else if (transicao.getElementsByTagName("write").item(i).getTextContent().equals(";")) {
+                tran[fita] += "&pv";
+            } else if (transicao.getElementsByTagName("write").item(i).getTextContent().equals("|")) {
+                tran[fita] += "$bv";
             } else {
                 tran[fita] += transicao.getElementsByTagName("write").item(i).
                         getTextContent().charAt(0);
             }
 
-            tran[fita] += "&pv";
+            tran[fita] += ";";
 
             tran[fita] += transicao.getElementsByTagName("move").item(0).
                     getTextContent().charAt(0);
 
-            tran[fita] += "&pv";
-
-            tran[fita] += "&bv";
-            System.out.println(tran[fita]);
+            tran[fita] += "|";
         }
+        tran[numFitas - 1] = tran[numFitas - 1].substring(0, 5);
 
         // Acessa o vetor de vértices do automato e pega os vértices que compõe a transição;
         v1 = automato.getVertices().get(origem);
@@ -290,8 +174,12 @@ public class FileManager {
 
         // Cria a aresta no automato
         aresta = automato.addAresta(v1, v2);
+        String tranFinal = "";
+        for (int i = 0; i < numFitas; i++) {
+            tranFinal += tran[i];
+        }
 
-        aresta.addTransicao(tran.toString(), null);
+        aresta.addTransicao(tranFinal, null);
     }
 
     public void saveMT(Automato mt) throws TransformerConfigurationException {
@@ -323,6 +211,11 @@ public class FileManager {
                 type.appendChild(doc.createTextNode("turing"));
                 raiz.appendChild(type);
 
+                //Type
+                Element tapes = doc.createElement("tapes");
+//                    tapes.appendChild(doc.createTextNode(mt.getNumFitas()));
+                raiz.appendChild(tapes);
+
                 //Automaton block
                 Element auto = doc.createElement("automaton");
                 raiz.appendChild(auto);
@@ -332,8 +225,10 @@ public class FileManager {
                 ArrayList<Vertice> vertices = mt.getVertices();
                 ArrayList<Aresta> arestas = mt.getArestas();
                 Comment com;
+
                 com = doc.createComment("The list of states.");
                 auto.appendChild(com);
+
                 for (Vertice v : vertices) {
                     block = doc.createElement("block");
                     auto.appendChild(block);
@@ -364,14 +259,23 @@ public class FileManager {
                 }
 
                 Element transition, from, to, read, write, move;
-                ArrayList<String> valores;
+                ArrayList<String> transicoes;
                 String[] chs;
+                String aux;
+//                int numFitas = mt.getNumFitas();
+                int numFitas = 5;
+
                 com = doc.createComment("The list of transitions.");
                 auto.appendChild(com);
                 for (Aresta a : arestas) {
-                    valores = a.getTrans();
-                    for (String s : valores) {
-                        chs = s.split(";");
+                    transicoes = a.getTrans();
+
+                    for (String s : transicoes) {
+                        // Split não funciona com '|', então, troca pra '/' e depois volta pra '|'
+                        s = s.replace('|', '/');
+                        chs = s.split("/");
+                        s = s.replace('/', '|');
+
                         transition = doc.createElement("transition");
                         auto.appendChild(transition);
 
@@ -383,24 +287,32 @@ public class FileManager {
                         to.appendChild(doc.createTextNode(Integer.toString(a.getDestino().getPos())));
                         transition.appendChild(to);
 
-                        read = doc.createElement("read");
-                        if (!"\u25A1".equals(chs[0])) {
-                            read.appendChild(doc.createTextNode(chs[0]));
+                        for (int i = 0; i < numFitas; i++) {
+                            aux = chs[i];
+
+                            read = doc.createElement("read");
+                            read.setAttribute("tape", String.valueOf(i + 1));
+                            if (aux.charAt(0) != '\u25A1') {
+                                read.appendChild(doc.createTextNode(String.valueOf(aux.charAt(0))));
+                            }
+                            transition.appendChild(read);
+
+                            write = doc.createElement("write");
+                            write.setAttribute("tape", String.valueOf(i + 1));
+                            if (aux.charAt(2) != '\u25A1') {
+                                write.appendChild(doc.createTextNode(String.valueOf(aux.charAt(2))));
+                            }
+                            transition.appendChild(write);
+
+                            move = doc.createElement("move");
+                            move.setAttribute("tape", String.valueOf(i + 1));
+                            move.appendChild(doc.createTextNode(String.valueOf(aux.charAt(4))));
+                            transition.appendChild(move);
+                            
                         }
-                        transition.appendChild(read);
-
-                        write = doc.createElement("write");
-                        if (!"\u25A1".equals(chs[1])) {
-                            write.appendChild(doc.createTextNode(chs[1]));
-                        }
-                        transition.appendChild(write);
-
-                        move = doc.createElement("move");
-                        move.appendChild(doc.createTextNode(chs[2]));
-                        transition.appendChild(move);
-
                     }
                 }
+
                 Element machine;
                 com = doc.createComment("The list of automata.");
                 auto.appendChild(com);
