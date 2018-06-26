@@ -17,9 +17,10 @@ import java.util.ArrayList;
  */
 public class Automato {
 
-    ArrayList<Vertice> vertices;
-    ArrayList<Aresta> arestas;
+    private ArrayList<Vertice> vertices;
+    private ArrayList<Aresta> arestas;
     private Vertice Inicial; // Mantém o inicial para ser mais facilmente manipulado
+    private int numFitas;
 
     public Automato() {
         this.vertices = new ArrayList();
@@ -32,6 +33,14 @@ public class Automato {
 
     public ArrayList<Aresta> getArestas() {
         return arestas;
+    }
+
+    public void setNumFitas(int numFitas) {
+        this.numFitas = numFitas;
+    }
+
+    public int getNumFitas() {
+        return this.numFitas;
     }
 
     //Retona a posição do inicial

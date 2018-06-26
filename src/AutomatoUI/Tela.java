@@ -35,7 +35,7 @@ import org.xml.sax.SAXException;
  */
 public class Tela extends javax.swing.JFrame {
 
-    private final Automato grafo;
+    private final Automato automato;
     private Vertice vertice;
     private Aresta aresta;
     private ViewPanel view;
@@ -68,6 +68,7 @@ public class Tela extends javax.swing.JFrame {
     
     public void setNumFitas(int num){
         this.numFitas = num;
+        this.automato.setNumFitas(numFitas);
     }
 
     /*
@@ -75,10 +76,10 @@ public class Tela extends javax.swing.JFrame {
         *Deve ser chamado ANTES initComponents
      */
     private void initTela() {
-        this.view = new ViewPanel(grafo);
-        this.view2 = new ViewPanel(grafo);
+        this.view = new ViewPanel(automato);
+        this.view2 = new ViewPanel(automato);
         this.view2.setBackground(Color.white);
-        this.view3 = new ViewPanel(grafo);
+        this.view3 = new ViewPanel(automato);
         this.view3.setBackground(Color.white);
     }
 
@@ -99,7 +100,7 @@ public class Tela extends javax.swing.JFrame {
     }
 
     public Tela() {
-        grafo = new Automato();
+        automato = new Automato();
         this.gr = false;
         this.initTela();
         initComponents();
@@ -112,7 +113,7 @@ public class Tela extends javax.swing.JFrame {
      */
     public Tela(Automato a) {
         this.gr = true;
-        this.grafo = a;
+        this.automato = a;
         this.initTela();
         initComponents();
         this.setComp();
@@ -714,7 +715,7 @@ public class Tela extends javax.swing.JFrame {
         try {
             this.view.getS().setLine(0, 0, 0, 0);
             Point p = this.view.getMousePosition();
-            Vertice v = grafo.busca(p.x, p.y);
+            Vertice v = automato.busca(p.x, p.y);
 
             if (evt.isPopupTrigger()) {
                 if (this.vertice == null) {
@@ -734,7 +735,7 @@ public class Tela extends javax.swing.JFrame {
                 if (v == null) {
                     return;
                 }
-                this.aresta = this.grafo.addAresta(this.vertice, v);
+                this.aresta = this.automato.addAresta(this.vertice, v);
                 if (this.aresta.getTipo() == 4) {
                     this.auxX = this.vertice.getX() - 114;
                     if (auxX < 6) {
@@ -774,7 +775,7 @@ public class Tela extends javax.swing.JFrame {
             if (this.InputTable.isVisible()) {
                 verificaClick(p.x, p.y);
             }
-            this.vertice = grafo.busca(p.x, p.y);
+            this.vertice = automato.busca(p.x, p.y);
             if (vertice != null) {
                 this.vertice.setFocus(true);
             }
@@ -793,23 +794,23 @@ public class Tela extends javax.swing.JFrame {
                 return;
             }
             this.vertice = new Vertice(p.x, p.y, "q");
-            this.grafo.addVertice(this.vertice);
+            this.automato.addVertice(this.vertice);
 
         }
         if (this.op == this.REMOVER) {//remove
             if (this.vertice != null) {
                 if (this.vertice.isInicial()) {
-                    this.grafo.setInicial(null);
+                    this.automato.setInicial(null);
                 }
-                this.grafo.removeVertice(this.vertice);
+                this.automato.removeVertice(this.vertice);
             } else {
-                this.grafo.removeTransicao(p);
+                this.automato.removeTransicao(p);
             }
-            this.grafo.verificaLabel(p);
+            this.automato.verificaLabel(p);
         }
         if (evt.getClickCount() == 2) { // verificar edição de estado
-            this.strTrans = this.grafo.getStrTrans(p);
-            this.aresta = this.grafo.getArestas(p);
+            this.strTrans = this.automato.getStrTrans(p);
+            this.aresta = this.automato.getArestas(p);
             if (strTrans != null) {
                 this.auxX = p.x;
                 this.auxY = p.y;
@@ -845,11 +846,11 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_TelaPanelMouseDragged
 
     private void PopUpItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopUpItem1ActionPerformed
-        if (this.grafo.getInicial() != null) {
-            this.grafo.getInicial().setInicial(false);
+        if (this.automato.getInicial() != null) {
+            this.automato.getInicial().setInicial(false);
         }
         this.vertice.setInicial(true);
-        this.grafo.setInicial(this.vertice);
+        this.automato.setInicial(this.vertice);
         this.TelaPanel.repaint();
     }//GEN-LAST:event_PopUpItem1ActionPerformed
 
@@ -859,13 +860,13 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_PopUpItem2ActionPerformed
 
     private void mi_Exe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_Exe1ActionPerformed
-        this.grafo.setPos();
+        this.automato.setPos();
 
-        if (this.grafo.getInicial() == null) {
+        if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
-        Resolve r = new Resolve(this.grafo);
+        Resolve r = new Resolve(this.automato);
         String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
         if (r.busca(aux)) {
             JOptionPane.showMessageDialog(this, "Aceito com " + r.getNumIt() + " passos !");
@@ -875,13 +876,13 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_mi_Exe1ActionPerformed
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
-        this.grafo.setPos();
+        this.automato.setPos();
 
-        if (this.grafo.getInicial() == null) {
+        if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
-        Resolve r = new Resolve(this.grafo);
+        Resolve r = new Resolve(this.automato);
         String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
         if (r.busca(aux)) {
             if (vertice != null) {
@@ -930,7 +931,7 @@ public class Tela extends javax.swing.JFrame {
             if (this.camCount != 1) {
                 this.camCount = 1;
                 this.StepBtn.setText("Próximo");
-                this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+                this.vertice = this.automato.setSelected(this.camAux.getEstado());
                 try {
                     for (i = 0; i < this.numFitas; i++) {
                         JTPs.get(i).getHighlighter().removeAllHighlights();
@@ -967,7 +968,7 @@ public class Tela extends javax.swing.JFrame {
 
                 if (this.camAux.getProx() != null) {
                     this.camAux = this.camAux.getProx();
-                    this.vertice = this.grafo.setSelected(this.camAux.getEstado());
+                    this.vertice = this.automato.setSelected(this.camAux.getEstado());
                 } else {
                     this.step = 1;
                     this.camCount = 2;
@@ -1004,13 +1005,13 @@ public class Tela extends javax.swing.JFrame {
         int contTransicoes = 0;
 
         DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
-        this.grafo.setPos();
+        this.automato.setPos();
         this.MultEntradaTable.getCellEditor().stopCellEditing();
-        if (this.grafo.getInicial() == null) {
+        if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
-        Resolve r = new Resolve(this.grafo);
+        Resolve r = new Resolve(this.automato);
         for (int j = 0; j < i; j++) {
             String aux = (String) model.getValueAt(j, 0);
             if (aux != null) {
@@ -1051,7 +1052,7 @@ public class Tela extends javax.swing.JFrame {
     private void CriarLabel_PopUpItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarLabel_PopUpItem3ActionPerformed
         // TODO add your handling code here:
         String label = JOptionPane.showInputDialog("Insira o label!");
-        this.grafo.criarLabel(label, this.vertice);
+        this.automato.criarLabel(label, this.vertice);
         this.TelaPanel.repaint();
     }//GEN-LAST:event_CriarLabel_PopUpItem3ActionPerformed
 
@@ -1136,9 +1137,9 @@ public class Tela extends javax.swing.JFrame {
     private void save_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_menuActionPerformed
         FileManager fm;
         fm = new FileManager();
-        this.grafo.setPos();
+        this.automato.setPos();
         try {
-            fm.saveMT(this.grafo);
+            fm.saveMT(this.automato);
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1148,9 +1149,9 @@ public class Tela extends javax.swing.JFrame {
         FileManager fm;
         fm = new FileManager();
         try {
-            grafo.getArestas().removeAll(grafo.getArestas());
-            grafo.getVertices().removeAll(grafo.getVertices());
-            fm.carregaMT(grafo);
+            automato.getArestas().removeAll(automato.getArestas());
+            automato.getVertices().removeAll(automato.getVertices());
+            fm.carregaMT(automato);
         } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -120,7 +120,7 @@ public class FileManager {
         Vertice v1, v2;
         int numFitas = 5;
         int fita;
-        //numFitas = automato.getNumFitas();
+        numFitas = automato.getNumFitas();
         String[] tran = new String[numFitas];
 
         // Lê os vértices de origem e destino
