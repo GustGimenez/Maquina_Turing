@@ -61,6 +61,8 @@ public class FileManager {
                 // Pega todos os estados e transições, pelo nome da tag
                 NodeList estados = doc.getElementsByTagName("block");
                 NodeList transicoes = doc.getElementsByTagName("transition");
+                int numFitas = Integer.valueOf(doc.getElementsByTagName("tapes").item(0).getTextContent());
+                automato.setNumFitas(numFitas);
 
                 // Leitura dos estados
                 for (int i = 0; i < estados.getLength(); i++) {
