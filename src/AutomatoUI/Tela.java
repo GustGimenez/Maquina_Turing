@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  * @author fabio
  */
 public class Tela extends javax.swing.JFrame {
-
+    
     private final Automato automato;
     private Vertice vertice;
     private Aresta aresta;
@@ -42,7 +42,7 @@ public class Tela extends javax.swing.JFrame {
     private ViewPanel view2;
     private ViewPanel view3;
     private int numFitas;
-
+    
     private No cam;
     private No camAux;
     private int camCount;
@@ -51,7 +51,7 @@ public class Tela extends javax.swing.JFrame {
     private String strTrans;
     private int step;
     private String TPFitaText;
-
+    
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
     private final int NOVO_ESTADO = 0;
@@ -59,14 +59,14 @@ public class Tela extends javax.swing.JFrame {
     private final int REMOVER = 2;
     private final int ARRASTAR = 3;
     private final char VAZIO = '\u25A1';
-
+    
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
-
+    
     public int getNumFItas() {
         return this.numFitas;
     }
     
-    public void setNumFitas(int num){
+    public void setNumFitas(int num) {
         this.numFitas = num;
         this.automato.setNumFitas(numFitas);
     }
@@ -98,14 +98,14 @@ public class Tela extends javax.swing.JFrame {
         TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
         tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
     }
-
+    
     public Tela() {
         automato = new Automato();
         this.gr = false;
         this.initTela();
         initComponents();
         this.setComp();
-
+        
     }
 
     /*
@@ -117,7 +117,7 @@ public class Tela extends javax.swing.JFrame {
         this.initTela();
         initComponents();
         this.setComp();
-
+        
     }
 
     /**
@@ -174,6 +174,7 @@ public class Tela extends javax.swing.JFrame {
         MultScrollPane1 = new javax.swing.JScrollPane(this.view3);
         jMenuBar1 = new javax.swing.JMenuBar();
         File_menu = new javax.swing.JMenu();
+        novaMaquinaMenu = new javax.swing.JMenuItem();
         save_menu = new javax.swing.JMenuItem();
         load_menu = new javax.swing.JMenuItem();
         Menu1 = new javax.swing.JMenu();
@@ -358,13 +359,14 @@ public class Tela extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
                         .addGap(255, 255, 255)
                         .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
+                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
+                        .addContainerGap())))
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -374,7 +376,7 @@ public class Tela extends javax.swing.JFrame {
         PanelAutomatoLayout.setVerticalGroup(
             PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                .addGap(11, 11, 11)
+                .addContainerGap()
                 .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAutomatoLayout.createSequentialGroup()
@@ -451,7 +453,6 @@ public class Tela extends javax.swing.JFrame {
                         .addComponent(StringLabel)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(numItLabel))
@@ -467,7 +468,6 @@ public class Tela extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(StepBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ExitStepBtn))
@@ -516,28 +516,12 @@ public class Tela extends javax.swing.JFrame {
 
         MultEntradaTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Entrada", "Resultado", "Número de Passos"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         MultEntradaTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         TabelPanel.setViewportView(MultEntradaTable);
         if (MultEntradaTable.getColumnModel().getColumnCount() > 0) {
@@ -641,6 +625,15 @@ public class Tela extends javax.swing.JFrame {
 
         File_menu.setText("Arquivos");
 
+        novaMaquinaMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        novaMaquinaMenu.setText("Nova Máquina");
+        novaMaquinaMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novaMaquinaMenuActionPerformed(evt);
+            }
+        });
+        File_menu.add(novaMaquinaMenu);
+
         save_menu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         save_menu.setText("Salvar");
         save_menu.addActionListener(new java.awt.event.ActionListener() {
@@ -716,13 +709,13 @@ public class Tela extends javax.swing.JFrame {
             this.view.getS().setLine(0, 0, 0, 0);
             Point p = this.view.getMousePosition();
             Vertice v = automato.busca(p.x, p.y);
-
+            
             if (evt.isPopupTrigger()) {
                 if (this.vertice == null) {
                     this.PopUpItem1.setEnabled(false);
                     this.PopUpItem2.setEnabled(false);
                 } else {
-
+                    
                     this.PopUpItem1.setSelected(this.vertice.isInicial());
                     this.PopUpItem2.setSelected(this.vertice.isFim());
                     this.PopUpItem1.setEnabled(true);
@@ -742,7 +735,7 @@ public class Tela extends javax.swing.JFrame {
                         auxX = 6;
                     }
                     this.auxY = this.vertice.getY() + 25;
-
+                    
                 } else {
                     this.auxX = (this.vertice.getX() + p.x) / 2;
                     if (auxX < 6) {
@@ -755,11 +748,11 @@ public class Tela extends javax.swing.JFrame {
                 this.InputTable.requestFocus();
                 this.InputTable.editCellAt(0, 0);
                 this.InputTable.changeSelection(0, 0, false, false);
-
+                
             }
-
+            
         } catch (NullPointerException e) {
-
+            
         } finally {
             this.TelaPanel.updateUI();
             this.InputTable.setLocation(this.auxX, this.auxY);
@@ -779,23 +772,23 @@ public class Tela extends javax.swing.JFrame {
             if (vertice != null) {
                 this.vertice.setFocus(true);
             }
-
+            
             this.TelaPanel.repaint();
         } catch (NullPointerException e) {
-
+            
         }
     }//GEN-LAST:event_TelaPanelMousePressed
 
     private void TelaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseClicked
         Point p = this.view.getMousePosition();
-
+        
         if (this.op == this.NOVO_ESTADO) {//novo estado
             if (this.vertice != null) {
                 return;
             }
             this.vertice = new Vertice(p.x, p.y, "q");
             this.automato.addVertice(this.vertice);
-
+            
         }
         if (this.op == this.REMOVER) {//remove
             if (this.vertice != null) {
@@ -827,19 +820,19 @@ public class Tela extends javax.swing.JFrame {
             if (this.op == this.ARRASTAR) {//arrastar
 
                 Point p = this.view.getMousePosition();
-
+                
                 if (this.vertice != null) {
                     this.vertice.setX(p.x);
                     this.vertice.setY(p.y);
                 }
-
+                
             } else if (this.vertice != null && this.op == this.NOVA_TRANSICAO) {//transição
                 Point2D p = (Point2D) this.view.getMousePosition();
                 this.view.getS().setLine(p.getX(), p.getY(), vertice.getX(), vertice.getY());
             }
-
+            
         } catch (NullPointerException e) {
-
+            
         } finally {
             this.view.updateUI();
         }
@@ -861,7 +854,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_Exe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_Exe1ActionPerformed
         this.automato.setPos();
-
+        
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
@@ -877,7 +870,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.automato.setPos();
-
+        
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
@@ -913,21 +906,21 @@ public class Tela extends javax.swing.JFrame {
         JTPs.add(this.TPFita3);
         JTPs.add(this.TPFita4);
         JTPs.add(this.TPFita5);
-
+        
         for (i = 0; i < this.numFitas; i++) {
             JTPs.get(i).setVisible(true);
             StringBuilder sb = new StringBuilder(JTPs.get(i).getText());
             str.add(sb);
             steps[i] = this.step;
         }
-
+        
         if (this.camCount == 2) {
             this.step = 1;
             this.camCount = 0;
             this.StepBtn.setText("Começar");
             this.vertice.setFocus(false);
         } else {
-
+            
             if (this.camCount != 1) {
                 this.camCount = 1;
                 this.StepBtn.setText("Próximo");
@@ -955,17 +948,17 @@ public class Tela extends javax.swing.JFrame {
                         steps[i] -= 1;
                     }
                 }
-
+                
                 try {
                     for (i = 0; i < this.numFitas; i++) {
                         JTPs.get(i).getHighlighter().removeAllHighlights();
                         JTPs.get(i).getHighlighter().addHighlight(steps[i], steps[i] + 1, highlightPainter);
                     }
-
+                    
                 } catch (BadLocationException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
                 if (this.camAux.getProx() != null) {
                     this.camAux = this.camAux.getProx();
                     this.vertice = this.automato.setSelected(this.camAux.getEstado());
@@ -976,9 +969,9 @@ public class Tela extends javax.swing.JFrame {
                     this.TPFita1.setText(this.TPFitaText);
                     this.StepBtn.setText("Recomeçar");
                     this.vertice = null;
-
+                    
                 }
-
+                
             }
         }
         this.StepPanel.repaint();
@@ -991,6 +984,16 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_MultEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_MultEntradasActionPerformed
         this.MultScrollPane1.repaint();
+        DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
+        model.setColumnCount(0);
+        for (int i = 0; i < this.numFitas; i++) {
+            model.addColumn("Entrada" + i);
+        }
+        model.addColumn("Numero de passos");
+        model.addColumn("Resultado");
+        
+        model.addRow(new Object[this.numFitas + 2]);
+        
         CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
         card.show(this.AutomatoLayout, "AutomatoMult");
     }//GEN-LAST:event_mi_MultEntradasActionPerformed
@@ -1003,7 +1006,7 @@ public class Tela extends javax.swing.JFrame {
     private void ExecBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExecBtnActionPerformed
         int i = this.MultEntradaTable.getRowCount();
         int contTransicoes = 0;
-
+        
         DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
         this.automato.setPos();
         this.MultEntradaTable.getCellEditor().stopCellEditing();
@@ -1024,7 +1027,7 @@ public class Tela extends javax.swing.JFrame {
                     model.setValueAt(contTransicoes, j, 2);
                 }
             }
-
+            
         }
     }//GEN-LAST:event_ExecBtnActionPerformed
 
@@ -1057,7 +1060,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_CriarLabel_PopUpItem3ActionPerformed
 
     private void InputTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentShown
-
+        
 
     }//GEN-LAST:event_InputTableComponentShown
 
@@ -1067,7 +1070,7 @@ public class Tela extends javax.swing.JFrame {
         if (x == 5 && y == 5) {
             this.InputTable.setLocation(this.auxX, this.auxY);
         }
-
+        
 
     }//GEN-LAST:event_InputTableComponentMoved
 
@@ -1087,7 +1090,7 @@ public class Tela extends javax.swing.JFrame {
 
         //Pega os valores da tabela, ignorando espacos
         for (int i = 0; i < this.numFitas; i++) {
-
+            
             String text1 = ((String) this.InputTable.getValueAt(i, 0)).trim();
             String text2 = ((String) this.InputTable.getValueAt(i, 1)).trim();
             String text3 = ((String) this.InputTable.getValueAt(i, 2)).trim();
@@ -1107,7 +1110,7 @@ public class Tela extends javax.swing.JFrame {
             text1 = "" + text1.charAt(0);
             text2 = "" + text2.charAt(0);
             text3 = "" + text3.charAt(0);
-
+            
             text1 = text1.replaceAll(";", "&pv").replaceAll("|", "&bv");
             text2 = text2.replaceAll(";", "&pv").replaceAll("|", "&bv");
             text3 = text3.replaceAll(";", "&pv").replaceAll("|", "&bv");
@@ -1152,11 +1155,17 @@ public class Tela extends javax.swing.JFrame {
             automato.getArestas().removeAll(automato.getArestas());
             automato.getVertices().removeAll(automato.getVertices());
             fm.carregaMT(automato);
+            this.numFitas = automato.getNumFitas();
         } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.TelaPanel.repaint();
     }//GEN-LAST:event_load_menuActionPerformed
+
+    private void novaMaquinaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaMaquinaMenuActionPerformed
+        
+
+    }//GEN-LAST:event_novaMaquinaMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1167,15 +1176,15 @@ public class Tela extends javax.swing.JFrame {
                 new Tela().setVisible(true);
             }
         });
-
+        
     }
-
+    
     private void verificaClick(int x, int y) {
         int tableX, tableY;
-
+        
         tableX = this.InputTable.getLocation().x;
         tableY = this.InputTable.getLocation().y;
-
+        
         if (x < tableX || x > tableX + 225 || y < tableY || y > tableY + 16) {
             if (this.InputTable.isEditing()) {
                 this.InputTable.getCellEditor().stopCellEditing();
@@ -1183,24 +1192,24 @@ public class Tela extends javax.swing.JFrame {
             this.InputTable.setVisible(false);
         }
     }
-
+    
     private void cleanInput() {
         this.InputTable.setValueAt("", 0, 0);
         this.InputTable.setValueAt("", 0, 1);
         this.InputTable.setValueAt("R", 0, 2);
     }
-
+    
     private void setInputTable(String strTrans) {
         String[] aux;
-
+        
         aux = strTrans.split(";");
         this.InputTable.setValueAt(aux[0], 0, 0);
         this.InputTable.setValueAt(aux[1], 0, 1);
         this.InputTable.setValueAt(aux[2], 0, 2);
     }
-
+    
     public class MeuPanel extends javax.swing.JPanel {
-
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddLineBtn;
@@ -1249,6 +1258,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JMenuItem mi_Exe1;
     private javax.swing.JMenuItem mi_ExeStep;
     private javax.swing.JMenuItem mi_MultEntradas;
+    private javax.swing.JMenuItem novaMaquinaMenu;
     private javax.swing.JButton novaTransButton;
     private javax.swing.JButton novoEstadoButton;
     private javax.swing.JLabel numItLabel;
