@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  * @author fabio
  */
 public class Tela extends javax.swing.JFrame {
-    
+
     private final Automato automato;
     private Vertice vertice;
     private Aresta aresta;
@@ -42,7 +42,7 @@ public class Tela extends javax.swing.JFrame {
     private ViewPanel view2;
     private ViewPanel view3;
     private int numFitas;
-    
+
     private No cam;
     private No camAux;
     private int camCount;
@@ -51,7 +51,7 @@ public class Tela extends javax.swing.JFrame {
     private String strTrans;
     private int step;
     private String TPFitaText;
-    
+
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
     private final int NOVO_ESTADO = 0;
@@ -59,16 +59,18 @@ public class Tela extends javax.swing.JFrame {
     private final int REMOVER = 2;
     private final int ARRASTAR = 3;
     private final char VAZIO = '\u25A1';
-    
+
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
-    
+
     public int getNumFItas() {
         return this.numFitas;
     }
-    
+
     public void setNumFitas(int num) {
         this.numFitas = num;
         this.automato.setNumFitas(numFitas);
+        ((DefaultTableModel) this.InputTable.getModel()).setRowCount(num);
+
     }
 
     /*
@@ -95,17 +97,19 @@ public class Tela extends javax.swing.JFrame {
         this.view.setBackground(Color.white);
         this.TelaPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.TelaPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.setLayout(null);
         TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
         tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
+      //  this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
     }
-    
+
     public Tela() {
         automato = new Automato();
         this.gr = false;
         this.initTela();
         initComponents();
         this.setComp();
-        
+
     }
 
     /*
@@ -117,7 +121,7 @@ public class Tela extends javax.swing.JFrame {
         this.initTela();
         initComponents();
         this.setComp();
-        
+
     }
 
     /**
@@ -143,7 +147,6 @@ public class Tela extends javax.swing.JFrame {
         novaTransButton = new javax.swing.JButton();
         removerButton = new javax.swing.JButton();
         arrastarButton = new javax.swing.JButton();
-        InputTable = new javax.swing.JTable();
         CBDirection = new javax.swing.JComboBox<>();
         PanelStep = new javax.swing.JPanel();
         StepPanel = new javax.swing.JScrollPane(this.view2);
@@ -172,6 +175,7 @@ public class Tela extends javax.swing.JFrame {
         ExecBtn = new javax.swing.JButton();
         AddLineBtn = new javax.swing.JButton();
         MultScrollPane1 = new javax.swing.JScrollPane(this.view3);
+        InputTable = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         File_menu = new javax.swing.JMenu();
         novaMaquinaMenu = new javax.swing.JMenuItem();
@@ -300,54 +304,8 @@ public class Tela extends javax.swing.JFrame {
                     .addComponent(novaTransButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(removerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(arrastarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
-
-        InputTable.setBackground(new java.awt.Color(204, 204, 204));
-        InputTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"$", null, null}
-            },
-            new String [] {
-                "Lê", "Escreve", "Vai para"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        InputTable.setGridColor(new java.awt.Color(204, 204, 255));
-        InputTable.getTableHeader().setReorderingAllowed(false);
-        InputTable.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                InputTableFocusLost(evt);
-            }
-        });
-        InputTable.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                InputTableComponentHidden(evt);
-            }
-            public void componentMoved(java.awt.event.ComponentEvent evt) {
-                InputTableComponentMoved(evt);
-            }
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                InputTableComponentShown(evt);
-            }
-        });
-        InputTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                InputTablePropertyChange(evt);
-            }
-        });
-        InputTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                InputTableKeyTyped(evt);
-            }
-        });
 
         CBDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "R", "L", "S" }));
 
@@ -358,15 +316,9 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelAutomatoLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addGap(255, 255, 255)
-                        .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAutomatoLayout.createSequentialGroup()
-                        .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
-                        .addContainerGap())))
+                    .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
+                    .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -378,27 +330,15 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelAutomatoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(EstadosBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(200, 357, Short.MAX_VALUE))
-                    .addGroup(PanelAutomatoLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(TelaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addGap(18, 18, 18)
+                .addComponent(TelaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(PanelAutomatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanelAutomatoLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(CBDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-
-        if (InputTable.getColumnModel().getColumnCount() > 0) {
-            InputTable.getColumnModel().getColumn(0).setResizable(false);
-            InputTable.getColumnModel().getColumn(1).setResizable(false);
-            InputTable.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         AutomatoLayout.add(PanelAutomato, "AutomatoEdit");
 
@@ -443,45 +383,47 @@ public class Tela extends javax.swing.JFrame {
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67)
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(StepBtn)
-                    .addComponent(ExitStepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(195, 195, 195)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addGap(337, 337, 337)
                         .addComponent(StringLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(303, Short.MAX_VALUE))
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(numItLabel))
-                        .addGap(61, 61, 61))))
+                            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                                .addComponent(ExitStepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(numItLabel))
+                            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                                .addComponent(StepBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1)))
+                        .addContainerGap())))
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+                .addContainerGap(87, Short.MAX_VALUE)
                 .addComponent(StringLabel)
-                .addContainerGap(83, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addComponent(StepBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ExitStepBtn))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, StepBtnPanelLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(numItLabel)))
-                .addGap(80, 80, 80))
+                .addContainerGap(87, Short.MAX_VALUE))
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(StepBtn)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(numItLabel)
+                            .addComponent(ExitStepBtn))
+                        .addGap(1, 1, 1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -498,8 +440,8 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(PanelStepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(StepPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
-                    .addComponent(StepBtnPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(StepBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(StepPanel))
                 .addContainerGap())
         );
         PanelStepLayout.setVerticalGroup(
@@ -556,27 +498,23 @@ public class Tela extends javax.swing.JFrame {
             MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MultEntradassBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MultEntradassBtnPanelLayout.createSequentialGroup()
-                        .addComponent(ExecBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                        .addGap(141, 141, 141))
-                    .addGroup(MultEntradassBtnPanelLayout.createSequentialGroup()
-                        .addComponent(AddLineBtn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(MultEntradassBtnPanelLayout.createSequentialGroup()
-                        .addComponent(ExitMultBtn)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addGroup(MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(ExitMultBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addGroup(MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(AddLineBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                        .addComponent(ExecBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         MultEntradassBtnPanelLayout.setVerticalGroup(
             MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MultEntradassBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(ExecBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AddLineBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ExitMultBtn)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         MultScrollPane1.setAutoscrolls(true);
@@ -591,8 +529,9 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(MultScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(TablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(MultEntradassBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(TabelPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                    .addComponent(MultEntradassBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         TablePanelLayout.setVerticalGroup(
             TablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -600,7 +539,7 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(TabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(MultEntradassBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 142, Short.MAX_VALUE))
+                .addGap(0, 151, Short.MAX_VALUE))
             .addComponent(MultScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -608,7 +547,7 @@ public class Tela extends javax.swing.JFrame {
         PanelMultEntradas.setLayout(PanelMultEntradasLayout);
         PanelMultEntradasLayout.setHorizontalGroup(
             PanelMultEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelMultEntradasLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelMultEntradasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(TablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -622,6 +561,52 @@ public class Tela extends javax.swing.JFrame {
         );
 
         AutomatoLayout.add(PanelMultEntradas, "AutomatoMult");
+
+        InputTable.setBackground(new java.awt.Color(204, 204, 204));
+        InputTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"$", null, null}
+            },
+            new String [] {
+                "Lê", "Escreve", "Vai para"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        InputTable.setGridColor(new java.awt.Color(204, 204, 255));
+        InputTable.getTableHeader().setReorderingAllowed(false);
+        InputTable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                InputTableFocusLost(evt);
+            }
+        });
+        InputTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                InputTableComponentHidden(evt);
+            }
+            public void componentMoved(java.awt.event.ComponentEvent evt) {
+                InputTableComponentMoved(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                InputTableComponentShown(evt);
+            }
+        });
+        InputTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                InputTablePropertyChange(evt);
+            }
+        });
+        InputTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                InputTableKeyTyped(evt);
+            }
+        });
 
         File_menu.setText("Arquivos");
 
@@ -691,7 +676,14 @@ public class Tela extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(AutomatoLayout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(AutomatoLayout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(298, 298, 298)
+                    .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(420, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -699,7 +691,18 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(AutomatoLayout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(295, 295, 295)
+                    .addComponent(InputTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(304, Short.MAX_VALUE)))
         );
+
+        if (InputTable.getColumnModel().getColumnCount() > 0) {
+            InputTable.getColumnModel().getColumn(0).setResizable(false);
+            InputTable.getColumnModel().getColumn(1).setResizable(false);
+            InputTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -709,13 +712,13 @@ public class Tela extends javax.swing.JFrame {
             this.view.getS().setLine(0, 0, 0, 0);
             Point p = this.view.getMousePosition();
             Vertice v = automato.busca(p.x, p.y);
-            
+
             if (evt.isPopupTrigger()) {
                 if (this.vertice == null) {
                     this.PopUpItem1.setEnabled(false);
                     this.PopUpItem2.setEnabled(false);
                 } else {
-                    
+
                     this.PopUpItem1.setSelected(this.vertice.isInicial());
                     this.PopUpItem2.setSelected(this.vertice.isFim());
                     this.PopUpItem1.setEnabled(true);
@@ -735,7 +738,7 @@ public class Tela extends javax.swing.JFrame {
                         auxX = 6;
                     }
                     this.auxY = this.vertice.getY() + 25;
-                    
+
                 } else {
                     this.auxX = (this.vertice.getX() + p.x) / 2;
                     if (auxX < 6) {
@@ -748,14 +751,14 @@ public class Tela extends javax.swing.JFrame {
                 this.InputTable.requestFocus();
                 this.InputTable.editCellAt(0, 0);
                 this.InputTable.changeSelection(0, 0, false, false);
-                
+
             }
-            
+
         } catch (NullPointerException e) {
-            
+
         } finally {
-            this.TelaPanel.updateUI();
-            this.InputTable.setLocation(this.auxX, this.auxY);
+            this.TelaPanel.repaint();
+            this.InputTable.setBounds(this.auxX, this.auxY, 255, 16*this.numFitas);
         }
     }//GEN-LAST:event_TelaPanelMouseReleased
 
@@ -772,23 +775,23 @@ public class Tela extends javax.swing.JFrame {
             if (vertice != null) {
                 this.vertice.setFocus(true);
             }
-            
+
             this.TelaPanel.repaint();
         } catch (NullPointerException e) {
-            
+
         }
     }//GEN-LAST:event_TelaPanelMousePressed
 
     private void TelaPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TelaPanelMouseClicked
         Point p = this.view.getMousePosition();
-        
+
         if (this.op == this.NOVO_ESTADO) {//novo estado
             if (this.vertice != null) {
                 return;
             }
             this.vertice = new Vertice(p.x, p.y, "q");
             this.automato.addVertice(this.vertice);
-            
+
         }
         if (this.op == this.REMOVER) {//remove
             if (this.vertice != null) {
@@ -820,19 +823,19 @@ public class Tela extends javax.swing.JFrame {
             if (this.op == this.ARRASTAR) {//arrastar
 
                 Point p = this.view.getMousePosition();
-                
+
                 if (this.vertice != null) {
                     this.vertice.setX(p.x);
                     this.vertice.setY(p.y);
                 }
-                
+
             } else if (this.vertice != null && this.op == this.NOVA_TRANSICAO) {//transição
                 Point2D p = (Point2D) this.view.getMousePosition();
                 this.view.getS().setLine(p.getX(), p.getY(), vertice.getX(), vertice.getY());
             }
-            
+
         } catch (NullPointerException e) {
-            
+
         } finally {
             this.view.updateUI();
         }
@@ -854,46 +857,60 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_Exe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_Exe1ActionPerformed
         this.automato.setPos();
-        
+
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
         Resolve r = new Resolve(this.automato);
-        String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
-        if (r.busca(aux)) {
-            JOptionPane.showMessageDialog(this, "Aceito com " + r.getNumIt() + " passos !");
-        } else {
-            JOptionPane.showMessageDialog(this, "Rejeitado com " + r.getNumIt() + " passos !");
+        EntradaUsuario ui = new EntradaUsuario(this, true);
+        ui.setFitas(this.numFitas);
+        ui.setVisible(true);
+        if (ui.isValido()) {
+            String[] aux = ui.getEntradas();
+            if (r.busca(aux)) {
+                JOptionPane.showMessageDialog(this, "Aceito com " + r.getNumIt() + " passos !");
+            } else {
+                JOptionPane.showMessageDialog(this, "Rejeitado com " + r.getNumIt() + " passos !");
+            }
         }
+
+
     }//GEN-LAST:event_mi_Exe1ActionPerformed
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.automato.setPos();
-        
+
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
         Resolve r = new Resolve(this.automato);
-        String aux = JOptionPane.showInputDialog(this, "Insira uma entrada");
-        if (r.busca(aux)) {
-            if (vertice != null) {
-                this.vertice.setFocus(false);
+        EntradaUsuario ui = new EntradaUsuario(this, true);
+        ui.setFitas(this.numFitas);
+        ui.setVisible(true);
+        if (ui.isValido()) {
+            String[] aux = ui.getEntradas();
+            if (r.busca(aux)) {
+                if (vertice != null) {
+                    this.vertice.setFocus(false);
+                }
+                this.camCount = 0;
+                this.step = 1;
+                this.cam = r.getCaminnho();
+                this.numItLabel.setText(Integer.toString(r.getNumIt()));
+                this.camAux = this.cam;
+                this.StepPanel.repaint();
+                this.TPFitaText = "□□□□□□" + aux + "□□□□□□";
+                //this.TPFita.setText(this.TPFitaText);
+                CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
+                card.show(this.AutomatoLayout, "AutomatoStep");
+            } else {
+                JOptionPane.showMessageDialog(this, "Entrada rejeitada");
             }
-            this.camCount = 0;
-            this.step = 1;
-            this.cam = r.getCaminnho();
-            this.numItLabel.setText(Integer.toString(r.getNumIt()));
-            this.camAux = this.cam;
-            this.StepPanel.repaint();
-            this.TPFitaText = "@" + aux + "□□□□□□";
-            this.TPFita.setText(this.TPFitaText);
-            CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
-            card.show(this.AutomatoLayout, "AutomatoStep");
-        } else {
-            JOptionPane.showMessageDialog(this, "Entrada rejeitada");
         }
+
+
     }//GEN-LAST:event_mi_ExeStepActionPerformed
 
     private void StepBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StepBtnActionPerformed
@@ -906,21 +923,21 @@ public class Tela extends javax.swing.JFrame {
         JTPs.add(this.TPFita3);
         JTPs.add(this.TPFita4);
         JTPs.add(this.TPFita5);
-        
+
         for (i = 0; i < this.numFitas; i++) {
             JTPs.get(i).setVisible(true);
             StringBuilder sb = new StringBuilder(JTPs.get(i).getText());
             str.add(sb);
             steps[i] = this.step;
         }
-        
+
         if (this.camCount == 2) {
             this.step = 1;
             this.camCount = 0;
             this.StepBtn.setText("Começar");
             this.vertice.setFocus(false);
         } else {
-            
+
             if (this.camCount != 1) {
                 this.camCount = 1;
                 this.StepBtn.setText("Próximo");
@@ -948,17 +965,17 @@ public class Tela extends javax.swing.JFrame {
                         steps[i] -= 1;
                     }
                 }
-                
+
                 try {
                     for (i = 0; i < this.numFitas; i++) {
                         JTPs.get(i).getHighlighter().removeAllHighlights();
                         JTPs.get(i).getHighlighter().addHighlight(steps[i], steps[i] + 1, highlightPainter);
                     }
-                    
+
                 } catch (BadLocationException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 if (this.camAux.getProx() != null) {
                     this.camAux = this.camAux.getProx();
                     this.vertice = this.automato.setSelected(this.camAux.getEstado());
@@ -969,9 +986,9 @@ public class Tela extends javax.swing.JFrame {
                     this.TPFita1.setText(this.TPFitaText);
                     this.StepBtn.setText("Recomeçar");
                     this.vertice = null;
-                    
+
                 }
-                
+
             }
         }
         this.StepPanel.repaint();
@@ -991,9 +1008,9 @@ public class Tela extends javax.swing.JFrame {
         }
         model.addColumn("Numero de passos");
         model.addColumn("Resultado");
-        
+
         model.addRow(new Object[this.numFitas + 2]);
-        
+
         CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
         card.show(this.AutomatoLayout, "AutomatoMult");
     }//GEN-LAST:event_mi_MultEntradasActionPerformed
@@ -1006,7 +1023,7 @@ public class Tela extends javax.swing.JFrame {
     private void ExecBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExecBtnActionPerformed
         int i = this.MultEntradaTable.getRowCount();
         int contTransicoes = 0;
-        
+
         DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
         this.automato.setPos();
         this.MultEntradaTable.getCellEditor().stopCellEditing();
@@ -1016,7 +1033,14 @@ public class Tela extends javax.swing.JFrame {
         }
         Resolve r = new Resolve(this.automato);
         for (int j = 0; j < i; j++) {
-            String aux = (String) model.getValueAt(j, 0);
+            String[] aux = new String[this.numFitas];
+            for (int k = 0; k < this.numFitas; k++) {
+                aux[k] = (String) model.getValueAt(j, k);
+                if ("".equals(aux[k]) || aux[k] == null) {
+                    aux[k] = "" + this.VAZIO;
+                }
+            }
+
             if (aux != null) {
                 if (r.busca(aux)) {
                     contTransicoes = r.getNumIt();
@@ -1027,7 +1051,7 @@ public class Tela extends javax.swing.JFrame {
                     model.setValueAt(contTransicoes, j, 2);
                 }
             }
-            
+
         }
     }//GEN-LAST:event_ExecBtnActionPerformed
 
@@ -1060,7 +1084,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_CriarLabel_PopUpItem3ActionPerformed
 
     private void InputTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_InputTableComponentShown
-        
+
 
     }//GEN-LAST:event_InputTableComponentShown
 
@@ -1070,7 +1094,7 @@ public class Tela extends javax.swing.JFrame {
         if (x == 5 && y == 5) {
             this.InputTable.setLocation(this.auxX, this.auxY);
         }
-        
+
 
     }//GEN-LAST:event_InputTableComponentMoved
 
@@ -1090,7 +1114,7 @@ public class Tela extends javax.swing.JFrame {
 
         //Pega os valores da tabela, ignorando espacos
         for (int i = 0; i < this.numFitas; i++) {
-            
+
             String text1 = ((String) this.InputTable.getValueAt(i, 0)).trim();
             String text2 = ((String) this.InputTable.getValueAt(i, 1)).trim();
             String text3 = ((String) this.InputTable.getValueAt(i, 2)).trim();
@@ -1110,12 +1134,12 @@ public class Tela extends javax.swing.JFrame {
             text1 = "" + text1.charAt(0);
             text2 = "" + text2.charAt(0);
             text3 = "" + text3.charAt(0);
-            
-            text1 = text1.replaceAll(";", "&pv").replaceAll("|", "&bv");
-            text2 = text2.replaceAll(";", "&pv").replaceAll("|", "&bv");
-            text3 = text3.replaceAll(";", "&pv").replaceAll("|", "&bv");
+
+            text1 = text1.replaceAll("';'", "&pv").replaceAll("'|'", "&bv");
+            text2 = text2.replaceAll("';'", "&pv").replaceAll("'|'", "&bv");
+            text3 = text3.replaceAll("';'", "&pv").replaceAll("'|'", "&bv");
             //Forma string que será armazenada. Apenas 1 caractere por campo
-            texto = text1 + ";" + text2 + ";" + text3;
+            texto += text1 + ";" + text2 + ";" + text3;
             if (i < this.numFitas - 1) {
                 texto += "|";
             }
@@ -1150,12 +1174,13 @@ public class Tela extends javax.swing.JFrame {
 
     private void load_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load_menuActionPerformed
         FileManager fm;
+        this.InputTable.setVisible(false);
         fm = new FileManager();
         try {
             automato.getArestas().removeAll(automato.getArestas());
             automato.getVertices().removeAll(automato.getVertices());
             fm.carregaMT(automato);
-            this.numFitas = automato.getNumFitas();
+            this.setNumFitas(automato.getNumFitas());
         } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1163,7 +1188,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_load_menuActionPerformed
 
     private void novaMaquinaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaMaquinaMenuActionPerformed
-        
+
 
     }//GEN-LAST:event_novaMaquinaMenuActionPerformed
 
@@ -1176,40 +1201,42 @@ public class Tela extends javax.swing.JFrame {
                 new Tela().setVisible(true);
             }
         });
-        
+
     }
-    
+
     private void verificaClick(int x, int y) {
         int tableX, tableY;
-        
+
         tableX = this.InputTable.getLocation().x;
         tableY = this.InputTable.getLocation().y;
-        
-        if (x < tableX || x > tableX + 225 || y < tableY || y > tableY + 16) {
+
+        if (x < 5 || x > 5 + 225 || y < 5 || y > 5 + 16 * this.numFitas) {
             if (this.InputTable.isEditing()) {
                 this.InputTable.getCellEditor().stopCellEditing();
             }
             this.InputTable.setVisible(false);
         }
     }
-    
+
     private void cleanInput() {
-        this.InputTable.setValueAt("", 0, 0);
-        this.InputTable.setValueAt("", 0, 1);
-        this.InputTable.setValueAt("R", 0, 2);
+        for (int i = 0; i < this.numFitas; i++) {
+            this.InputTable.setValueAt("", i, 0);
+            this.InputTable.setValueAt("", i, 1);
+            this.InputTable.setValueAt("R", i, 2);
+        }
     }
-    
+
     private void setInputTable(String strTrans) {
         String[] aux;
-        
+
         aux = strTrans.split(";");
         this.InputTable.setValueAt(aux[0], 0, 0);
         this.InputTable.setValueAt(aux[1], 0, 1);
         this.InputTable.setValueAt(aux[2], 0, 2);
     }
-    
+
     public class MeuPanel extends javax.swing.JPanel {
-        
+
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddLineBtn;
