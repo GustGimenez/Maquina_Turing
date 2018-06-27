@@ -857,6 +857,7 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_Exe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_Exe1ActionPerformed
         this.automato.setPos();
+        String str;
 
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
@@ -869,10 +870,13 @@ public class Tela extends javax.swing.JFrame {
         if (ui.isValido()) {
             String[] aux = ui.getEntradas();
             if (r.busca(aux)) {
-                JOptionPane.showMessageDialog(this, "Aceito com " + r.getNumIt() + " passos !");
+                str = "Aceito com " + r.getNumIt() + " passos !";
             } else {
-                JOptionPane.showMessageDialog(this, "Rejeitado com " + r.getNumIt() + " passos !");
+                str = "Rejeitado com " + r.getNumIt() + " passos !";
             }
+            ui.setEntradas(r.getResult());
+            ui.setResultado(str);
+            ui.setVisible(true);
         }
 
 

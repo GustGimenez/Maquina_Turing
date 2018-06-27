@@ -57,6 +57,11 @@ public class Resolve {
         }
     }
 
+    public String[] getResult() {
+        return result;
+    }
+
+    
     public boolean busca(String[] s) { // Verifica validade de uma String (Chamada na interface)
         this.caminho = null;
         this.numIt = 0;

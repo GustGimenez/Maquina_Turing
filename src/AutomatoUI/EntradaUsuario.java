@@ -13,9 +13,11 @@ import javax.swing.JTextPane;
  * @author fabio
  */
 public class EntradaUsuario extends javax.swing.JDialog {
+
     private boolean valido;
     private int numFitas;
     private ArrayList<JTextPane> JTP;
+
     /**
      * Creates new form EntradaUsuario
      */
@@ -29,7 +31,7 @@ public class EntradaUsuario extends javax.swing.JDialog {
         JTP.add(f3);
         JTP.add(f4);
         JTP.add(f5);
-        
+
         for (int i = 0; i < 5; i++) {
             JTP.get(i).setEnabled(false);
         }
@@ -60,8 +62,9 @@ public class EntradaUsuario extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        resulltadoLabel = new javax.swing.JLabel();
 
-        jButton1.setText("Buscar");
+        jButton1.setText("Ok");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -96,7 +99,7 @@ public class EntradaUsuario extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 205, Short.MAX_VALUE)
+                        .addGap(0, 225, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -109,7 +112,8 @@ public class EntradaUsuario extends javax.swing.JDialog {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(resulltadoLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -117,6 +121,8 @@ public class EntradaUsuario extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(resulltadoLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,11 +140,11 @@ public class EntradaUsuario extends javax.swing.JDialog {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addGap(6, 6, 6))
+                .addGap(13, 13, 13))
         );
 
         pack();
@@ -148,37 +154,51 @@ public class EntradaUsuario extends javax.swing.JDialog {
         this.valido = true;
         for (int i = 0; i < 5; i++) {
             JTP.get(i).setEnabled(false);
+            JTP.get(i).setEditable(true);
         }
+        this.resulltadoLabel.setText("");
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void setFitas(int num){
-        this.numFitas = num;        
+    public void setFitas(int num) {
+        this.numFitas = num;
         for (int i = 0; i < num; i++) {
             this.JTP.get(i).setEnabled(true);
         }
     }
-    
-    public String[] getEntradas(){
+
+    public String[] getEntradas() {
         String[] entradas = new String[numFitas];
-        
+
         for (int i = 0; i < this.numFitas; i++) {
             entradas[i] = JTP.get(i).getText();
-            if(entradas[i] == null){
+            if (entradas[i] == null) {
                 entradas[i] = "\u25A1";
             }
-            if("".equals(entradas[i])){
+            if ("".equals(entradas[i])) {
                 entradas[i] = "\u25A1";
             }
         }
         return entradas;
     }
 
+    public void setEntradas(String[] fitas) {
+        String[] entradas = new String[numFitas];
+
+        for (int i = 0; i < this.numFitas; i++) {
+            JTP.get(i).setText(fitas[i]);
+            JTP.get(i).setEditable(false);
+        }
+    }
+
     public boolean isValido() {
         return valido;
     }
-    
-    
+
+    public void setResultado(String str) {
+        this.resulltadoLabel.setText(str);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -238,5 +258,6 @@ public class EntradaUsuario extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel resulltadoLabel;
     // End of variables declaration//GEN-END:variables
 }
