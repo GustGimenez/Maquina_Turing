@@ -28,6 +28,7 @@ public class Resolve {
     private final char VAZIO = '\u25A1';
     private boolean stopExec;
     private int numFitas;
+    private String[] result;
 
     public Resolve(Automato auto) { // Transforma a representação de desenho para uma representação lógica
         this.numVert = auto.getVertices().size();
@@ -53,7 +54,6 @@ public class Resolve {
             aux = new No(d, trans);
             aux.setProx(this.estados[o]);
             this.estados[o] = aux;
-
         }
     }
 
@@ -65,6 +65,7 @@ public class Resolve {
         this.numFitas = s.length;
 
         boolean aux = busca(s, this.inicial, new int[this.numFitas]);
+        this.result = s;
         return aux;
 
     }
@@ -109,11 +110,11 @@ public class Resolve {
         while (aux != null) { // Verifica se existe uma transicao valida
             trans = aux.getTransicao();
             for (String sf : trans) {
-                sFitas = sf.split("|");
+                sFitas = sf.split("[\u007C]");
                 int fitaCount = 0;
                 falha = false;
                 for (String s : sFitas) {
-                    split = s.split(";");
+                    split = s.split("[;]");
                     ch = split[0].replaceAll("&pv", ";").replaceAll("&bv", "|").charAt(0); //split(";")[0] -> valor de leitura 
                     if (ch == str[fitaCount].charAt(pos[fitaCount])) { // Se o caracter de leitura corresponde a posicao inicial
                         fitaCount++;
@@ -126,10 +127,10 @@ public class Resolve {
                     //Grava o novo valor
                     fitaCount = 0;
                     for (String s : sFitas) {
-                        split = s.split(";");
+                        split = s.split("[;]");
                         direcao.add(split[2].charAt(0));
                         escreve.add(split[1].charAt(0));
-                        strB = new StringBuilder(sFitas[fitaCount]);
+                        strB = new StringBuilder(str[fitaCount]);
                         strB.setCharAt(pos[fitaCount], split[1].replaceAll("&pv", ";").replaceAll("&bv", "|").charAt(0));
                         novoStr = strB.toString();
                         if ("L".equals(split[2])) { // Se vai para esquerda
@@ -144,9 +145,9 @@ public class Resolve {
                                 novoStr += this.VAZIO;
                             }
                         }
-                        sFitas[fitaCount++] = novoStr;
+                        str[fitaCount++] = novoStr;
                     }
-                    if (this.busca(sFitas, aux.getEstado(), pos)) { // Se chegou encontrou uma solucao
+                    if (this.busca(str, aux.getEstado(), pos)) { // Se chegou encontrou uma solucao
                         aux1.setDirecao(direcao);
                         aux1.setEscreve(escreve);
                         aux1.setProx(this.caminho);

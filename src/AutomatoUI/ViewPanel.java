@@ -37,6 +37,7 @@ public class ViewPanel extends JPanel {
         Dimension d1 = this.automato.getDimensao();
 
         this.setPreferredSize(d1);
+        this.updateUI();
         super.paintComponent(g);
         java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
 

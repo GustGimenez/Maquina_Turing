@@ -5,18 +5,22 @@
  */
 package AutomatoUI;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author fabio
  */
 public class EntradaUsuario extends javax.swing.JDialog {
-
+    private boolean valido;
+    private int numFitas;
     /**
      * Creates new form EntradaUsuario
      */
     public EntradaUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.valido = false;
     }
 
     /**
@@ -29,8 +33,43 @@ public class EntradaUsuario extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
+        TableFitas = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        TableFitas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Fita", "Entrada"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(TableFitas);
+
+        jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -38,20 +77,64 @@ public class EntradaUsuario extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(290, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.valido = true;
+        if(this.TableFitas.isEditing()){
+            this.TableFitas.getCellEditor().stopCellEditing();
+        }
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void setFitas(int num){
+        this.numFitas = num;
+        DefaultTableModel model = (DefaultTableModel) this.TableFitas.getModel();
+        model.setRowCount(num);
+        
+        for (int i = 0; i < num; i++) {
+            this.TableFitas.setValueAt("Fita " + i, i, 0);
+        }
+    }
+    
+    public String[] getEntradas(){
+        String[] entradas = new String[numFitas];
+        
+        for (int i = 0; i < this.numFitas; i++) {
+            entradas[i] = (String) this.TableFitas.getValueAt(i, 1);
+            if(entradas[i] == null){
+                entradas[i] = "\u25A1";
+            }
+            if("".equals(entradas[i])){
+                entradas[i] = "\u25A1";
+            }
+        }
+        return entradas;
+    }
+
+    public boolean isValido() {
+        return valido;
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -95,6 +178,8 @@ public class EntradaUsuario extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TableFitas;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

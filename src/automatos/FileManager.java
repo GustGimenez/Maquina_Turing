@@ -163,7 +163,7 @@ public class FileManager {
 
             tran[fita] += ";";
 
-            tran[fita] += transicao.getElementsByTagName("move").item(0).
+            tran[fita] += transicao.getElementsByTagName("move").item(i).
                     getTextContent().charAt(0);
 
             tran[fita] += "|";
