@@ -12,7 +12,6 @@ import automatos.Resolve;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -49,8 +48,8 @@ public class Tela extends javax.swing.JFrame {
     private final boolean gr;
     private int auxX, auxY;
     private String strTrans;
-    private int step;
-    private String TPFitaText;
+    private int[] step;
+    private String[] TPFitaText;
 
     private int op; // 0 - novo estado, 1 -  nova transição, 2 - remover, 3 - arrastar
 
@@ -83,6 +82,7 @@ public class Tela extends javax.swing.JFrame {
         this.view2.setBackground(Color.white);
         this.view3 = new ViewPanel(automato);
         this.view3.setBackground(Color.white);
+
     }
 
     /*
@@ -100,7 +100,12 @@ public class Tela extends javax.swing.JFrame {
         this.setLayout(null);
         TableColumn tc = this.InputTable.getColumnModel().getColumn(2);
         tc.setCellEditor(new DefaultCellEditor(this.CBDirection));
-      //  this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
+        //  this.setExtendedState(this.getExtendedState() | javax.swing.JFrame.MAXIMIZED_BOTH);
+        this.novaTransButton.setEnabled(false);
+        this.novoEstadoButton.setEnabled(false);
+        this.removerButton.setEnabled(false);
+        this.arrastarButton.setEnabled(false);
+        this.op = -2;
     }
 
     public Tela() {
@@ -380,56 +385,51 @@ public class Tela extends javax.swing.JFrame {
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane10)
                     .addComponent(jScrollPane9)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addGap(337, 337, 337)
+                        .addGap(209, 209, 209)
                         .addComponent(StringLabel)
                         .addContainerGap(303, Short.MAX_VALUE))
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addGap(75, 75, 75)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(StepBtn)
+                            .addComponent(ExitStepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                                .addComponent(ExitStepBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(numItLabel))
-                            .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                                .addComponent(StepBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(numItLabel, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
         );
         StepBtnPanelLayout.setVerticalGroup(
             StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                .addContainerGap(87, Short.MAX_VALUE)
-                .addComponent(StringLabel)
-                .addContainerGap(87, Short.MAX_VALUE))
-            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(StepBtnPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel1)
-                                .addComponent(StepBtn)))
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StepBtnPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numItLabel)
-                            .addComponent(ExitStepBtn))
-                        .addGap(1, 1, 1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                        .addComponent(StepBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(StepBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(StepBtnPanelLayout.createSequentialGroup()
+                                .addComponent(ExitStepBtn)
+                                .addGap(50, 50, 50)
+                                .addComponent(StringLabel))
+                            .addComponent(numItLabel))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -450,8 +450,8 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(StepPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(StepBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(StepBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         AutomatoLayout.add(PanelStep, "AutomatoStep");
@@ -500,9 +500,8 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(ExitMultBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                    .addGroup(MultEntradassBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(AddLineBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                        .addComponent(ExecBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(AddLineBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(ExecBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         MultEntradassBtnPanelLayout.setVerticalGroup(
@@ -758,7 +757,8 @@ public class Tela extends javax.swing.JFrame {
 
         } finally {
             this.TelaPanel.repaint();
-            this.InputTable.setBounds(this.auxX, this.auxY, 255, 16*this.numFitas);
+            // this.InputTable.setLocation(this.auxX, this.auxY);
+            this.InputTable.setBounds(this.auxX, this.auxY, 255, 16 * this.numFitas);
         }
     }//GEN-LAST:event_TelaPanelMouseReleased
 
@@ -880,6 +880,16 @@ public class Tela extends javax.swing.JFrame {
 
     private void mi_ExeStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_ExeStepActionPerformed
         this.automato.setPos();
+        ArrayList<JTextPane> JTPs = new ArrayList();
+        JTPs.add(this.TPFita1);
+        JTPs.add(this.TPFita2);
+        JTPs.add(this.TPFita3);
+        JTPs.add(this.TPFita4);
+        JTPs.add(this.TPFita5);
+        for (int i = 0; i < 5; i++) {
+            JTPs.get(i).setVisible(false);
+
+        }
 
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
@@ -896,12 +906,19 @@ public class Tela extends javax.swing.JFrame {
                     this.vertice.setFocus(false);
                 }
                 this.camCount = 0;
-                this.step = 1;
                 this.cam = r.getCaminnho();
                 this.numItLabel.setText(Integer.toString(r.getNumIt()));
                 this.camAux = this.cam;
                 this.StepPanel.repaint();
-                this.TPFitaText = "□□□□□□" + aux + "□□□□□□";
+                this.TPFitaText = aux;
+                this.step = new int[this.numFitas];
+
+                for (int i = 0; i < aux.length; i++) {
+                    this.step[i] = 6;
+                    JTPs.get(i).setVisible(true);
+                    JTPs.get(i).setText("□□□□□□" + aux[i] + "□□□□□□");
+                }
+
                 //this.TPFita.setText(this.TPFitaText);
                 CardLayout card = (CardLayout) this.AutomatoLayout.getLayout();
                 card.show(this.AutomatoLayout, "AutomatoStep");
@@ -917,7 +934,6 @@ public class Tela extends javax.swing.JFrame {
         int i = 0;
         ArrayList<StringBuilder> str = new ArrayList();
         ArrayList<JTextPane> JTPs = new ArrayList();
-        int[] steps = new int[this.numFitas];
         JTPs.add(this.TPFita1);
         JTPs.add(this.TPFita2);
         JTPs.add(this.TPFita3);
@@ -925,17 +941,19 @@ public class Tela extends javax.swing.JFrame {
         JTPs.add(this.TPFita5);
 
         for (i = 0; i < this.numFitas; i++) {
-            JTPs.get(i).setVisible(true);
             StringBuilder sb = new StringBuilder(JTPs.get(i).getText());
             str.add(sb);
-            steps[i] = this.step;
         }
 
         if (this.camCount == 2) {
-            this.step = 1;
+            for (int j = 0; j < this.numFitas; j++) {
+                this.step[j] = 6;
+            }
             this.camCount = 0;
             this.StepBtn.setText("Começar");
-            this.vertice.setFocus(false);
+            if (this.vertice != null) {
+                this.vertice.setFocus(false);
+            }
         } else {
 
             if (this.camCount != 1) {
@@ -945,45 +963,50 @@ public class Tela extends javax.swing.JFrame {
                 try {
                     for (i = 0; i < this.numFitas; i++) {
                         JTPs.get(i).getHighlighter().removeAllHighlights();
-                        JTPs.get(i).getHighlighter().addHighlight(steps[i], steps[i] + 1, highlightPainter);
+                        JTPs.get(i).getHighlighter().addHighlight(this.step[i], this.step[i] + 1, highlightPainter);
                     }
                 } catch (BadLocationException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                if (this.vertice != null) {
-                    this.vertice.setFocus(false);
-                }
-                for (i = 0; i < this.numFitas; i++) {
-                    if (str.get(i).charAt(steps[i]) != camAux.getEscreve().get(i)) {
-                        str.get(i).setCharAt(steps[i], camAux.getEscreve().get(i));
-                        JTPs.get(i).setText(str.get(i).toString());
-                    }
-                    if (camAux.getDirecao().get(i).equals('R')) { //Direção do highlight
-                        steps[i] += 1;
-                    } else {
-                        steps[i] -= 1;
-                    }
-                }
-
-                try {
-                    for (i = 0; i < this.numFitas; i++) {
-                        JTPs.get(i).getHighlighter().removeAllHighlights();
-                        JTPs.get(i).getHighlighter().addHighlight(steps[i], steps[i] + 1, highlightPainter);
-                    }
-
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
                 if (this.camAux.getProx() != null) {
+
+                    if (this.vertice != null) {
+                        this.vertice.setFocus(false);
+                    }
+                    for (i = 0; i < this.numFitas; i++) {
+                        if (str.get(i).charAt(this.step[i]) != camAux.getEscreve().get(i)) {
+                            str.get(i).setCharAt(this.step[i], camAux.getEscreve().get(i));
+                            JTPs.get(i).setText(str.get(i).toString());
+                        }
+                        if (camAux.getDirecao().get(i).equals('R')) { //Direção do highlight
+                            this.step[i] += 1;
+                        } else {
+                            this.step[i] -= 1;
+                        }
+                    }
+
+                    try {
+                        for (i = 0; i < this.numFitas; i++) {
+                            JTPs.get(i).getHighlighter().removeAllHighlights();
+                            JTPs.get(i).getHighlighter().addHighlight(this.step[i], this.step[i] + 1, highlightPainter);
+                        }
+
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+//                }
+//                if (this.camAux.getProx() != null) {
                     this.camAux = this.camAux.getProx();
                     this.vertice = this.automato.setSelected(this.camAux.getEstado());
                 } else {
-                    this.step = 1;
+                    for (int j = 0; j < this.numFitas; j++) {
+                        this.step[j] = 6;
+                        JTPs.get(j).setText("□□□□□□" + this.TPFitaText[j] + "□□□□□□");
+
+                    }
                     this.camCount = 2;
                     this.camAux = this.cam;
-                    this.TPFita1.setText(this.TPFitaText);
                     this.StepBtn.setText("Recomeçar");
                     this.vertice = null;
 
@@ -1026,15 +1049,15 @@ public class Tela extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) this.MultEntradaTable.getModel();
         this.automato.setPos();
-        this.MultEntradaTable.getCellEditor().stopCellEditing();
+        //    this.MultEntradaTable.getCellEditor().stopCellEditing();
         if (this.automato.getInicial() == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Estado inicial");
             return;
         }
         Resolve r = new Resolve(this.automato);
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j < i; j++) {//Para a qntdade de linhas da tabela
             String[] aux = new String[this.numFitas];
-            for (int k = 0; k < this.numFitas; k++) {
+            for (int k = 0; k < this.numFitas; k++) {//pega cada entrada
                 aux[k] = (String) model.getValueAt(j, k);
                 if ("".equals(aux[k]) || aux[k] == null) {
                     aux[k] = "" + this.VAZIO;
@@ -1044,11 +1067,11 @@ public class Tela extends javax.swing.JFrame {
             if (aux != null) {
                 if (r.busca(aux)) {
                     contTransicoes = r.getNumIt();
-                    model.setValueAt("Aceito", j, 1);
-                    model.setValueAt(contTransicoes, j, 2);
+                    model.setValueAt("Aceito", j, this.numFitas + 1);
+                    model.setValueAt(contTransicoes, j, this.numFitas);
                 } else {
-                    model.setValueAt("Rejeitado", j, 1);
-                    model.setValueAt(contTransicoes, j, 2);
+                    model.setValueAt("Rejeitado", j, this.numFitas + 1);
+                    model.setValueAt(contTransicoes, j, this.numFitas);
                 }
             }
 
@@ -1181,6 +1204,11 @@ public class Tela extends javax.swing.JFrame {
             automato.getVertices().removeAll(automato.getVertices());
             fm.carregaMT(automato);
             this.setNumFitas(automato.getNumFitas());
+            this.novaTransButton.setEnabled(true);
+            this.novoEstadoButton.setEnabled(true);
+            this.removerButton.setEnabled(true);
+            this.arrastarButton.setEnabled(true);
+            this.op = ARRASTAR;
         } catch (ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1188,7 +1216,14 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_load_menuActionPerformed
 
     private void novaMaquinaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaMaquinaMenuActionPerformed
-
+        EntradaNumFitas enf = new EntradaNumFitas(this, true);
+        enf.setVisible(true);
+        this.numFitas = enf.getNumFitas();
+        this.novaTransButton.setEnabled(true);
+        this.novoEstadoButton.setEnabled(true);
+        this.removerButton.setEnabled(true);
+        this.arrastarButton.setEnabled(true);
+        this.op = NOVO_ESTADO;
 
     }//GEN-LAST:event_novaMaquinaMenuActionPerformed
 
@@ -1210,7 +1245,7 @@ public class Tela extends javax.swing.JFrame {
         tableX = this.InputTable.getLocation().x;
         tableY = this.InputTable.getLocation().y;
 
-        if (x < 5 || x > 5 + 225 || y < 5 || y > 5 + 16 * this.numFitas) {
+        if (x < tableX || x > tableX + 225 || y < tableY || y > tableY + 16 * this.numFitas) {
             if (this.InputTable.isEditing()) {
                 this.InputTable.getCellEditor().stopCellEditing();
             }
@@ -1219,6 +1254,9 @@ public class Tela extends javax.swing.JFrame {
     }
 
     private void cleanInput() {
+        DefaultTableModel model = (DefaultTableModel) this.InputTable.getModel();
+        model.setNumRows(this.numFitas);
+
         for (int i = 0; i < this.numFitas; i++) {
             this.InputTable.setValueAt("", i, 0);
             this.InputTable.setValueAt("", i, 1);
