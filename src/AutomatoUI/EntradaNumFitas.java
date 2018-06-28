@@ -10,7 +10,9 @@ package AutomatoUI;
  * @author Gi
  */
 public class EntradaNumFitas extends javax.swing.JDialog {
+
     private int numFitas;
+    private boolean valido;
 
     /**
      * Creates new form EntradaNumFitas
@@ -18,6 +20,7 @@ public class EntradaNumFitas extends javax.swing.JDialog {
     public EntradaNumFitas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.valido = false;
     }
 
     public int getNumFitas() {
@@ -27,8 +30,10 @@ public class EntradaNumFitas extends javax.swing.JDialog {
     public void setNumFitas(int numFitas) {
         this.numFitas = numFitas;
     }
-    
-    
+
+    public boolean isValido() {
+        return this.valido;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -90,7 +95,9 @@ public class EntradaNumFitas extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.numFitas = Integer.parseInt((String) this.comboFitas.getSelectedItem());
+        this.valido = true;
         this.setVisible(false);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
