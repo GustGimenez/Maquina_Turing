@@ -8,19 +8,12 @@ package automatos;
 import AutomatoUI.Aresta;
 import AutomatoUI.Automato;
 import AutomatoUI.Vertice;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -29,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.Hashtable;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -45,6 +39,7 @@ import org.w3c.dom.Comment;
 public class FileManager {
 
     public void carregaMT(Automato automato) throws ParserConfigurationException, SAXException {
+        Hashtable<Integer, Vertice> hashEstados = new Hashtable();
         JFileChooser fc = new JFileChooser("C:\\");
         int result = fc.showOpenDialog(fc);
 
@@ -70,12 +65,13 @@ public class FileManager {
                 automato.setNumFitas(numFitas);
 
                 // Leitura dos estados
-                for (int i = 0; i < estados.getLength(); i++) {
+                for (int i = 0; i < estados.getLength(); i++) {                  
                     Node no = estados.item(i);
 
                     // Itera por todos os itens
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
-                        this.lerEstado(automato, no);
+                        Vertice v = this.lerEstado(automato, no);
+                        hashEstados.put(v.getPos(), v);
                     }
                 }
 
@@ -85,7 +81,7 @@ public class FileManager {
 
                     // Itera por todos os itens
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
-                        this.lerTransicao(automato, no);
+                        this.lerTransicao(hashEstados, automato, no);
                     }
                 }
 
@@ -95,10 +91,10 @@ public class FileManager {
         }
     }
 
-    private void lerEstado(Automato automato, Node no) {
+    private Vertice lerEstado(Automato automato, Node no) {
         Element estado = (Element) no;
         Element ini, fim;
-        int x, y;
+        int x, y, id;
         float aux;
 
         // Acessa as tags do objeto
@@ -110,17 +106,22 @@ public class FileManager {
         // Cria um novo vertice (estado) e o adiciona
         ini = (Element) estado.getElementsByTagName("initial").item(0);
         fim = (Element) estado.getElementsByTagName("final").item(0);
-        Vertice vert = new Vertice(x, y, "q");
+        id = Integer.parseInt(estado.getAttributeNode("id").getValue());
+        
+        Vertice vert = new Vertice(x, y, "q");        
+        vert.setPos(id);
 
         vert.setInicial(ini != null);
         if (ini != null) {
             automato.setInicial(vert);
         }
         vert.setFim(fim != null);
+        
         automato.addVertice(vert);
+        return vert;
     }
 
-    private void lerTransicao(Automato automato, Node no) {
+    private void lerTransicao(Hashtable<Integer, Vertice> hash, Automato automato, Node no) {
         Element transicao = (Element) no;
         Aresta aresta;
         int origem, destino;
@@ -179,8 +180,8 @@ public class FileManager {
         tran[numFitas - 1] = tran[numFitas - 1].substring(0, 5);
 
         // Acessa o vetor de vértices do automato e pega os vértices que compõe a transição;
-        v1 = automato.getVertices().get(origem);
-        v2 = automato.getVertices().get(destino);
+        v1 = hash.get(origem);
+        v2 = hash.get(destino);
 
         // Cria a aresta no automato
         aresta = automato.addAresta(v1, v2);
