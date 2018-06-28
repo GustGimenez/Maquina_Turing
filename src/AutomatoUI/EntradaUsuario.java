@@ -162,6 +162,7 @@ public class EntradaUsuario extends javax.swing.JDialog {
 
     public void setFitas(int num) {
         this.numFitas = num;
+
         for (int i = 0; i < num; i++) {
             this.JTP.get(i).setEnabled(true);
         }
