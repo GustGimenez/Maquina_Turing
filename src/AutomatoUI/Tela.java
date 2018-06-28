@@ -1218,12 +1218,18 @@ public class Tela extends javax.swing.JFrame {
     private void novaMaquinaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novaMaquinaMenuActionPerformed
         EntradaNumFitas enf = new EntradaNumFitas(this, true);
         enf.setVisible(true);
+        if (!enf.isValido()) {
+            return;
+        }
+        automato.getArestas().removeAll(automato.getArestas());
+        automato.getVertices().removeAll(automato.getVertices());
         this.numFitas = enf.getNumFitas();
         this.novaTransButton.setEnabled(true);
         this.novoEstadoButton.setEnabled(true);
         this.removerButton.setEnabled(true);
         this.arrastarButton.setEnabled(true);
         this.op = NOVO_ESTADO;
+        this.TelaPanel.repaint();
 
     }//GEN-LAST:event_novaMaquinaMenuActionPerformed
 

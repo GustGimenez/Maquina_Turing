@@ -61,7 +61,12 @@ public class FileManager {
                 // Pega todos os estados e transições, pelo nome da tag
                 NodeList estados = doc.getElementsByTagName("block");
                 NodeList transicoes = doc.getElementsByTagName("transition");
-                int numFitas = Integer.valueOf(doc.getElementsByTagName("tapes").item(0).getTextContent());
+                int numFitas;
+                try {
+                    numFitas = Integer.valueOf(doc.getElementsByTagName("tapes").item(0).getTextContent());
+                } catch (NullPointerException e) {
+                    numFitas = 1;
+                }
                 automato.setNumFitas(numFitas);
 
                 // Leitura dos estados
@@ -133,9 +138,12 @@ public class FileManager {
 
         // Lê o que compõe a transição
         for (int i = 0; i < numFitas; i++) {
-
-            fita = Integer.valueOf(transicao.getElementsByTagName("read").
-                    item(i).getAttributes().getNamedItem("tape").getTextContent()) - 1;
+            try {
+                fita = Integer.valueOf(transicao.getElementsByTagName("read").
+                        item(i).getAttributes().getNamedItem("tape").getTextContent()) - 1;
+            } catch (NullPointerException e) {
+                fita = 0;
+            }
             tran[fita] = "";
             if (transicao.getElementsByTagName("read").item(i).getTextContent().equals("")) {
                 tran[fita] += '\u25A1';
@@ -310,7 +318,7 @@ public class FileManager {
                             move.setAttribute("tape", String.valueOf(i + 1));
                             move.appendChild(doc.createTextNode(String.valueOf(aux.charAt(4))));
                             transition.appendChild(move);
-                            
+
                         }
                     }
                 }
