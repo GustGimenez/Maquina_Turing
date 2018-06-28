@@ -985,7 +985,7 @@ public class Tela extends javax.swing.JFrame {
                         }
                         if (camAux.getDirecao().get(i).equals('R')) { //Direção do highlight
                             this.step[i] += 1;
-                        } else {
+                        } else if (camAux.getDirecao().get(i).equals('L')){
                             this.step[i] -= 1;
                         }
                     }
