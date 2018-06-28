@@ -61,7 +61,6 @@ public class Resolve {
         return result;
     }
 
-    
     public boolean busca(String[] s) { // Verifica validade de uma String (Chamada na interface)
         this.caminho = null;
         this.numIt = 0;
@@ -70,7 +69,6 @@ public class Resolve {
         this.numFitas = s.length;
 
         boolean aux = busca(s, this.inicial, new int[this.numFitas]);
-        this.result = s;
         return aux;
 
     }
@@ -84,13 +82,12 @@ public class Resolve {
     }
 
     private boolean busca(String[] str, int vert, int[] pos) { //Executa busca de verificação
-        this.numIt++;
         if (numIt > this.lim) {
             int resp = JOptionPane.showConfirmDialog(null, "Numero de iteracoes passou de " + this.lim + ". Deseja continuar?");
             if (resp == JOptionPane.OK_OPTION) {
                 this.lim *= 2;
             } else {
-
+                this.result = str;
                 this.stopExec = true;
                 return false;
 
@@ -104,13 +101,17 @@ public class Resolve {
         ArrayList<String> trans;
         String novoStr;
         String[] sFitas;
+        String[] novaFita = str.clone();
+        int[] novosPonteiros = pos.clone();
         boolean falha;
-        ArrayList<Character> direcao = new ArrayList(),escreve = new ArrayList();
+        ArrayList<Character> direcao = new ArrayList(), escreve = new ArrayList();
         if (this.terminal[vert]) { // Chegou em um estado final
             aux1.setProx(this.caminho);
             this.caminho = aux1;
+            this.result = str;
             return true;
         }
+        this.numIt++;
         aux = this.estados[vert];
         while (aux != null) { // Verifica se existe uma transicao valida
             trans = aux.getTransicao();
@@ -142,17 +143,17 @@ public class Resolve {
                             if (pos[fitaCount] == 0) { // Se está no inicio da fita
                                 novoStr = this.VAZIO + novoStr;
                             } else {
-                                pos[fitaCount] = pos[fitaCount] - 1;
+                                novosPonteiros[fitaCount] = pos[fitaCount] - 1;
                             }
                         } else if ("R".equals(split[2])) { // Se vai pra direita
-                            pos[fitaCount] = pos[fitaCount] + 1;
-                            if (pos[fitaCount] >= str[fitaCount].length()) {
+                            novosPonteiros[fitaCount] = pos[fitaCount] + 1;
+                            if (novosPonteiros[fitaCount] >= str[fitaCount].length()) {
                                 novoStr += this.VAZIO;
                             }
                         }
-                        str[fitaCount++] = novoStr;
+                        novaFita[fitaCount++] = novoStr;
                     }
-                    if (this.busca(str, aux.getEstado(), pos)) { // Se chegou encontrou uma solucao
+                    if (this.busca(novaFita, aux.getEstado(), novosPonteiros)) { // Se chegou encontrou uma solucao
                         aux1.setDirecao(direcao);
                         aux1.setEscreve(escreve);
                         aux1.setProx(this.caminho);
@@ -167,6 +168,7 @@ public class Resolve {
 
             aux = aux.getProx(); // Testa proxima transicao
         }
+        this.result = str;
         return false; // Caso nenhuma transicao desse estado funcione
     }
 

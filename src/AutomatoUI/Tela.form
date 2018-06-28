@@ -138,6 +138,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="M&#xe1;quina de Turing"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -154,43 +155,17 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,124,0,0,3,93"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="AutomatoLayout" max="32767" attributes="0"/>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="298" max="-2" attributes="0"/>
-                  <Component id="InputTable" min="-2" pref="143" max="-2" attributes="0"/>
-                  <EmptySpace pref="420" max="32767" attributes="0"/>
-              </Group>
-          </Group>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="AutomatoLayout" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
-                  <Component id="InputTable" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="304" max="32767" attributes="0"/>
-              </Group>
-          </Group>
-      </Group>
-    </DimensionLayout>
-  </Layout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="AutomatoLayout">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
       <SubComponents>
@@ -207,7 +182,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="TelaPanel" pref="831" max="32767" attributes="0"/>
+                          <Component id="TelaPanel" pref="841" max="32767" attributes="0"/>
                           <Component id="EstadosBtnPanel" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -219,6 +194,13 @@
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="354" max="-2" attributes="0"/>
+                          <Component id="InputTable" min="-2" pref="143" max="-2" attributes="0"/>
+                          <EmptySpace pref="364" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -227,7 +209,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="EstadosBtnPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="TelaPanel" pref="469" max="32767" attributes="0"/>
+                      <Component id="TelaPanel" pref="491" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -235,6 +217,13 @@
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="CBDirection" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                          <Component id="InputTable" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="311" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -364,6 +353,54 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JTable" name="InputTable">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                </Property>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="3" rowCount="1">
+                    <Column editable="true" title="L&#xea;" type="java.lang.String">
+                      <Data value="$"/>
+                    </Column>
+                    <Column editable="true" title="Escreve" type="java.lang.String"/>
+                    <Column editable="true" title="Vai para" type="java.lang.Object"/>
+                  </Table>
+                </Property>
+                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                  <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                  </TableColumnModel>
+                </Property>
+                <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="cc" red="cc" type="rgb"/>
+                </Property>
+                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                  <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="InputTableFocusLost"/>
+                <EventHandler event="componentHidden" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="InputTableComponentHidden"/>
+                <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="InputTableComponentShown"/>
+                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="InputTablePropertyChange"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="InputTableKeyTyped"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="PanelStep">
@@ -424,7 +461,7 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="209" max="-2" attributes="0"/>
                                   <Component id="StringLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="303" max="32767" attributes="0"/>
+                                  <EmptySpace pref="313" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
@@ -583,16 +620,20 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="TablePanel" max="32767" attributes="0"/>
+                      <Component id="MultScrollPane1" pref="436" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="TablePanel" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="TablePanel" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="TablePanel" max="32767" attributes="0"/>
+                          <Component id="MultScrollPane1" pref="593" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -604,15 +645,18 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="MultScrollPane1" min="-2" pref="393" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="TabelPanel" pref="400" max="32767" attributes="0"/>
-                              <Component id="MultEntradassBtnPanel" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="MultEntradassBtnPanel" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="TabelPanel" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -620,11 +664,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="TabelPanel" min="-2" pref="284" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                           <Component id="MultEntradassBtnPanel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="151" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="MultScrollPane1" pref="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -670,14 +713,17 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="ExitMultBtn" pref="140" max="32767" attributes="0"/>
-                                  <Component id="AddLineBtn" alignment="0" pref="140" max="32767" attributes="0"/>
-                                  <Component id="ExecBtn" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace pref="236" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="AddLineBtn" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="ExecBtn" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jButton1" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                                  <Component id="ExitMultBtn" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -689,8 +735,9 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="AddLineBtn" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="ExitMultBtn" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="26" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -720,75 +767,34 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddLineBtnActionPerformed"/>
                       </Events>
                     </Component>
+                    <Component class="javax.swing.JButton" name="jButton1">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Ver Fita(s)"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JScrollPane" name="MultScrollPane1">
-                  <Properties>
-                    <Property name="autoscrolls" type="boolean" value="true"/>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[600, 600]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JScrollPane(this.view3)"/>
-                  </AuxValues>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                </Container>
               </SubComponents>
+            </Container>
+            <Container class="javax.swing.JScrollPane" name="MultScrollPane1">
+              <Properties>
+                <Property name="autoscrolls" type="boolean" value="true"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[600, 600]"/>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JScrollPane(this.view3)"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
           </SubComponents>
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTable" name="InputTable">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="cc" green="cc" red="cc" type="rgb"/>
-        </Property>
-        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-          <Table columnCount="3" rowCount="1">
-            <Column editable="true" title="L&#xea;" type="java.lang.String">
-              <Data value="$"/>
-            </Column>
-            <Column editable="true" title="Escreve" type="java.lang.String"/>
-            <Column editable="true" title="Vai para" type="java.lang.Object"/>
-          </Table>
-        </Property>
-        <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-          <TableColumnModel selectionModel="0">
-            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-              <Title/>
-              <Editor/>
-              <Renderer/>
-            </Column>
-            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-              <Title/>
-              <Editor/>
-              <Renderer/>
-            </Column>
-            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-              <Title/>
-              <Editor/>
-              <Renderer/>
-            </Column>
-          </TableColumnModel>
-        </Property>
-        <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="cc" red="cc" type="rgb"/>
-        </Property>
-        <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-          <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="InputTableFocusLost"/>
-        <EventHandler event="componentHidden" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="InputTableComponentHidden"/>
-        <EventHandler event="componentMoved" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="InputTableComponentMoved"/>
-        <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="InputTableComponentShown"/>
-        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="InputTablePropertyChange"/>
-        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="InputTableKeyTyped"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>
